@@ -21,6 +21,7 @@
 from Components.Converter.EventName import EventName
 
 
+# DEPRECATED use core EventName
 class EMCEventName(EventName):
 	def __init__(self, type):
 		EventName.__init__(self, type)

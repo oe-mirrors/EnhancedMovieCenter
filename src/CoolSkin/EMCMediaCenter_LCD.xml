@@ -13,7 +13,7 @@
 		</widget>
 		<widget font="Display;14" position="1,49" render="Label" transparent="1" zPosition="2" size="65,16" source="parent.size_disp" />
 		<widget font="Display;15" halign="right" position="66,48" render="Label" size="65,16" source="parent.Service">
-			<convert type="EMCServiceTime">Duration</convert>
+			<convert type="ServiceTime">Duration</convert>
 			<convert type="EMCClockToText">InMinutes</convert>
 		</widget>
 		<widget font="Display;15" halign="right" position="66,48" render="Label" transparent="1" zPosition="2" size="65,16" source="parent.runtime_disp" />
@@ -89,7 +89,7 @@
 		</widget>
 		<widget font="Display;47" position="10,184" render="Label" transparent="1" zPosition="2" size="210,50" source="parent.size_disp" />
 		<widget font="Display;50" halign="right" position="225,182" render="Label" size="170,55" source="parent.Service">
-			<convert type="EMCServiceTime">Duration</convert>
+			<convert type="ServiceTime">Duration</convert>
 			<convert type="EMCClockToText">InMinutes</convert>
 		</widget>
 		<widget font="Display;50" halign="right" position="225,182" render="Label" transparent="1" zPosition="2" size="170,55" source="parent.runtime_disp" />

@@ -20,6 +20,7 @@
 from Components.Converter.MovieInfo import MovieInfo
 
 
+# DEPRECATED use core MovieInfo
 class EMCMovieInfo(MovieInfo):
 	def __init__(self, type):
 		MovieInfo.__init__(self, type)

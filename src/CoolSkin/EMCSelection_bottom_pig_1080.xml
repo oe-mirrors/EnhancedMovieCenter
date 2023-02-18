@@ -22,27 +22,27 @@
         <widget name="Cover" position="115,650" size="270,270" alphatest="blend" zPosition="3"/>
         <widget name="CoverBgLbl" backgroundColor="background" position="15,655" size="468,260" zPosition="2"/>
         <widget font="Regular;32" position="500,650" render="Label" size="580,40" source="Service">
-            <convert type="EMCEventName">Name</convert>
+            <convert type="EventName">Name</convert>
         </widget>
         <widget font="Regular;30" halign="center" position="1100,650" render="Label" size="340,35" source="Service">
-            <convert type="EMCServiceTime">Duration</convert>
+            <convert type="ServiceTime">Duration</convert>
 	     	<convert type="EMCClockToText">Format:%Hh:%Mmin</convert>
         </widget>
         <widget font="Regular;30" halign="right" position="1450,650" render="Label" size="340,35" source="Service">
-            <convert type="EMCServiceTime">StartTime</convert>
+            <convert type="ServiceTime">StartTime</convert>
             <convert type="EMCClockToText">Format:%a. %d. %B %Y</convert>
         </widget>
         <widget font="Regular;30" foregroundColor="yellow" position="500,700" render="Label" size="580,35" source="Service">
-            <convert type="EMCMovieInfo">ShortDescription</convert>
+            <convert type="MovieInfo">ShortDescription</convert>
         </widget>
         <widget font="Regular;30" foregroundColor="yellow" halign="right" position="1100,700" render="Label" size="400,35" source="Service">
-            <convert type="EMCMovieInfo">RecordServiceName</convert>
+            <convert type="MovieInfo">RecordServiceName</convert>
         </widget>
         <widget font="Regular;30" foregroundColor="yellow" halign="right" position="1620,700" render="Label" size="170,35" source="Service">
-            <convert type="EMCMovieInfo">FileSize</convert>
+            <convert type="MovieInfo">FileSize</convert>
         </widget>
         <widget font="Regular;30" position="500,745" render="Label" size="1290,175" source="Service">
-            <convert type="EMCEventName">ExtendedDescription</convert>
+            <convert type="EventName">ExtendedDescription</convert>
         </widget>
     	<widget name="name" position="500,650" size="600,40" font="Regular;32" foregroundColor="yellow" backgroundColor="background" transparent="1"/>
     	<widget name="date" position="1120,650" halign="right" size="450,40" font="Regular;32" foregroundColor="yellow" backgroundColor="background" transparent="1"/>

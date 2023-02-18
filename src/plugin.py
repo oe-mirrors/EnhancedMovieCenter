@@ -22,14 +22,14 @@ from Components.ActionMap import ActionMap
 from Plugins.Plugin import PluginDescriptor
 from Screens.MessageBox import MessageBox
 
-from Components.Sources import EMCCurrentService
-from Components.Sources import EMCServiceEvent
-from Components.Renderer import EMCPositionGauge
-from Components.Converter import EMCClockToText
-from Components.Converter import EMCEventName
-from Components.Converter import EMCServicePosition
-from Components.Converter import EMCRecordPosition
-from Components.Converter import EMCServiceTime
+#from Components.Sources import EMCCurrentService
+#from Components.Sources import EMCServiceEvent
+#from Components.Renderer import EMCPositionGauge
+#from Components.Converter import EMCClockToText
+#from Components.Converter import EMCEventName
+#from Components.Converter import EMCServicePosition
+#from Components.Converter import EMCRecordPosition
+#from Components.Converter import EMCServiceTime
 
 from . import _
 from Components.Language import language

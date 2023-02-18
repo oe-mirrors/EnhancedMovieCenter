@@ -22,13 +22,13 @@
             <convert type="EMCServicePosition">Length,ShowHours</convert>
 		</widget>
 		<eLabel position="290,158" size="820,2" backgroundColor="#818181" />
-		<widget source="Service" render="EMCPositionGauge" position="290,155" size="840,8" zPosition="1" pointer="/usr/lib/enigma2/python/Plugins/Extensions/EnhancedMovieCenter/img/progress_rec.png:840,0" transparent="1">
+		<widget source="Service" render="PositionGauge" position="290,155" size="840,8" zPosition="1" pointer="/usr/lib/enigma2/python/Plugins/Extensions/EnhancedMovieCenter/img/progress_rec.png:840,0" transparent="1">
             <convert type="EMCRecordPosition">Gauge</convert>
 		</widget>
-		<widget source="Service" render="EMCPositionGauge" position="290,155" size="840,8" zPosition="2" pointer="/usr/lib/enigma2/python/Plugins/Extensions/EnhancedMovieCenter/img/progress.png:840,0" transparent="1">
+		<widget source="Service" render="PositionGauge" position="290,155" size="840,8" zPosition="2" pointer="/usr/lib/enigma2/python/Plugins/Extensions/EnhancedMovieCenter/img/progress.png:840,0" transparent="1">
             <convert type="EMCServicePosition">Gauge</convert>
 		</widget>
-		<widget source="Service" render="EMCPositionGauge" position="290,151" size="840,15" zPosition="3" transparent="1">
+		<widget source="Service" render="PositionGauge" position="290,151" size="840,15" zPosition="3" transparent="1">
             <convert type="EMCServicePosition">Gauge</convert>
 		</widget>
         <widget font="Regular;20" foregroundColor="#818181" name="chapterLabel" halign="center" position="350,125" size="600,25" />

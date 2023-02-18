@@ -20,6 +20,7 @@
 from Components.Converter.ServiceTime import ServiceTime
 
 
+# DEPRECATED use core ServiceTime
 class EMCServiceTime(ServiceTime):
 	def __init__(self, type):
 		ServiceTime.__init__(self, type)

@@ -1,6 +1,7 @@
 from Components.Renderer.PositionGauge import PositionGauge
 
 
+# DEPRECATED use core PositionGauge
 class EMCPositionGauge(PositionGauge):
 	def __init__(self):
 		PositionGauge.__init__(self)

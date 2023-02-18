@@ -19,24 +19,24 @@
 	<eLabel position="380,50" size="1,555" backgroundColor="#818181" />
     <widget name="Cover" position="5,60" size="180,180" alphatest="blend"/>
     <widget font="Regular;20" halign="center" foregroundColor="yellow" position="170,70" render="Label" size="200,50" source="Service">
-        <convert type="EMCMovieInfo">RecordServiceName</convert>
+        <convert type="MovieInfo">RecordServiceName</convert>
     </widget>
     <widget font="Regular;19" halign="center" position="170,130" render="Label" size="200,25" source="Service">
-        <convert type="EMCServiceTime">StartTime</convert>
+        <convert type="ServiceTime">StartTime</convert>
         <convert type="EMCClockToText">Format:%a. %d. %b %y</convert>
     </widget>
     <widget font="Regular;20" halign="center" position="170,160" render="Label" size="200,25" source="Service">
-        <convert type="EMCMovieInfo">FileSize</convert>
+        <convert type="MovieInfo">FileSize</convert>
         </widget>
     <widget font="Regular;20" halign="center" position="170,190" render="Label" size="200,25" source="Service">
-        <convert type="EMCServiceTime">Duration</convert>
+        <convert type="ServiceTime">Duration</convert>
 	    <convert type="EMCClockToText">Format:%Hh:%Mmin</convert>
     </widget>
     <widget font="Regular;20" foregroundColor="yellow" position="10,255" render="Label" size="360,25" source="Service">
-        <convert type="EMCMovieInfo">ShortDescription</convert>
+        <convert type="MovieInfo">ShortDescription</convert>
     </widget>
     <widget font="Regular;18" position="10,285" render="Label" size="360,315" source="Service">
-        <convert type="EMCEventName">ExtendedDescription</convert>
+        <convert type="EventName">ExtendedDescription</convert>
     </widget>
     <widget name="name" position="10,260" size="260,160" font="Regular;20" foregroundColor="yellow" backgroundColor="background" transparent="1"/>
     <widget name="artistAT" position="10,420" size="100,25" font="Regular;20" backgroundColor="background" transparent="1"/>
