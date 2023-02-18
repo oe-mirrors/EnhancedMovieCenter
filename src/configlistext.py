@@ -1,16 +1,9 @@
-﻿# -*- coding: utf-8 -*-
-from Screens.MessageBox import MessageBox
+﻿from Screens.MessageBox import MessageBox
 from Screens.VirtualKeyBoard import VirtualKeyBoard
 from Components.GUIComponent import GUIComponent
 from Components.config import KEY_LEFT, KEY_RIGHT, KEY_HOME, KEY_END, KEY_0, KEY_DELETE, KEY_BACKSPACE, KEY_OK, KEY_TOGGLEOW, KEY_ASCII, KEY_TIMEOUT, KEY_NUMBERS, ConfigElement, ConfigText, ConfigPassword
 from Components.ActionMap import NumberActionMap, ActionMap
 from enigma import eListbox, eListboxPythonConfigContent, ePoint, eTimer
-
-try:
-	from enigma import eMediaDatabase
-	isDreamOS = True
-except:
-	isDreamOS = False
 
 
 class ConfigListExt(GUIComponent):
@@ -32,16 +25,10 @@ class ConfigListExt(GUIComponent):
 		self.session = session
 
 	def execBegin(self):
-		if isDreamOS:
-			self.timer_conn = self.timer.timeout.connect(self.timeout)
-		else:
-			self.timer.callback.append(self.timeout)
+		self.timer.callback.append(self.timeout)
 
 	def execEnd(self):
-		if isDreamOS:
-			self.timer_conn = None
-		else:
-			self.timer.callback.remove(self.timeout)
+		self.timer.callback.remove(self.timeout)
 
 	def toggle(self):
 		selection = self.getCurrent()
@@ -87,19 +74,13 @@ class ConfigListExt(GUIComponent):
 			x()
 
 	def postWidgetCreate(self, instance):
-		if isDreamOS:
-			self.selectionChanged_conn = instance.selectionChanged.connect(self.selectionChanged)
-		else:
-			instance.selectionChanged.get().append(self.selectionChanged)
+		instance.selectionChanged.get().append(self.selectionChanged)
 		instance.setContent(self.l)
 
 	def preWidgetRemove(self, instance):
 		if isinstance(self.current, tuple) and len(self.current) > 1:
 			self.current[1].onDeselect(self.session)
-		if isDreamOS:
-			self.selectionChanged_conn = None
-		else:
-			instance.selectionChanged.get().remove(self.selectionChanged)
+		instance.selectionChanged.get().remove(self.selectionChanged)
 		instance.setContent(None)
 
 	def setList(self, l):
@@ -140,10 +121,7 @@ class ConfigListExt(GUIComponent):
 		self.pageDown()
 
 	def jumpToPreviousSection(self):
-		if isDreamOS:
-			index = self.getCurrentIndex() - 1
-		else:
-			index = self.getCurrentIndex() - 3
+		index = self.getCurrentIndex() - 3
 		maxlen = len(self.__list)
 		while index >= 0 and maxlen > 0:
 			index -= 1

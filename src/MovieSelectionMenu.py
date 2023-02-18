@@ -1,6 +1,4 @@
-﻿#!/usr/bin/python
-# encoding: utf-8
-#
+﻿#
 # Copyright (C) 2011 by Coolman & Swiss-MAD
 #
 # In case of reuse of this source code please do not remove this copyright.
@@ -18,7 +16,7 @@
 #	For more information on the GNU General Public License see:
 #	<http://www.gnu.org/licenses/>.
 #
-from __future__ import print_function, absolute_import
+from __future__ import print_function
 import os
 import struct
 
@@ -34,21 +32,19 @@ from Screens.InputBox import InputBox
 from Screens.LocationBox import LocationBox
 from Screens.HelpMenu import HelpMenu
 from Tools.BoundFunction import boundFunction
-from Tools.Notifications import AddPopup
 from enigma import getDesktop
 
 from .EMCFileCache import movieFileCache
 from .EMCTasker import emcTasker, emcDebugOut
 from . import _
 from Plugins.Extensions.EnhancedMovieCenter.plugin import pluginOpen as emcsetup
-from .PermanentSort import PermanentSort
 from .E2Bookmarks import E2Bookmarks
 from .EMCBookmarks import EMCBookmarks
 from .RogueFileCheck import RogueFileCheck
 from .CommonSupport import extTS, extMedia
 global extTS
 
-cutsParser = struct.Struct('>QI') # big-endian, 64-bit PTS and 32-bit type
+cutsParser = struct.Struct('>QI')  # big-endian, 64-bit PTS and 32-bit type
 
 sz_w = getDesktop(0).size().width()
 
@@ -308,7 +304,7 @@ class MovieMenu(Screen, E2Bookmarks, EMCBookmarks):
 				LocationBox,
 					windowTitle=_("Create link"),
 					text=_("Choose directory"),
-					currDir =str(path) + "/",
+					currDir=str(path) + "/",
 					bookmarks=config.movielist.videodirs,
 					autoAdd=False,
 					editDir=True,
@@ -326,7 +322,7 @@ class MovieMenu(Screen, E2Bookmarks, EMCBookmarks):
 				cmd = 'ln -s "' + linkPath + '" "' + os.path.join(currentPath, name) + '"'
 				if cmd != "":
 					association = []
-					association.append((self.mselection.reloadList))	# Force list reload after creating the link
+					association.append((self.mselection.reloadList))  # Force list reload after creating the link
 					emcTasker.shellExecute(cmd, association)
 			except Exception as e:
 				emcDebugOut("[EMCMM] createLink exception:\n" + str(e))

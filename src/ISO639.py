@@ -1,7 +1,3 @@
-import six
-
-
-# -*- coding: utf-8 -*-
 LanguageCodes = {}
 
 LanguageCodes["aar"] = LanguageCodes["aa"] = ("Afar", "Hamitic")
@@ -183,16 +179,16 @@ class ISO639Language:
 		if depth == self.PRIMARY:
 			wanted_languages = ["Undetermined", "English", "German", "Arabic", "Catalan", "Croatian", "Czech", "Danish", "Dutch", "Estonian", "Finnish", "French", "Greek", "Hungarian", "Lithuanian", "Latvian", "Icelandic", "Italian", "Norwegian", "Polish", "Portuguese", "Russian", "Serbian", "Slovakian", "Slovenian", "Spanish", "Swedish", "Turkish", "Ukrainian"]
 		elif depth == self.SECONDARY:
-			for key, val in six.iteritems(LanguageCodes):
+			for key, val in iter(LanguageCodes.items()):
 				if len(key) == 2:
 					wanted_languages.append(val[0])
 		else:
-			for key, val in six.iteritems(LanguageCodes):
+			for key, val in iter(LanguageCodes.items()):
 				if len(key) == 3:
 					wanted_languages.append(val[0])
 
 		self.idlist_by_name = {}
-		for key, val in six.iteritems(LanguageCodes):
+		for key, val in iter(LanguageCodes.items()):
 			val = val[0]
 			if val not in wanted_languages:
 				continue
@@ -203,7 +199,7 @@ class ISO639Language:
 
 		self.name_and_shortid_by_longid = {}
 		self.name_by_shortid = {}
-		for lang, id_list in six.iteritems(self.idlist_by_name):
+		for lang, id_list in iter(self.idlist_by_name.items()):
 			long_ids = []
 			short_id = None
 			for id in id_list:

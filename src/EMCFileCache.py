@@ -1,6 +1,4 @@
-﻿#!/usr/bin/python
-# encoding: utf-8
-#
+﻿#
 # In case of reuse of this source code please do not remove this copyright.
 #
 #	This program is free software: you can redistribute it and/or modify
@@ -19,15 +17,9 @@
 
 from __future__ import print_function
 from Components.config import config
-from datetime import datetime
-import os
+from os.path import isfile, isdir, islink, exists, realpath
 
 MinCacheLimit = config.EMC.min_file_cache_limit.getValue()
-pathisfile = os.path.isfile
-pathisdir = os.path.isdir
-pathislink = os.path.islink
-pathexists = os.path.exists
-pathreal = os.path.realpath
 
 idx_isLink = 0
 idx_isDir = 1
@@ -64,14 +56,14 @@ class EMCFileCache():
 
 	def delcacheCountSizeList(self):
 		self.cacheCountSizeList = {}
-		print("EMC delete cacheCountSizeList", self.cacheCountSizeList)
+		print("EMC delete cacheCountSizeList %s" % self.cacheCountSizeList)
 
 	def delcacheCountSizeListEntriesOnFileOp(self, path):
 		#print "EMC delcacheCountSizeListEntriesOnFileOp",path
 		rescanPaths = []
 		if path:
 			for k in self.cacheCountSizeList.keys():
-				if (k + "/").startswith(path + "/") or (path + "/").startswith(k + "/"): # drop dirs containing path, but not "a/bc" when path is "a/bcd/e", therefore append "/"
+				if (k + "/").startswith(path + "/") or (path + "/").startswith(k + "/"):  # drop dirs containing path, but not "a/bc" when path is "a/bcd/e", therefore append "/"
 					rescanPaths.append(k)
 					#print "EMC delcacheCountSizeListEntriesOnFileOp IS  deleting",k," due to OP on path ",path
 				#else:
@@ -88,27 +80,27 @@ class EMCFileCache():
 
 	def addPathToCache(self, path, subdirlist, filelist, MovieCenterInst):
 		if config.EMC.files_cache.value:
-			print("EMC addPathToCache", path)
+			print("EMC addPathToCache %s" % path)
 			if (len(subdirlist) > MinCacheLimit) or (len(filelist) > MinCacheLimit):
 				self.cacheDirectoryList[path] = subdirlist
 				for p, n, e in subdirlist:
 					if not (p in self.cacheAttributeList):
 						AttributeList = [None] * idx_num
-						AttributeList[idx_isLink] = pathislink(p)
-						AttributeList[idx_isDir] = True # we are in subdirlist
-						AttributeList[idx_isFile] = False # we are in subdirlist
-						AttributeList[idx_Date] = pathexists(p) and MovieCenterInst.checkDate(p, True)
-						AttributeList[idx_realpath] = pathreal(p) #for dirs only
+						AttributeList[idx_isLink] = islink(p)
+						AttributeList[idx_isDir] = True  # we are in subdirlist
+						AttributeList[idx_isFile] = False  # we are in subdirlist
+						AttributeList[idx_Date] = exists(p) and MovieCenterInst.checkDate(p, True)
+						AttributeList[idx_realpath] = realpath(p)  # for dirs only
 						self.cacheAttributeList[p] = AttributeList
 				self.cacheFileList[path] = filelist
 				for p, n, e in filelist:
 					if not (p in self.cacheAttributeList):
 						AttributeList = [None] * idx_num
-						AttributeList[idx_isLink] = pathislink(p)
-						AttributeList[idx_isDir] = False # we are in filelist, no entry is a real directrory ...
-						AttributeList[idx_isFile] = pathisfile(p) # ... but filelist might contain virtual directories
-						AttributeList[idx_Date] = pathexists(p) and MovieCenterInst.checkDate(p, False)
-						#AttributeList[idx_realpath] = pathreal(p) #for dirs only
+						AttributeList[idx_isLink] = islink(p)
+						AttributeList[idx_isDir] = False  # we are in filelist, no entry is a real directrory ...
+						AttributeList[idx_isFile] = isfile(p)  # ... but filelist might contain virtual directories
+						AttributeList[idx_Date] = exists(p) and MovieCenterInst.checkDate(p, False)
+						#AttributeList[idx_realpath] = realpath(p) #for dirs only
 						self.cacheAttributeList[p] = AttributeList
 			else:
 				if path in self.cacheDirectoryList:
@@ -130,7 +122,7 @@ class EMCFileCache():
 				self.cacheFileList[path] = filelist
 
 	def getCacheForPath(self, path):
-		print("EMC getCacheForPath", path)
+		print("EMC getCacheForPath %s" % path)
 		if config.EMC.files_cache.value and path in self.cacheDirectoryList and path in self.cacheFileList:
 			subdirlist = self.cacheDirectoryList[path]
 			filelist = self.cacheFileList[path]
@@ -146,7 +138,7 @@ class EMCFileCache():
 		if config.EMC.files_cache.value and (path in self.cacheAttributeList):
 			isLink = self.cacheAttributeList[path][idx_isLink]
 		if isLink is None:
-			isLink = pathislink(path)
+			isLink = islink(path)
 		return isLink
 
 	def isDir(self, path):
@@ -154,7 +146,7 @@ class EMCFileCache():
 		if (config.EMC.check_dead_links.value != "always") and config.EMC.files_cache.value and (path in self.cacheAttributeList):
 			isDir = self.cacheAttributeList[path][idx_isDir]
 		if isDir is None:
-			isDir = pathisdir(path)
+			isDir = isdir(path)
 		return isDir
 
 	def isFile(self, path):
@@ -162,7 +154,7 @@ class EMCFileCache():
 		if (config.EMC.check_dead_links.value != "always") and config.EMC.files_cache.value and (path in self.cacheAttributeList):
 			isFile = self.cacheAttributeList[path][idx_isFile]
 		if isFile is None:
-			isFile = pathisfile(path)
+			isFile = isfile(path)
 		return isFile
 
 	def realpath(self, path):
@@ -170,7 +162,7 @@ class EMCFileCache():
 		if config.EMC.files_cache.value and (path in self.cacheAttributeList):
 			realpath = self.cacheAttributeList[path][idx_realpath]
 		if realpath is None:
-			realpath = pathreal(path)
+			realpath = realpath(path)
 		return realpath
 
 	def getDateInfoFromCacheForPath(self, path):
@@ -214,7 +206,7 @@ class EMCFileCache():
 	def delPathFromCache(self, path):
 		if len(path) > 1 and path[-1] == "/":
 			path = path[:-1]
-		print("EMC delPathFromCache", path)
+		print("EMC delPathFromCache %s" % path)
 		if path in self.cacheDirectoryList:
 			self.deleteAssociatedListEntries(self.cacheDirectoryList[path])
 			del self.cacheDirectoryList[path]

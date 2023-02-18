@@ -1,7 +1,4 @@
-﻿#!/usr/bin/python
-# encoding: utf-8
-#
-# EMCEventName
+﻿# EMCEventName
 # Copyright (C) 2011 betonme
 #
 # In case of reuse of this source code please do not remove this copyright.
@@ -20,9 +17,7 @@
 #	<http://www.gnu.org/licenses/>.
 #
 
-from Components.Converter.Converter import Converter
 from Components.Converter.MovieInfo import MovieInfo
-from Components.Element import cached, ElementError
 
 
 class EMCMovieInfo(MovieInfo):

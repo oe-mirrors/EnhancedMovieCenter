@@ -1,7 +1,7 @@
-﻿from Components.Converter.Converter import Converter
-from time import localtime, strftime, gmtime
-from Components.Element import cached
+﻿from time import localtime, strftime, gmtime
 from Components.config import config
+from Components.Converter.Converter import Converter
+from Components.Element import cached
 
 
 class EMCClockToText(Converter, object):

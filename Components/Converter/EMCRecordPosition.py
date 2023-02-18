@@ -1,7 +1,4 @@
-﻿#!/usr/bin/python
-# encoding: utf-8
-#
-# EMCServicePosition
+﻿# EMCServicePosition
 # Copyright (C) 2011 betonme
 #
 # In case of reuse of this source code please do not remove this copyright.

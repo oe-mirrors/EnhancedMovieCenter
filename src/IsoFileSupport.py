@@ -1,6 +1,4 @@
-﻿#!/usr/bin/python
-# encoding: utf-8
-#
+﻿#
 # IsoSupport
 # Copyright (C) 2011 betonme
 #
@@ -19,7 +17,6 @@
 #	For more information on the GNU General Public License see:
 #	<http://www.gnu.org/licenses/>.
 #
-from __future__ import absolute_import
 import os
 
 from .EMCTasker import emcDebugOut

@@ -1,6 +1,4 @@
-﻿#!/usr/bin/python
-# encoding: utf-8
-#
+﻿#
 # Copyright (C) 2011 by Coolman & Swiss-MAD
 #
 # In case of reuse of this source code please do not remove this copyright.
@@ -18,7 +16,7 @@
 #	For more information on the GNU General Public License see:
 #	<http://www.gnu.org/licenses/>.
 #
-from __future__ import print_function, absolute_import
+from __future__ import print_function
 from Components.config import *
 from Components.ActionMap import ActionMap
 from Plugins.Plugin import PluginDescriptor
@@ -32,7 +30,6 @@ from Components.Converter import EMCEventName
 from Components.Converter import EMCServicePosition
 from Components.Converter import EMCRecordPosition
 from Components.Converter import EMCServiceTime
-import six
 
 from . import _
 from Components.Language import language
@@ -120,7 +117,7 @@ class Autoselect639Language(ISO639Language):
 		choices_dict = {}
 		choices_list = []
 		defaults = []
-		for lang, id_list in six.iteritems(self.idlist_by_name):
+		for lang, id_list in iter(self.idlist_by_name.items()):
 			if syslang not in id_list and 'en' not in id_list:
 				name = _(lang)
 				short_id = sorted(id_list, key=len)[0]
@@ -144,8 +141,10 @@ def langList():
 	newlist = iso639.getTranslatedChoicesDictAndSortedListAndDefaults()[1]
 	return newlist
 
+
 try:
 	from Components.International import international
+
 	def langListEPG():
 		langs = international.getLocaleList()
 		newlist = []
@@ -187,9 +186,9 @@ date_choices = [("", _("Off")),
 		]
 
 dirinfo_choices = [("", _("Off")),
-			("D", _("Description")), # Description
+			("D", _("Description")),  # Description
 			("C", _("( # )")),  # Count
-			("CS", _("( # / GB )")), # Count / Size
+			("CS", _("( # / GB )")),  # Count / Size
 			("S", _("( GB )"))]  # Size
 
 progress_choices = [("PB", _("ProgressBar")),
@@ -411,7 +410,7 @@ config.EMC.color_finished = ConfigSelection(default="#38ff48", choices=[("#38ff4
 config.EMC.color_recording = ConfigSelection(default="#ff0000", choices=[("#ff0000", _("Red")), ("#ff9999", _("Light red")), ("#990000", _("Dark red"))])
 config.EMC.color_highlight = ConfigSelection(default="#bababa", choices=[("#ffffff", _("White")), ("#cccccc", _("Light grey")), ("#bababa", _("Grey")), ("#666666", _("Dark grey")), ("#000000", _("Black"))])
 
-nget = False # this is needed for vti-image at the moment
+nget = False  # this is needed for vti-image at the moment
 try:
 	ngettext("%d second", "%d seconds", 30)
 	nget = True
@@ -526,7 +525,7 @@ def playerCallback(reopen=False, *args):
 
 
 def autostart(reason, **kwargs):
-	if reason == 0: # start
+	if reason == 0:  # start
 		if "session" in kwargs:
 			global gSession
 			from .EnhancedMovieCenter import EMCStartup

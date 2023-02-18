@@ -1,6 +1,4 @@
-﻿#!/usr/bin/python
-# encoding: utf-8
-#
+﻿# E2Bookmarks
 # Copyright (C) 2011 by betonme
 #
 # In case of reuse of this source code please do not remove this copyright.
@@ -18,12 +16,9 @@
 #	For more information on the GNU General Public License see:
 #	<http://www.gnu.org/licenses/>.
 #
-from __future__ import absolute_import
-import os
+from os.path import normpath
 
-from Components.config import *
-
-from .EMCTasker import emcTasker, emcDebugOut
+from Components.config import config
 
 
 class E2Bookmarks():
@@ -33,8 +28,8 @@ class E2Bookmarks():
 	# Is the E2 bookmarks as a list
 	def isE2Bookmark(self, path):
 		if path and config.movielist and config.movielist.videodirs:
-			bookmark = os.path.normpath(path) + "/"
-			bookmarks = [os.path.normpath(e2bm) + "/" for e2bm in config.movielist.videodirs.value]
+			bookmark = normpath(path) + "/"
+			bookmarks = [normpath(e2bm) + "/" for e2bm in config.movielist.videodirs.value]
 			if bookmark in bookmarks:
 				return True
 		return False
@@ -42,7 +37,7 @@ class E2Bookmarks():
 	# Returns the E2 bookmarks as a list
 	def getE2Bookmarks(self):
 		if config.movielist and config.movielist.videodirs:
-			return [os.path.normpath(e2bm) for e2bm in config.movielist.videodirs.value]
+			return [normpath(e2bm) for e2bm in config.movielist.videodirs.value]
 		else:
 			return []
 
@@ -51,8 +46,8 @@ class E2Bookmarks():
 	# Returns False on already in bookmarklist or failure
 	def addE2Bookmark(self, path):
 		if path and config.movielist and config.movielist.videodirs:
-			bookmark = os.path.normpath(path) + "/"
-			bookmarks = [os.path.normpath(e2bm) + "/" for e2bm in config.movielist.videodirs.value]
+			bookmark = normpath(path) + "/"
+			bookmarks = [normpath(e2bm) + "/" for e2bm in config.movielist.videodirs.value]
 			if bookmark not in bookmarks:
 				bookmarks.append(bookmark)
 				bookmarks.sort()
@@ -66,8 +61,8 @@ class E2Bookmarks():
 	# Returns False on already in bookmarklist or failure
 	def removeE2Bookmark(self, path):
 		if path and config.movielist and config.movielist.videodirs:
-			bookmark = os.path.normpath(path) + "/"
-			bookmarks = [os.path.normpath(e2bm) + "/" for e2bm in config.movielist.videodirs.value]
+			bookmark = normpath(path) + "/"
+			bookmarks = [normpath(e2bm) + "/" for e2bm in config.movielist.videodirs.value]
 			if bookmark in bookmarks:
 				# Adapted from LocationBox
 				bookmarks.remove(bookmark)

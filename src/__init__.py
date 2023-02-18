@@ -1,5 +1,4 @@
 ﻿from gettext import bindtextdomain, dgettext
-import sys
 from skin import loadSkin
 from Components.Language import language
 from Tools.Directories import resolveFilename, SCOPE_PLUGINS
@@ -15,4 +14,3 @@ _ = lambda txt: dgettext("EnhancedMovieCenter", txt) if txt else ""
 
 localeInit()
 language.addCallback(localeInit)
-PY3 = sys.version_info[0] == 3

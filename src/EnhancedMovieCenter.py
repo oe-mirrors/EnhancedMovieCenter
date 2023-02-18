@@ -1,6 +1,4 @@
-﻿#!/usr/bin/python
-# encoding: utf-8
-#
+﻿#
 # Copyright (C) 2011 by Coolman & Swiss-MAD
 #
 # In case of reuse of this source code please do not remove this copyright.
@@ -19,7 +17,7 @@
 #	<http://www.gnu.org/licenses/>.
 #
 
-from __future__ import print_function, absolute_import
+from __future__ import print_function
 from . import _
 from Components.config import *
 from Components.config import config
@@ -27,8 +25,6 @@ from Components.Button import Button
 from .configlistext import ConfigListScreenExt
 from Components.Language import *
 from Components.ActionMap import ActionMap
-from Components.Label import Label
-from Components.Pixmap import Pixmap
 from Components.Sources.StaticText import StaticText
 from Screens.Screen import Screen
 from Screens.LocationBox import LocationBox
@@ -36,7 +32,7 @@ from Screens.MessageBox import MessageBox
 from Screens.ServiceScan import *
 import Screens.Standby
 from Tools import Notifications
-from enigma import eServiceEvent, eActionMap, eTimer, getDesktop
+from enigma import eServiceEvent, eTimer, getDesktop
 import os
 import struct
 import NavigationInstance
@@ -50,11 +46,6 @@ except ImportError as ie:
 else:
 	hasCutlistDownloader = True
 
-try:
-	from enigma import eMediaDatabase
-	isDreamOS = True
-except:
-	isDreamOS = False
 
 from .DelayedFunction import DelayedFunction
 from .EMCTasker import emcTasker, emcDebugOut
@@ -109,12 +100,12 @@ def cleanupSetup(dummy=None):
 			ltime = lotime[3] * 60 + lotime[4]
 			ctime = cltime[0] * 60 + cltime[1]
 			seconds = 60 * (ctime - ltime)
-			if recordings or rec_time > 0 and (rec_time - time()) < 600: # no more recordings exist
+			if recordings or rec_time > 0 and (rec_time - time()) < 600:  # no more recordings exist
 				DelayedFunction(1800000, cleanupSetup)
 				emcDebugOut("recordings exist... so next trashcan cleanup in " + str(seconds / 60) + " minutes")
 			else:
 				if seconds <= 0:
-					seconds += 86400	# 24*60*60
+					seconds += 86400  # 24*60*60
 				# Recall setup funktion
 				trashCleanCall = DelayedFunction(1000 * seconds, cleanupSetup)
 				# Execute trash cleaning
@@ -154,8 +145,6 @@ def EMCStartup(session):
 #			Name (Button),	Column,	ID (Title)
 from collections import OrderedDict
 
-import six
-
 
 predefined_settings = OrderedDict([(_("Custom"), (None, "")),
 					(_("Default"), (None, "D")),
@@ -165,11 +154,11 @@ predefined_settings = OrderedDict([(_("Custom"), (None, "")),
 
 
 def get_predefined_columns():
-	return [v[0] for k, v in six.iteritems(predefined_settings) if v[0] is not None]
+	return [v[0] for k, v in iter(predefined_settings.items()) if v[0] is not None]
 
 
 def get_predefined_nameid(column):
-	for k, v in six.iteritems(predefined_settings):
+	for k, v in iter(predefined_settings.items()):
 		if v[0] == column:
 			return k, v[1]
 
@@ -254,7 +243,7 @@ class EnhancedMovieCenterMenu(ConfigListScreenExt, Screen):
 			"bluelong": self.loadDefaultSettings,
 			"nextBouquet": self.keyPreviousSection,
 			"prevBouquet": self.keyNextSection,
-		}, -2) # higher priority
+		}, -2)  # higher priority
 
 		self["key_red"] = Button(_("Cancel"))
 		self["key_green"] = Button(_("Save"))
@@ -272,10 +261,7 @@ class EnhancedMovieCenterMenu(ConfigListScreenExt, Screen):
 		self.createConfig()
 
 		self.reloadTimer = eTimer()
-		try:
-			self.reloadTimer_conn = self.reloadTimer.timeout.connect(self.createConfig)
-		except:
-			self.reloadTimer.callback.append(self.createConfig)
+		self.reloadTimer.callback.append(self.createConfig)
 
 		# Override selectionChanged because our config tuples have a size bigger than 2
 		def selectionChanged():
@@ -500,8 +486,7 @@ class EnhancedMovieCenterMenu(ConfigListScreenExt, Screen):
 		]
 		)
 
-		if not isDreamOS:
-			self.EMCConfig.extend(
+		self.EMCConfig.extend(
 		[
 			(_("Cover background"), config.EMC.movie_cover_background, None, None, 0, [-3], _("HELP_Cover background"), None, None),
 		]
@@ -517,8 +502,7 @@ class EnhancedMovieCenterMenu(ConfigListScreenExt, Screen):
 		]
 		)
 
-		if not isDreamOS:
-			self.EMCConfig.extend(
+		self.EMCConfig.extend(
 		[
 			(_("Method of hiding MiniTV"), config.EMC.hide_miniTV_method, None, None, 0, [], _("HELP_hide_MiniTV_method"), "stopService", "stopService"),
 		]
@@ -576,10 +560,9 @@ class EnhancedMovieCenterMenu(ConfigListScreenExt, Screen):
 							list.append(getConfigListEntry("<DUMMY CONFIGSECTION>"))
 						else:
 							list.append(getConfigListEntry(conf[1]))
-						if not isDreamOS:
-							list.append(getConfigListEntry(conf[0]))
+						list.append(getConfigListEntry(conf[0]))
 					else:
-						list.append(getConfigListEntry(conf[0], conf[1], conf[2], conf[3], conf[4], conf[5], conf[6])) # not needed conf[7], conf[8]
+						list.append(getConfigListEntry(conf[0], conf[1], conf[2], conf[3], conf[4], conf[5], conf[6]))  # not needed conf[7], conf[8]
 					# Check for predefined config match
 					for i, pd in enumerate(pds[:]):
 						if conf[pd] is not None:
@@ -724,7 +707,7 @@ class EnhancedMovieCenterMenu(ConfigListScreenExt, Screen):
 					LocationBox,
 						windowTitle=_("Select Location"),
 						text=_("Choose directory"),
-						currDir =str(path) + "/",
+						currDir=str(path) + "/",
 						bookmarks=config.movielist.videodirs,
 						autoAdd=False,
 						editDir=True,

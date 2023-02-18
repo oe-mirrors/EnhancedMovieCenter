@@ -1,6 +1,4 @@
-﻿#!/usr/bin/python
-# encoding: utf-8
-#
+﻿#
 # Copyright (C) 2011 by Coolman & Swiss-MAD
 #
 # In case of reuse of this source code please do not remove this copyright.
@@ -19,7 +17,7 @@
 #	<http://www.gnu.org/licenses/>.
 #
 
-from __future__ import print_function, absolute_import
+from __future__ import print_function
 from enigma import eTimer, eConsoleAppContainer
 from Components.config import *
 from Screens.Standby import *
@@ -39,7 +37,7 @@ import six
 
 
 def emcDebugOut(outtxt, outfile=None, fmode="a", forced=False):
-	try:	# fails if called too early during Enigma startup
+	try:  # fails if called too early during Enigma startup
 		if config.EMC.debug.value or forced:
 			if not os.path.exists(config.EMC.folder.value):
 				emcTasker.shellExecute("mkdir " + config.EMC.folder.value)
@@ -65,15 +63,8 @@ class EMCExecutioner:
 	def __init__(self, identifier):
 		self.identifier = identifier   #TODO could be remove
 		self.container = eConsoleAppContainer()
-		try:
-			self.container_appClosed_conn = self.container.appClosed.connect(self.runFinished)
-			# this will cause interfilesystem transfers to stall Enigma
-			self.container_dataAvail_conn = self.container.dataAvail.connect(self.dataAvail)
-		except:
-			self.container_appClosed_conn = None
-			self.container_dataAvail_conn = None
-			self.container.appClosed.append(self.runFinished)
-			self.container.dataAvail.append(self.dataAvail)	# this will cause interfilesystem transfers to stall Enigma
+		self.container.appClosed.append(self.runFinished)
+		self.container.dataAvail.append(self.dataAvail)  # this will cause interfilesystem transfers to stall Enigma
 		self.script = deque()
 		self.associated = deque()
 		self.executing = ""
@@ -165,17 +156,15 @@ class EMCExecutioner:
 			emcDebugOut("[emcTasker] runFinished exception:\n" + str(e))
 
 	def dataAvail(self, data):
-		data = six.ensure_str(data)
+		if isinstance(data, bytes):
+			data = data.decode()
 		self.returnData += "\n" + data.replace("\n", "")
 
 
 class EMCTasker:
 	def __init__(self):
 		self.restartTimer = eTimer()
-		try:
-			self.restartTimer_conn = self.restartTimer.timeout.connect(self.RestartTimerStart)
-		except:
-			self.restartTimer.timeout.get().append(self.RestartTimerStart)
+		self.restartTimer.timeout.get().append(self.RestartTimerStart)
 		self.minutes = 0
 		self.timerActive = False
 		self.executioners = []
@@ -197,7 +186,7 @@ class EMCTasker:
 		self.session = session
 		if config.EMC.restart.value != "":
 			from .DelayedFunction import DelayedFunction
-			DelayedFunction(60 * 1000, self.RestartTimerStart, True)	# delay auto restart timer to make sure there's time for clock init
+			DelayedFunction(60 * 1000, self.RestartTimerStart, True)  # delay auto restart timer to make sure there's time for clock init
 
 	def ShowAutoRestartInfo(self):
 		# call the Execute/Stop function to update minutes
@@ -221,15 +210,15 @@ class EMCTasker:
 
 	def InitRestart(self):
 		if Screens.Standby.inStandby:
-			self.LaunchRestart(True)	# no need to query if in standby mode
+			self.LaunchRestart(True)  # no need to query if in standby mode
 		else:
-			if config.EMC.restart.value == "0": # Standby
+			if config.EMC.restart.value == "0":  # Standby
 				stri = _("Your Box is about to go into Standby, continue?\n Select no to delay one hour")
-			elif config.EMC.restart.value == "1": # DeepStandby
+			elif config.EMC.restart.value == "1":  # DeepStandby
 				stri = _("Your Box is about to go into DeepStandby, continue?\n Select no to delay one hour")
-			elif config.EMC.restart.value == "2": # Reboot
+			elif config.EMC.restart.value == "2":  # Reboot
 				stri = _("Your Box is about to go into Reboot, continue?\n Select no to delay one hour")
-			else: # E2 Restart
+			else:  # E2 Restart
 				stri = _("Your Box is about to go into E2 Restart, continue?\n Select no to delay one hour")
 			self.session.openWithCallback(self.LaunchRestart, MessageBox, stri, MessageBox.TYPE_YESNO, 30)
 
@@ -241,15 +230,15 @@ class EMCTasker:
 				emcDebugOut("!", flag, fmode="w", forced=True)
 			else:
 				self.shellExecute("rm -rf " + flag)
-			if config.EMC.restart.value == "0": # Standby
+			if config.EMC.restart.value == "0":  # Standby
 				self.session.open(Standby)
 				return "true"
 			elif config.EMC.restart.value == "1":
-				CoolRestart = 1 # DeepStandby
+				CoolRestart = 1  # DeepStandby
 			elif config.EMC.restart.value == "2":
-				CoolRestart = 2 # Reboot
+				CoolRestart = 2  # Reboot
 			else:
-				CoolRestart = 3 # E2 Restart
+				CoolRestart = 3  # E2 Restart
 			self.session.open(TryQuitMainloop, CoolRestart)
 			# this means that we're going to be re-instantiated after Enigma has restarted
 		else:
@@ -285,7 +274,7 @@ class EMCTasker:
 
 			if initializing or minsToGo > 0:
 				if minsToGo < 0:		# if initializing
-					minsToGo += 24 * 60	# today's window already passed
+					minsToGo += 24 * 60  # today's window already passed
 				elif minsToGo == 0:
 					minsToGo = 1
 				self.restartTimer.start(minsToGo * 60000, False)

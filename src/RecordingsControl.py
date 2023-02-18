@@ -1,6 +1,4 @@
-﻿#!/usr/bin/python
-# encoding: utf-8
-#
+﻿#
 # Copyright (C) 2011 by Coolman & Swiss-MAD
 #
 # In case of reuse of this source code please do not remove this copyright.
@@ -18,7 +16,6 @@
 #	For more information on the GNU General Public License see:
 #	<http://www.gnu.org/licenses/>.
 #
-from __future__ import absolute_import
 import pickle
 import os
 from collections import defaultdict
@@ -30,20 +27,13 @@ import NavigationInstance
 from .EMCTasker import emcTasker, emcDebugOut
 from .DelayedFunction import DelayedFunction
 
-try:
-	from enigma import eMediaDatabase
-	isDreamOS = True
-except:
-	isDreamOS = False
-
 
 def getRecording(filename):
 	try:
 		if filename[0] == "/":
 			filename = os.path.basename(filename)
-		if not isDreamOS:
-			if filename.lower().endswith(".ts"):
-				filename = filename[:-3]
+		if filename.lower().endswith(".ts"):
+			filename = filename[:-3]
 
 		for timer in NavigationInstance.instance.RecordTimer.timer_list:
 			try:
@@ -128,7 +118,7 @@ class RecordingsControl:
 			filename = os.path.basename(timer.Filename)
 			if timer.state == timer.StatePrepared:
 				pass
-			elif timer.state == timer.StateRunning:	# timer.isRunning()
+			elif timer.state == timer.StateRunning:  # timer.isRunning()
 				if config.EMC.files_cache.value:
 					cutfilename = "/" + filename
 					realpath = timer.Filename.replace(cutfilename, '')
@@ -146,7 +136,7 @@ class RecordingsControl:
 					self.recDict[filename] = (begin, end, timer.service_ref.ref, str(timer))
 					inform = True
 					emcDebugOut("[emcRC] REC START for: " + filename)
-			else: #timer.state == timer.StateEnded:
+			else:  # timer.state == timer.StateEnded:
 				if filename in self.recDict:
 					del self.recDict[filename]
 					inform = True
@@ -158,7 +148,7 @@ class RecordingsControl:
 					except:
 						pass
 				if config.EMC.timer_autocln.value:
-					DelayedFunction(2000, self.timerCleanup)	# postpone to avoid crash in basic timer delete by user
+					DelayedFunction(2000, self.timerCleanup)  # postpone to avoid crash in basic timer delete by user
 			if inform:
 				if config.EMC.remote_recordings.value:
 					self.recFileUpdate()
@@ -176,9 +166,8 @@ class RecordingsControl:
 		try:
 			if filename[0] == "/":
 				filename = os.path.basename(filename)
-			if not isDreamOS:
-				if filename.lower().endswith(".ts"):
-					filename = filename[:-3]
+			if filename.lower().endswith(".ts"):
+				filename = filename[:-3]
 			return filename in self.recDict
 		except Exception as e:
 			emcDebugOut("[emcRC] isRecording exception:\n" + str(e))
@@ -188,9 +177,8 @@ class RecordingsControl:
 		try:
 			if filename[0] == "/":
 				filename = os.path.basename(filename)
-			if not isDreamOS:
-				if filename.lower().endswith(".ts"):
-					filename = filename[:-3]
+			if filename.lower().endswith(".ts"):
+				filename = filename[:-3]
 			return filename in self.recRemoteList
 		except Exception as e:
 			emcDebugOut("[emcRC] isRemoteRecording exception:\n" + str(e))
@@ -200,9 +188,8 @@ class RecordingsControl:
 		try:
 			if filename[0] == "/":
 				filename = os.path.basename(filename)
-			if not isDreamOS:
-				if filename.lower().endswith(".ts"):
-					filename = filename[:-3]
+			if filename.lower().endswith(".ts"):
+				filename = filename[:-3]
 			if filename in self.recDict:
 				for timer in NavigationInstance.instance.RecordTimer.timer_list:
 					if timer.isRunning() and not timer.justplay and timer.Filename.find(filename) >= 0:
@@ -237,11 +224,10 @@ class RecordingsControl:
 
 	def fixTimerPath(self, old, new):
 		try:
-			if not isDreamOS:
-				if old.lower().endswith(".ts"):
-					old = old[:-3]
-				if new.lower().endswith(".ts"):
-					new = new[:-3]
+			if old.lower().endswith(".ts"):
+				old = old[:-3]
+			if new.lower().endswith(".ts"):
+				new = new[:-3]
 			for timer in NavigationInstance.instance.RecordTimer.timer_list:
 				if timer.isRunning() and not timer.justplay and timer.Filename == old:
 					timer.dirname = os.path.dirname(new) + "/"
@@ -268,7 +254,7 @@ class RecordingsControl:
 			if self.recFile is None:
 				self.remoteInit(spNET.whatIsMyIP())
 			if self.recFile is None:
-				return	# was not able to get IP
+				return  # was not able to get IP
 			recf = open(self.recFile, "wb")
 			pickle.dump(self.recDict.keys(), recf)
 		except Exception as e:

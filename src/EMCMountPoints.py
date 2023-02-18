@@ -1,6 +1,4 @@
-﻿#!/usr/bin/python
-# encoding: utf-8
-#
+﻿#
 # Copyright (C) 2011 by Coolman & Swiss-MAD
 #
 # In case of reuse of this source code please do not remove this copyright.
@@ -18,7 +16,6 @@
 #	For more information on the GNU General Public License see:
 #	<http://www.gnu.org/licenses/>.
 #
-from __future__ import absolute_import
 import os
 from enigma import eTimer
 from Components.config import config
@@ -30,10 +27,7 @@ class EMCMountPoints:
 		self.mountPointDeviceCache = {}
 
 		self.postWakeHDDtimer = eTimer()
-		try:
-			self.postWakeHDDtimer_conn = self.postWakeHDDtimer.timeout.connect(self.postWakeHDDtimerTimeout)
-		except:
-			self.postWakeHDDtimer.callback.append(self.postWakeHDDtimerTimeout)
+		self.postWakeHDDtimer.callback.append(self.postWakeHDDtimerTimeout)
 
 		self.postWakeHDDtimerActive = False
 		self.postWakeHDDtimerDevice = ""
@@ -71,7 +65,7 @@ class EMCMountPoints:
 
 	def postWakeHDDtimerStart(self, path):
 		self.postWakeHDDtimer.stop()
-		self.postWakeHDDtimer.start(500 * int(config.usage.hdd_standby.value), True) # within 50% of the configured standby time after waking the HDD, this timer indicates that the HDD is active (we know it better than the harddiskmanager)
+		self.postWakeHDDtimer.start(500 * int(config.usage.hdd_standby.value), True)  # within 50% of the configured standby time after waking the HDD, this timer indicates that the HDD is active (we know it better than the harddiskmanager)
 		self.postWakeHDDtimerActive = True
 		self.postWakeHDDtimerDevice = self.getMountPointDeviceCached(path)
 

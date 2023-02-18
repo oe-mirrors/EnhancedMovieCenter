@@ -1,6 +1,4 @@
-﻿#!/usr/bin/python
-# encoding: utf-8
-#
+﻿#
 # Copyright (C) 2011 by Coolman & Swiss-MAD
 #
 # In case of reuse of this source code please do not remove this copyright.
@@ -18,34 +16,25 @@
 #	For more information on the GNU General Public License see:
 #	<http://www.gnu.org/licenses/>.
 #
-from __future__ import print_function, absolute_import
+from __future__ import print_function
 import os
-import re
-import sys
-import traceback
 from time import time
 
 from Components.config import *
-from Components.ActionMap import ActionMap, NumberActionMap, HelpableActionMap
+from Components.ActionMap import ActionMap, HelpableActionMap
 from Components.Label import Label
 from Components.Pixmap import Pixmap
-from Components.ServiceEventTracker import ServiceEventTracker, InfoBarBase
-from enigma import eTimer, iPlayableService, iServiceInformation, eServiceReference, iServiceKeys, getDesktop
+from Components.ServiceEventTracker import ServiceEventTracker
+from enigma import iPlayableService, iServiceInformation, iServiceKeys, getDesktop
 from Screens.Screen import Screen
 from Screens.InfoBarGenerics import *
-from Screens.InfoBar import MoviePlayer, InfoBar
+from Screens.InfoBar import InfoBar
 from Screens.MessageBox import MessageBox
 from Screens.HelpMenu import HelpableScreen
-from Tools.BoundFunction import boundFunction
-from Tools.Directories import fileExists, resolveFilename, SCOPE_LANGUAGE, SCOPE_PLUGINS
+from Tools.Directories import fileExists, resolveFilename, SCOPE_PLUGINS
 from .ISO639 import LanguageCodes as langC
 from Components.Language import language
 
-try:
-	from enigma import eMediaDatabase
-	isDreamOS = True
-except:
-	isDreamOS = False
 
 # Zap to Live TV of record
 from Screens.MessageBox import MessageBox
@@ -70,8 +59,6 @@ from .CommonSupport import sidDVD, sidDVB
 
 from .RecordingsControl import getRecording
 import NavigationInstance
-
-from six.moves import range
 
 
 dvdPlayerPlg = "%s%s" % (resolveFilename(SCOPE_PLUGINS), "Extensions/DVDPlayer/plugin.py")
@@ -135,42 +122,27 @@ class EMCMediaCenter(CutList, Screen, HelpableScreen, InfoBarTimeshift, InfoBarS
 		self["Service"] = EMCCurrentService(session.nav, self)
 
 		# Events
-		if isDreamOS:
-			self.__event_tracker = ServiceEventTracker(screen=self, eventmap={
-					iPlayableService.evEnd: self.__serviceStopped,
-					iPlayableService.evStopped: self.__serviceStopped,
-					iPlayableService.evAudioListChanged: self.__osdAudioInfoAvail,
-					iPlayableService.evSubtitleListChanged: self.__osdSubtitleInfoAvail,
-					iPlayableService.evUser + 3: self.__osdFFwdInfoAvail,
-					iPlayableService.evUser + 4: self.__osdFBwdInfoAvail,
-					iPlayableService.evUser + 6: self.__osdAngleInfoAvail,
-					iPlayableService.evUser + 7: self.__chapterUpdated,
-					iPlayableService.evUser + 8: self.__titleUpdated,
-					iPlayableService.evUser + 9: self.__menuOpened,
-					iPlayableService.evUser + 10: self.__menuClosed
-				})
-		else:
-			self.__event_tracker = ServiceEventTracker(screen=self, eventmap={
-					# Disabled for tests
-					# If we enable them, the sound will be delayed for about 2 seconds ?
-					iPlayableService.evStart: self.__serviceStarted,
-					iPlayableService.evStopped: self.__serviceStopped,
-					#iPlayableService.evEnd: self.__evEnd,
-					#iPlayableService.evEOF: self.__evEOF,
-					#iPlayableService.evUser: self.__timeUpdated,
-					#iPlayableService.evUser+1: self.__statePlay,
-					#iPlayableService.evUser+2: self.__statePause,
-					iPlayableService.evUser + 3: self.__osdFFwdInfoAvail,
-					iPlayableService.evUser + 4: self.__osdFBwdInfoAvail,
-					#iPlayableService.evUser+5: self.__osdStringAvail,
-					iPlayableService.evUser + 6: self.__osdAudioInfoAvail,
-					iPlayableService.evUser + 7: self.__osdSubtitleInfoAvail,
-					iPlayableService.evUser + 8: self.__chapterUpdated,
-					iPlayableService.evUser + 9: self.__titleUpdated,
-					iPlayableService.evUser + 11: self.__menuOpened,
-					iPlayableService.evUser + 12: self.__menuClosed,
-					iPlayableService.evUser + 13: self.__osdAngleInfoAvail
-				})
+		self.__event_tracker = ServiceEventTracker(screen=self, eventmap={
+				# Disabled for tests
+				# If we enable them, the sound will be delayed for about 2 seconds ?
+				iPlayableService.evStart: self.__serviceStarted,
+				iPlayableService.evStopped: self.__serviceStopped,
+				#iPlayableService.evEnd: self.__evEnd,
+				#iPlayableService.evEOF: self.__evEOF,
+				#iPlayableService.evUser: self.__timeUpdated,
+				#iPlayableService.evUser+1: self.__statePlay,
+				#iPlayableService.evUser+2: self.__statePause,
+				iPlayableService.evUser + 3: self.__osdFFwdInfoAvail,
+				iPlayableService.evUser + 4: self.__osdFBwdInfoAvail,
+				#iPlayableService.evUser+5: self.__osdStringAvail,
+				iPlayableService.evUser + 6: self.__osdAudioInfoAvail,
+				iPlayableService.evUser + 7: self.__osdSubtitleInfoAvail,
+				iPlayableService.evUser + 8: self.__chapterUpdated,
+				iPlayableService.evUser + 9: self.__titleUpdated,
+				iPlayableService.evUser + 11: self.__menuOpened,
+				iPlayableService.evUser + 12: self.__menuClosed,
+				iPlayableService.evUser + 13: self.__osdAngleInfoAvail
+			})
 
 			# Keymap
 	#		self["SeekActions"] = HelpableActionMap(self, "InfobarSeekActions", 							-1 higher priority
@@ -205,7 +177,7 @@ class EMCMediaCenter(CutList, Screen, HelpableScreen, InfoBarTimeshift, InfoBarS
 				"nextAudioTrack": (self.nextAudioTrack, _("switch to the next audio track")),
 				"nextSubtitleTrack": (self.nextSubtitleTrack, _("switch to the next subtitle language")),
 				"nextAngle": (self.nextAngle, _("switch to the next angle")),
-			}, 1) # lower priority
+			}, 1)  # lower priority
 		# Only enabled if playing a dvd
 		self["DVDPlayerPlaybackActions"].setEnabled(False)
 
@@ -217,7 +189,7 @@ class EMCMediaCenter(CutList, Screen, HelpableScreen, InfoBarTimeshift, InfoBarS
 				"down": self.keyDown,
 				"ok": self.keyOk,
 				"back": self.keyBack,
-			}, 2) # lower priority
+			}, 2)  # lower priority
 		# Only enabled during DVD Menu
 		self["DVDMenuActions"].setEnabled(False)
 
@@ -230,7 +202,7 @@ class EMCMediaCenter(CutList, Screen, HelpableScreen, InfoBarTimeshift, InfoBarS
 				"nextTitle": (self.nextTitle, _("jump forward to the next title")),
 				"prevTitle": (self.prevTitle, _("jump back to the previous title")),
 				"movieInfo": (self.infoMovie, _("Movie information")),
-			}, -2) # default priority
+			}, -2)  # default priority
 
 		self["MenuActions"].prio = 2
 		if "TeletextActions" in self:
@@ -278,10 +250,7 @@ class EMCMediaCenter(CutList, Screen, HelpableScreen, InfoBarTimeshift, InfoBarS
 		self.servicelist = InfoBar.instance.servicelist
 
 		self.picload = ePicLoad()
-		try:
-			self.picload_conn = self.picload.PictureData.connect(self.showCoverCallback)
-		except:
-			self.picload.PictureData.get().append(self.showCoverCallback)
+		self.picload.PictureData.get().append(self.showCoverCallback)
 
 		# Record events
 		try:
@@ -302,10 +271,10 @@ class EMCMediaCenter(CutList, Screen, HelpableScreen, InfoBarTimeshift, InfoBarS
 		if not os.path.exists(jpgpath):
 			self["Cover"].hide()
 		else:
-			sc = AVSwitch().getFramebufferScale() # Maybe save during init
+			sc = AVSwitch().getFramebufferScale()  # Maybe save during init
 			size = self["Cover"].instance.size()
 			if self.picload:
-				self.picload.setPara((size.width(), size.height(), sc[0], sc[1], False, 1, config.EMC.movie_cover_background.value)) # Background dynamically
+				self.picload.setPara((size.width(), size.height(), sc[0], sc[1], False, 1, config.EMC.movie_cover_background.value))  # Background dynamically
 				self.picload.startDecode(jpgpath)
 
 	def showCoverCallback(self, picInfo=None):
@@ -365,7 +334,7 @@ class EMCMediaCenter(CutList, Screen, HelpableScreen, InfoBarTimeshift, InfoBarS
 		if self.firstStart:
 			# Avoid new playback if the user switches between MovieSelection and MoviePlayer
 			self.firstStart = False
-			self.evEOF()	# begin playback
+			self.evEOF()  # begin playback
 			if self.service and self.service.type != sidDVB:
 				self.realSeekLength = self.getSeekLength()
 
@@ -403,7 +372,7 @@ class EMCMediaCenter(CutList, Screen, HelpableScreen, InfoBarTimeshift, InfoBarS
 			service = self.playlist[self.playcount]
 			#TODO Problem with VLC
 			path = service and service.getPath()
-			if os.path.exists(path): #TODO use ext != vlc but must be prepared first
+			if os.path.exists(path):  # TODO use ext != vlc but must be prepared first
 				# Why should the file be removed? Maybe that's the problem with "no Cutlist while recording"
 				#cutspath = path + ".cuts"
 				#if os.path.exists(cutspath):
@@ -430,7 +399,7 @@ class EMCMediaCenter(CutList, Screen, HelpableScreen, InfoBarTimeshift, InfoBarS
 					# Only import DVDPlayer, if we want to play a DVDPlayer format
 					if fileExists(dvdPlayerPlg) or fileExists("%sc" % dvdPlayerPlg):
 						try:
-							from Plugins.Extensions.DVDPlayer import servicedvd # load c++ part of dvd player plugin
+							from Plugins.Extensions.DVDPlayer import servicedvd  # load c++ part of dvd player plugin
 						except:
 							pass
 						from Plugins.Extensions.DVDPlayer.plugin import DVDOverlay
@@ -539,7 +508,7 @@ class EMCMediaCenter(CutList, Screen, HelpableScreen, InfoBarTimeshift, InfoBarS
 									"EMCCloseAllAndZap"
 								)
 				else:
-					if config.EMC.movie_reopenEOF.value: # did the player close while movie list was open?
+					if config.EMC.movie_reopenEOF.value:  # did the player close while movie list was open?
 						#self.recordings.show()
 						reopen = True
 			#self.service = None
@@ -641,8 +610,8 @@ class EMCMediaCenter(CutList, Screen, HelpableScreen, InfoBarTimeshift, InfoBarS
 				if xp == os.path.basename(p.getPath()):
 					self.playlist.remove(p)
 		if callEOF:
-			self.playcount -= 1	# need to go one back since the current was removed
-			self.evEOF(True)	# force playback of the next movie or close the player if none left
+			self.playcount -= 1  # need to go one back since the current was removed
+			self.evEOF(True)  # force playback of the next movie or close the player if none left
 
 	def currentlyPlayedMovie(self):
 		return self.service
@@ -658,7 +627,7 @@ class EMCMediaCenter(CutList, Screen, HelpableScreen, InfoBarTimeshift, InfoBarS
 			if self.service.type != sidDVB:
 				self.makeUpdateCutList()
 
-			self.evEOF()	# start playback of the first movie
+			self.evEOF()  # start playback of the first movie
 		#self.showCover()
 
 	##############################################################################
@@ -681,10 +650,7 @@ class EMCMediaCenter(CutList, Screen, HelpableScreen, InfoBarTimeshift, InfoBarS
 				print("lang", lang)
 				desc = audioInfo.getDescription()
 				print("desc", desc)
-				if isDreamOS:
-					type = audioInfo.getType()
-				else:
-					type = None
+				type = None
 				track = idx, lang, desc, type
 				idx += 1
 				trackList += [track]
@@ -696,7 +662,7 @@ class EMCMediaCenter(CutList, Screen, HelpableScreen, InfoBarTimeshift, InfoBarS
 				audiolang = [config.EMC.audlang1.value, config.EMC.audlang2.value, config.EMC.audlang3.value]
 			else:
 				audiolang = syslang
-			useAc3 = config.EMC.autoaudio_ac3.value	# emc has new value, in some images it gives different values for that
+			useAc3 = config.EMC.autoaudio_ac3.value  # emc has new value, in some images it gives different values for that
 			if useAc3:
 				matchedAc3 = self.tryAudioTrack(tracks, audiolang, trackList, seltrack, useAc3)
 				if matchedAc3:
@@ -777,59 +743,18 @@ class EMCMediaCenter(CutList, Screen, HelpableScreen, InfoBarTimeshift, InfoBarS
 			if not config.EMC.autosubs.value or not enabled:
 				return
 
-			if isDreamOS:
-				subs = isinstance(self, InfoBarSubtitleSupport) and self.getCurrentServiceSubtitle() or None
-				n = subs and subs.getNumberOfSubtitleTracks() or 0
-				if n == 0:
-					return
-				from enigma import iSubtitleType_ENUMS
-				from Screens.AudioSelection import SUB_FORMATS, GST_SUB_FORMATS
-				self.sub_format_dict = {}
-				self.gstsub_format_dict = {}
-				for idx, (short, text, rank) in sorted(SUB_FORMATS.items(), key=lambda x: x[1][2]):
-					if rank > 0:
-						self.sub_format_dict[idx] = short
-				for idx, (short, text, rank) in sorted(GST_SUB_FORMATS.items(), key=lambda x: x[1][2]):
-					if rank > 0:
-						self.gstsub_format_dict[idx] = short
-				lt = []
-				l = []
-				for idx in range(n):
-					info = subs.getSubtitleTrackInfo(idx)
-					languages = info.getLanguage().split('/')
-					print("lang", languages)
-					iType = info.getType()
-					print("type", iType)
-					if iType == iSubtitleType_ENUMS.GST:
-						iType = info.getGstSubtype()
-						codec = iType in self.gstsub_format_dict and self.gstsub_format_dict[iType] or "?"
-					else:
-						codec = iType in self.sub_format_dict and self.sub_format_dict[iType] or "?"
-					print("codec", codec)
-
-					lt.append((idx, (iType == 1 and "DVB" or iType == 2 and "TTX" or "???"), languages))
+			subs = self.getCurrentServiceSubtitle() or self.getServiceInterface("subtitle")
+			if subs:
+				print("############################subs")
+				print(subs.getSubtitleList())
+				lt = [(e, (e[0] == 0 and "DVB" or e[0] == 1 and "TXT" or "???")) for e in (subs and subs.getSubtitleList() or [])]
 				if lt:
-					print(lt)
-					for e in lt:
-						l.append((e[0], e[1], e[2][0] in langC and langC[e[2][0]][0] or e[2][0]))
-						if l:
-							print(l)
-							for sublang in [config.EMC.sublang1.value, config.EMC.sublang2.value, config.EMC.sublang3.value]:
-								if self.trySubEnable(l, sublang):
-									break
-			else:
-				subs = self.getCurrentServiceSubtitle() or self.getServiceInterface("subtitle")
-				if subs:
-					print("############################subs")
-					print(subs.getSubtitleList())
-					lt = [(e, (e[0] == 0 and "DVB" or e[0] == 1 and "TXT" or "???")) for e in (subs and subs.getSubtitleList() or [])]
-					if lt:
-						l = [[e[0], e[1], e[0][4] in langC and langC[e[0][4]][0] or e[0][4]] for e in lt]
-						if l:
-							print(l)
-							for sublang in [config.EMC.sublang1.value, config.EMC.sublang2.value, config.EMC.sublang3.value]:
-								if self.trySubEnable(l, sublang):
-									break
+					l = [[e[0], e[1], e[0][4] in langC and langC[e[0][4]][0] or e[0][4]] for e in lt]
+					if l:
+						print(l)
+						for sublang in [config.EMC.sublang1.value, config.EMC.sublang2.value, config.EMC.sublang3.value]:
+							if self.trySubEnable(l, sublang):
+								break
 		except Exception as e:
 			emcDebugOut("[EMCPlayer] setSubtitleState exception:\n" + str(e))
 
@@ -902,7 +827,7 @@ class EMCMediaCenter(CutList, Screen, HelpableScreen, InfoBarTimeshift, InfoBarS
 					self.showAfterSeek()
 		else:
 			if self.playall:
-				self.evEOF(False, True) # True=previous
+				self.evEOF(False, True)  # True=previous
 			elif len(self.playlist) > 1:
 				if self.playcount >= 1:
 					self.playcount -= 2
@@ -923,7 +848,7 @@ class EMCMediaCenter(CutList, Screen, HelpableScreen, InfoBarTimeshift, InfoBarS
 		return keys
 
 	def getServiceInterface(self, iface):
-		service = self.session.nav.getCurrentService() # self.service
+		service = self.session.nav.getCurrentService()  # self.service
 		if service:
 			attr = getattr(service, iface, None)
 			if callable(attr):
@@ -1069,12 +994,6 @@ class EMCMediaCenter(CutList, Screen, HelpableScreen, InfoBarTimeshift, InfoBarS
 	##############################################################################
 	## Override functions from InfoBarGenerics.py
 	# InfoBarShowHide
-	if isDreamOS:
-		def serviceStarted(self): #override InfoBarShowHide function
-			if self.dvdScreen:
-				subTracks = self.getCurrentServiceSubtitle()
-				subTracks.enableSubtitles(self.dvdScreen.instance, 0) # give parent widget reference to service for drawing menu highlights in a repurposed subtitle widget
-				self.dvdScreen.show()
 	#def serviceStarted(self):
 	#	if not self.in_menu:
 	#		if self.dvdScreen:

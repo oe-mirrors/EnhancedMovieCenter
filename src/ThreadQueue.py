@@ -1,5 +1,4 @@
-﻿# -*- coding: utf-8 -*-
-from threading import Lock
+﻿from threading import Lock
 from collections import deque
 
 

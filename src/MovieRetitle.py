@@ -1,7 +1,6 @@
-﻿# -*- coding: utf-8 -*-
-from __future__ import print_function, absolute_import
+﻿from __future__ import print_function
 import os
-import six
+from glob import glob
 
 # for localized messages
 from . import _
@@ -28,7 +27,7 @@ class MovieRetitle(Screen, ConfigListScreenExt):
 		self.list = []
 		ConfigListScreenExt.__init__(self, self.list, session)
 
-		self["Path"] = Label(_("Location:"))# + ' ' + os.path.dirname(os.path.splitext(path)[0]))
+		self["Path"] = Label(_("Location:"))  # + ' ' + os.path.dirname(os.path.splitext(path)[0]))
 		self["HelpWindow"] = Pixmap()
 		self.onLayoutFinish.append(self.setCustomTitle)
 
@@ -183,10 +182,10 @@ class MovieRetitle(Screen, ConfigListScreenExt):
 			path = os.path.dirname(service.getPath())
 			file_name = os.path.basename(os.path.splitext(service.getPath())[0])
 			src = os.path.join(path, file_name)
-			new_name = six.ensure_str(new_name)
+			if isinstance(new_name, bytes):
+				new_name = new_name.decode()
 			dst = os.path.join(path, new_name)
-			import glob
-			for f in glob.glob(os.path.join(path, src + "*")):
+			for f in glob(os.path.join(path, src + "*")):
 				os.rename(f, f.replace(src, dst))
 		except Exception as e:
 			print(e)

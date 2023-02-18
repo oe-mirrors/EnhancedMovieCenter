@@ -1,6 +1,4 @@
-﻿#!/usr/bin/python
-# encoding: utf-8
-from __future__ import print_function, absolute_import
+﻿from __future__ import print_function
 import os
 
 from . import _
@@ -330,14 +328,10 @@ class PlayList(GUIComponent):
 	def postWidgetCreate(self, instance):
 		instance.setWrapAround(True)
 		instance.setContent(self.l)
-		try:
-			self.selectionChanged_conn = instance.selectionChanged.connect(self.selectionChanged)
-		except:
-			instance.selectionChanged.get().append(self.selectionChanged)
+		instance.selectionChanged.get().append(self.selectionChanged)
 
 	def preWidgetRemove(self, instance):
 		instance.setContent(None)
-		self.selectionChanged_conn = None
 
 	def readPlaylist(self):
 		self.list = []
@@ -352,7 +346,6 @@ class PlayList(GUIComponent):
 			for x in tmpplaylist:
 				pos += 1
 				self.addEntry(pos, x)
-
 
 	def playlistEntrys(self, pos, name, service):
 		entrys = [service]

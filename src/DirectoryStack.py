@@ -1,7 +1,4 @@
-﻿#!/usr/bin/python
-# encoding: utf-8
-#
-# DirectoryStack
+﻿# DirectoryStack
 # Copyright (C) 2011 betonme
 #
 # In case of reuse of this source code please do not remove this copyright.
@@ -19,16 +16,10 @@
 #	For more information on the GNU General Public License see:
 #	<http://www.gnu.org/licenses/>.
 #
-from __future__ import absolute_import
-import os
-
 from collections import deque
 
-from .EMCTasker import emcDebugOut
 
 # DirectoryStack class
-
-
 class DirectoryStack():
 
 	def __init__(self):

@@ -1,6 +1,4 @@
-﻿#!/usr/bin/python
-# encoding: utf-8
-#
+﻿#
 # Copyright (C) 2011 betonme, 2023 pjsharp
 #
 # In case of reuse of this source code please do not remove this copyright.
@@ -18,15 +16,11 @@
 #	For more information on the GNU General Public License see:
 #	<http://www.gnu.org/licenses/>.
 #
-from __future__ import absolute_import
 import os
-import struct
 from datetime import datetime
-from time import mktime
 
 from Components.config import *
-from enigma import eServiceCenter, iServiceInformation, eServiceReference
-from ServiceReference import ServiceReference
+from enigma import eServiceCenter, iServiceInformation
 from .EMCFileCache import movieFileCache
 from .CutListSupport import CutList
 from .CommonSupport import getInfoFile, readPlaylist
@@ -50,7 +44,7 @@ class ServiceCenter:
 		return instance
 
 	def info(self, service):
-		if service:		
+		if service:
 			return ServiceInfo(service)
 		else:
 			return None
@@ -61,10 +55,10 @@ class ServiceInfo:
 		self.service = service
 		self.serviceHandler = eServiceCenter.getInstance()
 		self.info = self.serviceHandler and self.serviceHandler.info(service)
-		self.event = ServiceEvent(service, self) 
+		self.event = ServiceEvent(service, self)
 		self.path = service.getPath()
 		self.isfile = os.path.isfile(self.path)
-		self.isdir = os.path.isdir(self.path)		
+		self.isdir = os.path.isdir(self.path)
 
 	def getName(self, service):
 		return self.info and self.info.getName(service) or ""
@@ -100,7 +94,7 @@ class ServiceInfo:
 
 	def getFileSize(self, service):
 		return self.info and self.info.getFileSize(service) or 0
-		
+
 	def __getFolderSize(self, path):
 		folder_size = 0
 		if config.EMC.directories_size_skin.value:
@@ -110,7 +104,7 @@ class ServiceInfo:
 				if size is not None:
 					folder_size = size * 1024 * 1024 * 1024
 		return folder_size
-		
+
 
 class ServiceEvent:
 	def __init__(self, service, serviceInfo):
@@ -120,7 +114,7 @@ class ServiceEvent:
 		self.path = service.getPath()
 		self.isfile = os.path.isfile(self.path)
 		self.ext = self.path and os.path.splitext(self.path)[1].lower()
-		
+
 	def getBeginTime(self):
 		beginTime = None
 		if not config.EMC.record_show_real_length.value:
@@ -151,7 +145,7 @@ class ServiceEvent:
 
 	def getExtendedDescription(self):
 		return self.__getExtendedDescription()
-		
+
 	def getExtraEventData(self):
 		return self.event and self.event.getExtraEventData() or None
 
@@ -168,7 +162,7 @@ class ServiceEvent:
 				return dt.strftime("%d.%m.%Y %H:%M")
 		else:
 			return None
-			
+
 	def getSeriesCRID(self):
 		return self.event and self.event.getSeriesCRID() or None
 
@@ -180,16 +174,16 @@ class ServiceEvent:
 
 	def __getDuration(self):
 		duration = 0
-		
+
 		if config.EMC.record_show_real_length.value:
-			# If it is a record we will force to use the timer duration		
+			# If it is a record we will force to use the timer duration
 			record = getRecording(self.path)
 			if record:
 				begin, end, service = record
-				duration = end - begin # times = (begin, end) : end - begin
+				duration = end - begin  # times = (begin, end) : end - begin
 		else:
 			duration = self.event and self.event.getDuration() or 0
-			
+
 		if not duration:
 			if self.isfile:
 				duration = self.serviceInfo.info and self.serviceInfo.info.getLength(self.service) or 0
@@ -202,7 +196,7 @@ class ServiceEvent:
 
 	def __getExtendedDescription(self):
 		extendedDescription = self.event and self.event.getExtendedDescription() or ""
-	
+
 		if not extendedDescription:
 			if self.isfile:
 				if not self.event or not self.event.getShortDescription() and not self.serviceInfo.getInfoString(self.service, iServiceInformation.sDescription):
@@ -231,9 +225,9 @@ class ServiceEvent:
 						else:
 							extendedDescription = ""
 			else:
-				extendedDescription = self.path			
+				extendedDescription = self.path
 		return extendedDescription
-		
+
 	def __getCutListLength(self):
 		cutlist = self.path and CutList(self.path) or []
 		length = cutlist and cutlist.getCutListLength() or 0

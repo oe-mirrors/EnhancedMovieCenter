@@ -1,6 +1,4 @@
-﻿#!/usr/bin/python
-# encoding: utf-8
-#
+﻿#
 #   Copyright (C) 2011-2023
 #
 #   In case of reuse of this source code please do not remove this copyright.
@@ -19,7 +17,6 @@
 #	<http://www.gnu.org/licenses/>.
 #
 
-from __future__ import absolute_import
 import os
 import re
 from enigma import eServiceReference
@@ -42,7 +39,7 @@ global sidDVB, sidDVD, sidMP3
 # Media types
 extAudio = frozenset([".ac3", ".dts", ".flac", ".m4a", ".mp2", ".mp3", ".ogg", ".wav", ".wma", ".aac"])
 extVideo = frozenset([".ts", ".trp", ".avi", ".divx", ".f4v", ".flv", ".img", ".ifo", ".iso", ".m2ts", ".m4v", ".mkv", ".mov", ".mp4", ".mpeg", ".mpg", ".mts", ".vob", ".wmv", ".bdmv", ".asf", ".stream", ".webm"])
-extPlaylist = frozenset([".m3u", ".e2pls"])#, ".pls"])
+extPlaylist = frozenset([".m3u", ".e2pls"])  # , ".pls"])
 extMedia = extAudio | extVideo | extPlaylist
 extDir = frozenset([""])
 extList = extMedia | extDir
@@ -63,7 +60,7 @@ extBlu = frozenset([".bdmv"])
 plyDVB = extTS											# ServiceDVB
 plyM2TS = extM2ts										# ServiceM2TS
 plyDVD = extDvd											# ServiceDVD
-plyMP3 = extMedia - plyDVB - plyM2TS - plyDVD - extBlu	# ServiceMP3 GStreamer
+plyMP3 = extMedia - plyDVB - plyM2TS - plyDVD - extBlu  # ServiceMP3 GStreamer
 plyVideo = extMedia - extAudio
 plyVLC = extVLC											# VLC Plugin
 #plyBLU      = extBlu | extIso							# BludiscPlayer Plugin
@@ -147,7 +144,7 @@ def getMetaTitleFromDescription(desc):
 				title = desc
 	except Exception as e:
 		emcDebugOut("[EMC] getMetaTitle failed !!!\n" + str(e))
-	return title					
+	return title
 
 
 ## readPlaylist (imported from EMCPlayList.py)
@@ -167,4 +164,3 @@ def readPlaylist(path):
 				name = service + "\n"
 				overview.append(name)
 		return overview
-	

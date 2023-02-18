@@ -1,7 +1,4 @@
-﻿#!/usr/bin/python
-# encoding: utf-8
-#
-# CutListSupport
+﻿# CutListSupport
 # Copyright (C) 2011 cmikula, betonme
 #
 # In case of reuse of this source code please do not remove this copyright.
@@ -20,7 +17,7 @@
 #	<http://www.gnu.org/licenses/>.
 #
 
-from __future__ import print_function, absolute_import
+from __future__ import print_function
 import os
 import struct
 from bisect import insort
@@ -40,11 +37,6 @@ except ImportError as ie:
 else:
 	hasCutlistDownloader = True
 
-try:
-	from enigma import eMediaDatabase
-	isDreamOS = True
-except:
-	isDreamOS = False
 
 # [Cutlist.Workaround] Enable Cutlist-Workaround:
 # Creates an Backup of the Cutlist during recording and merge it with the cutlist-File from enigma after recording
@@ -137,7 +129,7 @@ class CutList():
 			service = hasattr(self, "service") and self.service
 
 			# Is there native cuesheet support
-			cue = self.__getCuesheet() #InfoBarCueSheetSupport._InfoBarCueSheetSupport__getCuesheet(self)
+			cue = self.__getCuesheet()  # InfoBarCueSheetSupport._InfoBarCueSheetSupport__getCuesheet(self)
 			if cue is None or (cue and not cue.getCutList()):
 				# No native cuesheet support
 				if service:
@@ -189,15 +181,7 @@ class CutList():
 					self.__writeCutFile()
 			else:
 				# Native cuesheet support
-				if isDreamOS and self.service:
-					if self.service.getPath().rsplit('.')[-1] == "mkv":
-						path = self.service.getPath()
-						self.__newPath(path)
-						self.__writeCutFile()
-					else:
-						cue.setCutList(self.cut_list)
-				else:
-					cue.setCutList(self.cut_list)
+				cue.setCutList(self.cut_list)
 		except Exception as e:
 			emcDebugOut("[CUTS] uploadCuesheet exception:" + str(e))
 

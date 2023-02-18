@@ -1,7 +1,6 @@
-﻿# -*- coding: utf-8 -*-
-from __future__ import print_function, absolute_import
+﻿from __future__ import print_function
 from . import _
-from Components.ActionMap import ActionMap, HelpableActionMap
+from Components.ActionMap import HelpableActionMap
 from Components.MenuList import MenuList
 from Components.Button import Button
 from Components.Label import Label
@@ -26,8 +25,8 @@ from Components.Pixmap import Pixmap
 from enigma import ePicLoad, eTimer, getDesktop
 import shutil
 
-from six.moves.urllib.parse import quote
-from six.moves.urllib.request import Request, urlopen
+from urllib.parse import quote
+from urllib.request import Request, urlopen
 import six
 
 config.EMC.movieinfo = ConfigSubsection()
@@ -298,20 +297,11 @@ class MovieInfoTMDb(Screen):
 		self.spath = spath
 		self["previewcover"] = Pixmap()
 		self.picload = ePicLoad()
-		try:
-			self.picload_conn = self.picload.PictureData.connect(self.showPreviewCoverCB)
-		except:
-			self.picload.PictureData.get().append(self.showPreviewCoverCB)
+		self.picload.PictureData.get().append(self.showPreviewCoverCB)
 		self.previewTimer = eTimer()
-		try:
-			self.previewTimer_conn = self.previewTimer.timeout.connect(self.showPreviewCover)
-		except:
-			self.previewTimer.callback.append(self.showPreviewCover)
+		self.previewTimer.callback.append(self.showPreviewCover)
 		self.selectionTimer = eTimer()
-		try:
-			self.selectionTimer_conn = self.selectionTimer.timeout.connect(self.updateSelection)
-		except:
-			self.selectionTimer.callback.append(self.updateSelection)
+		self.selectionTimer.callback.append(self.updateSelection)
 		self["previewlist"] = MenuList([])
 		self.page = 0
 		self.id = None
@@ -568,7 +558,7 @@ class MovieInfoTMDb(Screen):
 		if fileExists("/tmp/previewCover.jpg"):
 			previewpath = "/tmp/previewCover.jpg"
 		else:
-			previewpath = getNoPosterPath() #"/usr/lib/enigma2/python/Plugins/Extensions/EnhancedMovieCenter/img/no_poster.png"
+			previewpath = getNoPosterPath()  # "/usr/lib/enigma2/python/Plugins/Extensions/EnhancedMovieCenter/img/no_poster.png"
 		sc = AVSwitch().getFramebufferScale()
 		self.picload.setPara((self["previewcover"].instance.size().width(), self["previewcover"].instance.size().height(), sc[0], sc[1], False, 1, "#00000000"))
 		self.picload.startDecode(previewpath)

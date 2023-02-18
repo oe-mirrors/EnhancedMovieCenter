@@ -1,6 +1,4 @@
-﻿#!/usr/bin/python
-# encoding: utf-8
-#
+﻿#
 # Copyright (C) 2011 by betonme
 #
 # In case of reuse of this source code please do not remove this copyright.
@@ -18,22 +16,16 @@
 #	For more information on the GNU General Public License see:
 #	<http://www.gnu.org/licenses/>.
 #
-from __future__ import print_function, absolute_import
-import os
+from __future__ import print_function
 
 from Components.config import *
-from Components.ActionMap import ActionMap, NumberActionMap, HelpableActionMap
-from Components.Label import Label
-from Components.Pixmap import Pixmap
+from Components.ActionMap import HelpableActionMap
 from Components.ServiceEventTracker import ServiceEventTracker, InfoBarBase
-from enigma import eTimer, iPlayableService, iServiceInformation, eServiceReference, iServiceKeys, getDesktop
-from Screens.Screen import Screen
+from enigma import iPlayableService
 from Screens.InfoBarGenerics import *
-from Screens.InfoBar import InfoBar
 from Screens.MessageBox import MessageBox
-from Screens.HelpMenu import HelpableScreen
 from Tools.BoundFunction import boundFunction
-from Tools.Directories import fileExists, resolveFilename, SCOPE_LANGUAGE, SCOPE_PLUGINS
+from Tools.Directories import fileExists, resolveFilename, SCOPE_PLUGINS
 
 from . import _
 from .EMCTasker import emcDebugOut
@@ -52,12 +44,6 @@ try:
 		hasmkvcuesheetsupport = False
 except:
 	hasmkvcuesheetsupport = False
-
-try:
-	from enigma import eMediaDatabase
-	isDreamOS = True
-except:
-	isDreamOS = False
 
 # Overwrite Seekbar
 
@@ -220,10 +206,7 @@ class InfoBarSupport(InfoBarBase,
 		if firstMark is not None:
 			self.start_point = firstMark
 			#== wait to seek - in OE2.5 not seek without wait
-			if isDreamOS:
-				DelayedFunction(500, self.doSeek, self.start_point)
-			else:
-				self.doSeek(self.start_point)
+			self.doSeek(self.start_point)
 
 	def jumpNextMark(self):
 		if not self.jumpPreviousNextMark(lambda x: x - 90000):

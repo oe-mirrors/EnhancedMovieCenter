@@ -1,6 +1,4 @@
-﻿#!/usr/bin/python
-# encoding: utf-8
-#
+﻿#
 # Copyright (C) 2011 by Coolman & Swiss-MAD
 #
 # In case of reuse of this source code please do not remove this copyright.
@@ -18,12 +16,11 @@
 #	For more information on the GNU General Public License see:
 #	<http://www.gnu.org/licenses/>.
 #
-from __future__ import absolute_import
 
 from enigma import eTimer
 from .EMCTasker import emcDebugOut
 
-instanceTab = []	# just seems to be required to keep the instances alive long enough
+instanceTab = []  # just seems to be required to keep the instances alive long enough
 
 
 class DelayedFunction:
@@ -36,11 +33,7 @@ class DelayedFunction:
 				self.params = params
 				self.timer = None
 				self.timer = eTimer()
-				self.timer_conn = None
-				try:
-					self.timer_conn = self.timer.timeout.connect(self.timerLaunch)
-				except:
-					self.timer.timeout.get().append(self.timerLaunch)
+				self.timer.timeout.get().append(self.timerLaunch)
 				self.timer.start(delay, False)
 		except Exception as e:
 			emcDebugOut("[spDF] __init__ exception:\n%s:%s" % (str(self.function), str(e)))
@@ -50,10 +43,7 @@ class DelayedFunction:
 			global instanceTab
 			instanceTab.remove(self)
 			self.timer.stop()
-			try:
-				self.timer_conn = None
-			except:
-				self.timer.timeout.get().remove(self.timerLaunch)
+			self.timer.timeout.get().remove(self.timerLaunch)
 			self.timer = None
 		except Exception as e:
 			emcDebugOut("[spDF] timer cancel exception:\n%s:%s" % (str(self.function), str(e)))
@@ -63,10 +53,7 @@ class DelayedFunction:
 			global instanceTab
 			instanceTab.remove(self)
 			self.timer.stop()
-			try:
-				self.timer_conn = None
-			except:
-				self.timer.timeout.get().remove(self.timerLaunch)
+			self.timer.timeout.get().remove(self.timerLaunch)
 			self.timer = None
 			self.function(*self.params)
 		except Exception as e:
@@ -77,7 +64,7 @@ class DelayedFunction:
 		try:
 			i = instanceTab.index(self)
 		except ValueError:
-			i = -1 # no match
+			i = -1  # no match
 		if i < 0:
 			return False
 		else:

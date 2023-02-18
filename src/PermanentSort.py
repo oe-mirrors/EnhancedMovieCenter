@@ -1,6 +1,4 @@
-﻿#!/usr/bin/python
-# encoding: utf-8
-#
+﻿#
 # PermanentSort
 # Copyright (C) 2011 betonme
 #
@@ -19,7 +17,6 @@
 #	For more information on the GNU General Public License see:
 #	<http://www.gnu.org/licenses/>.
 #
-from __future__ import absolute_import
 import os
 import pickle
 import six
@@ -111,7 +108,7 @@ class PermanentSort():
 				for entry in root.findall("entry"):
 					key = entry.get("key")
 					modestring = entry.get("modestring")
-					from Plugins.Extensions.EnhancedMovieCenter.plugin import sort_modes
+					from .plugin import sort_modes
 					value = sort_modes.get(modestring)[1]
 					data[key] = value
 			except Exception as e:
@@ -122,7 +119,7 @@ class PermanentSort():
 	def __writePermanentSortXmlFile(self, data):
 		f = None
 		try:
-			from Plugins.Extensions.EnhancedMovieCenter.plugin import sort_modes
+			from .plugin import sort_modes
 			list = ['<?xml version="1.0" ?>\n']
 			list.append('<PermanentSort>\n')
 			for key, value in data.items():
@@ -134,10 +131,7 @@ class PermanentSort():
 				list.append('</entry>\n')
 			list.append('</PermanentSort>\n')
 
-			if six.PY2:
-				f = open(XML_FILE, "wb")
-			else:
-				f = open(XML_FILE, "w")
+			f = open(XML_FILE, "w")
 			for x in list:
 				f.write(x)
 		except Exception as e:
@@ -167,7 +161,7 @@ class PermanentSort():
 					if not isinstance(value, tuple):
 						# There is only the sorting stored, add the default order
 						#data[key] = (value, config.EMC.moviecenter_sort.value[1])
-						from Plugins.Extensions.EnhancedMovieCenter.plugin import sort_modes
+						from .plugin import sort_modes
 						data[key] = (value, sort_modes.get(config.EMC.moviecenter_sort.value)[1][1])
 			except Exception as e:
 				emcDebugOut("[EMC] Exception in readPermanentSortCfgFile Parse: " + str(e))

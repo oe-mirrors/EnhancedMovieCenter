@@ -1,12 +1,8 @@
-﻿#!/usr/bin/python
-# encoding: utf-8
-from __future__ import print_function, absolute_import
-import os
+﻿import os
 import time
 import datetime
 import base64
 from Tools.Directories import fileExists
-import six
 
 from mutagen.mp3 import MP3
 from mutagen.easyid3 import EasyID3
@@ -138,10 +134,7 @@ def getAudioMetaData(service, ext):
 					except Exception as e:
 						emcDebugOut("[EMCMutagenSupport] Exception in Mp4-M4aEmbeddedCover: " + str(e))
 
-			if six.PY3:
-				return title, genre, artist, album, length
-			else:
-				return title.encode('utf-8'), genre.encode('utf-8'), artist.encode('utf-8'), album.encode('utf-8'), length.encode('utf-8')
+			return title, genre, artist, album, length
 
 	return title, genre, artist, album, length
 

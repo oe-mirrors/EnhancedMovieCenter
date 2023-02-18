@@ -1,6 +1,4 @@
-﻿#!/usr/bin/python
-# encoding: utf-8
-#
+﻿#
 # Copyright (C) 2011 by Coolman & Swiss-MAD
 #
 # In case of reuse of this source code please do not remove this copyright.
@@ -19,9 +17,7 @@
 #	<http://www.gnu.org/licenses/>.
 #
 
-from __future__ import absolute_import
 import os
-import sys
 
 from glob import glob
 from Components.config import *

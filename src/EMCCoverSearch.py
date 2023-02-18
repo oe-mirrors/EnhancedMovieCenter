@@ -1,7 +1,6 @@
-﻿# -*- coding: utf-8 -*-
-# mod by einfall (09.11.2014)
+﻿# mod by einfall (09.11.2014)
 # change to themoviedb.org / thetvdb.com - Api
-from __future__ import print_function, absolute_import
+from __future__ import print_function
 from . import _
 
 from Components.ActionMap import *
@@ -11,28 +10,21 @@ from Components.MenuList import MenuList
 from Components.MultiContent import MultiContentEntryText
 from Components.Pixmap import Pixmap
 from enigma import ePicLoad, gPixmapPtr
-from Tools.LoadPixmap import LoadPixmap
 from Components.AVSwitch import AVSwitch
-from Components.Sources.StaticText import StaticText
-from Plugins.Plugin import PluginDescriptor
 from Screens.Screen import Screen
 from Tools.Directories import fileExists
-from Screens.Menu import boundFunction
 from Screens.LocationBox import LocationBox
-from Components.PluginComponent import plugins
 
 from Components.Button import Button
 
-from twisted.web import client
 from twisted.web.client import downloadPage, getPage
 from twisted.internet import defer
 
 from Components.config import *
 from .configlistext import ConfigListScreenExt
 
-from enigma import eListboxPythonMultiContent, eListbox, gFont, getDesktop, loadJPG, RT_HALIGN_LEFT, RT_HALIGN_RIGHT, RT_HALIGN_CENTER, RT_VALIGN_CENTER, loadPNG, RT_WRAP, eServiceReference
+from enigma import eListboxPythonMultiContent, gFont, getDesktop, RT_HALIGN_LEFT, RT_HALIGN_RIGHT, RT_VALIGN_CENTER
 
-from Tools.BoundFunction import boundFunction
 from .DelayedFunction import DelayedFunction
 from time import time
 
@@ -45,8 +37,8 @@ import os
 import time
 import shutil
 import requests
-from six.moves.urllib.parse import quote
-from six.moves.urllib.request import urlopen, Request
+from urllib.parse import quote
+from urllib.request import urlopen, Request
 import six
 
 config.EMC.imdb = ConfigSubsection()
@@ -89,13 +81,6 @@ def getSearchList(title, option):
 	if not slist:
 		slist = [' '.join(s)]
 	return slist
-
-
-try:
-	from enigma import eMediaDatabase
-	isDreamOS = True
-except:
-	isDreamOS = False
 
 
 class imdblist(MenuList):
@@ -311,14 +296,14 @@ class EMCImdbScan(Screen):
 			urls = []
 			for each in self.cm_list:
 				(title, path) = each
-				if six.PY2: # FIXME
-					try:
-						title.decode('utf-8')
-					except UnicodeDecodeError:
-						try:
-							title = title.decode("cp1252").encode("utf-8")
-						except UnicodeDecodeError:
-							title = title.decode("iso-8859-1").encode("utf-8")
+#				if six.PY2:  # FIXME
+#					try:
+#						title.decode('utf-8')
+#					except UnicodeDecodeError:
+#						try:
+#							title = title.decode("cp1252").encode("utf-8")
+#						except UnicodeDecodeError:
+#							title = title.decode("iso-8859-1").encode("utf-8")
 				title = getMovieNameWithoutExt(title)
 				cover_path = re.sub(self.file_format + "$", '.jpg', path, flags=re.IGNORECASE)
 				if os.path.exists(cover_path):
@@ -511,10 +496,7 @@ class EMCImdbScan(Screen):
 			scale = AVSwitch().getFramebufferScale()
 			size = self["poster"].instance.size()
 			self.picload.setPara((size.width(), size.height(), scale[0], scale[1], False, 1, "#00000000"))
-			if isDreamOS:
-				result = self.picload.startDecode(poster_path, False)
-			else:
-				result = self.picload.startDecode(poster_path, 0, 0, False)
+			result = self.picload.startDecode(poster_path, 0, 0, False)
 			if result == 0:
 				ptr = self.picload.getData()
 				if ptr != None:
@@ -528,7 +510,7 @@ class EMCImdbScan(Screen):
 		print("EMC iMDB Config Saved.")
 		if result:
 			if self.isFolder:
-				self.verwaltung() #if foldercoverpath settings is changed
+				self.verwaltung()  # if foldercoverpath settings is changed
 			self["done_msg"].show()
 			self["done_msg"].setText(_("Settings have been Saved."))
 
@@ -667,7 +649,7 @@ class EMCImdbScan(Screen):
 
 		h = self.itemHeight
 		if self.count_movies * h > self.listHeight:
-			w = self.listWidth - 15 # place for scrollbar
+			w = self.listWidth - 15  # place for scrollbar
 		else:
 			w = self.listWidth
 
@@ -1016,10 +998,7 @@ class getCover(Screen):
 		size = self["poster"].instance.size()
 		if self.picload:
 			self.picload.setPara((size.width(), size.height(), sc[0], sc[1], False, 1, "#00000000"))
-			if isDreamOS:
-				result = self.picload.startDecode(poster_path, False)
-			else:
-				result = self.picload.startDecode(poster_path, 0, 0, False)
+			result = self.picload.startDecode(poster_path, 0, 0, False)
 			if result == 0:
 				ptr = self.picload.getData()
 				if ptr != None:
@@ -1082,7 +1061,7 @@ class getCover(Screen):
 					LocationBox,
 						windowTitle=_("Move Cover to:"),
 						text=_("Choose directory"),
-						currDir =str(choosePath) + "/",
+						currDir=str(choosePath) + "/",
 						bookmarks=config.movielist.videodirs,
 						autoAdd=False,
 						editDir=True,
@@ -1115,7 +1094,7 @@ class getCover(Screen):
 
 		h = self.itemHeight
 		if self.cover_count * h > self.listHeight:
-			w = self.listWidth - 15 # place for scrollbar
+			w = self.listWidth - 15  # place for scrollbar
 		else:
 			w = self.listWidth
 

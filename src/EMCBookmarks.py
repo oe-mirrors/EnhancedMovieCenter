@@ -1,6 +1,4 @@
-﻿#!/usr/bin/python
-# encoding: utf-8
-#
+﻿#
 # Copyright (C) 2011 by betonme
 #
 # In case of reuse of this source code please do not remove this copyright.
@@ -18,12 +16,11 @@
 #	For more information on the GNU General Public License see:
 #	<http://www.gnu.org/licenses/>.
 #
-from __future__ import absolute_import
 import os
 
 from Components.config import *
 
-from .EMCTasker import emcTasker, emcDebugOut
+from .EMCTasker import emcDebugOut
 
 global CFG_FILE
 CFG_FILE = "/etc/enigma2/emc-bookmarks.cfg"

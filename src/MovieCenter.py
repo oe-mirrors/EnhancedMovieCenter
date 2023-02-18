@@ -1,5 +1,3 @@
-#!/usr/bin/python
-# encoding: utf-8
 #
 # Copyright (C) 2011 by Coolman & Swiss-MAD
 #
@@ -18,13 +16,12 @@
 #	For more information on the GNU General Public License see:
 #	<http://www.gnu.org/licenses/>.
 #
-from __future__ import print_function, absolute_import, division
+from __future__ import print_function, division
 import math
 import os
 import random
 import re
 
-from collections import defaultdict
 from time import time
 from datetime import datetime
 from threading import Thread
@@ -39,7 +36,7 @@ from skin import parseColor, parseFont, parseSize
 from enigma import eListboxPythonMultiContent, eListbox, gFont, RT_HALIGN_LEFT, RT_HALIGN_RIGHT, RT_HALIGN_CENTER, eServiceReference, eServiceCenter, ePythonMessagePump, loadPNG, getDesktop, iServiceInformation
 from timer import TimerEntry
 
-from . import _, PY3
+from . import _
 from .CommonSupport import *
 from .EMCFileCache import movieFileCache
 from .EMCMountPoints import mountPoints
@@ -56,13 +53,6 @@ from .EMCBookmarks import EMCBookmarks
 from .ServiceSupport import ServiceCenter
 from .ThreadQueue import ThreadQueue
 
-from six.moves import range
-
-try:
-	from enigma import eMediaDatabase
-	isDreamOS = True
-except:
-	isDreamOS = False
 
 sz_w = getDesktop(0).size().width()
 
@@ -257,7 +247,7 @@ def getPlayerService(path, name="", ext=None):
 	elif ext in plyM2TS:
 		service = eServiceReference(sidM2TS, 0, path)
 	else:
-		path = path.replace(":", "") # because of VLC player
+		path = path.replace(":", "")  # because of VLC player
 		#service = eServiceReference("2:0:1:0:0:0:0:0:0:0:" + path)
 		service = eServiceReference(ENIGMA_SERVICE_ID, 0, path)
 		print("[EMC] service valid=", service.valid())
@@ -442,12 +432,12 @@ def dirInfo(folder, bsize=False):
 		hideitemlist = readBasicCfgFile("/etc/enigma2/emc-hide.cfg") or []
 	else:
 		hideitemlist = []
-	
+
 	def isHideItem(item):
 		return hideitemlist and item and (item in hideitemlist or (item[0:1] == "." and item[0:2] != ".." and ".*" in hideitemlist))
-	
+
 	dirDict = set()
-	
+
 	if os.path.exists(folder):
 		#for m in os.listdir(path):
 		for (path, dirs, files) in os.walk(folder):
@@ -580,9 +570,7 @@ class CountSizeWorker(Thread):
 		return len(self.__list)
 
 	def isStartedSet(self):
-		if PY3:
-			return self._started.is_set()
-		return self.__Thread__started.is_set()
+		return self._started.is_set()
 
 	def Cancel(self):
 		self.__running = False
@@ -713,7 +701,7 @@ class MovieCenterData(VlcPluginInterfaceList, PermanentSort, E2Bookmarks, EMCBoo
 			order = self.actualSort[1]
 
 		movie_metaload = config.EMC.movie_metaload.value
-		if mode == "D":	# Date sort
+		if mode == "D":  # Date sort
 			if not order:
 				if movie_metaload:
 					sortlist.sort(key=lambda x: (-x[12], -x[13], -x[14], -x[15], -x[16], x[1], x[9], -x[8]))
@@ -725,35 +713,35 @@ class MovieCenterData(VlcPluginInterfaceList, PermanentSort, E2Bookmarks, EMCBoo
 				else:
 					sortlist.sort(key=lambda x: (x[12], x[13], x[14], x[15], x[16], x[1], x[8]), reverse=True)
 
-		elif mode == "A":	# Alpha sort
+		elif mode == "A":  # Alpha sort
 			if not order:
 				sortlist.sort(key=lambda x: (x[1], x[12], x[13], x[14], x[15], x[16], x[8]))
 			else:
 				sortlist.sort(key=lambda x: (x[1], -x[12], -x[13], -x[14], -x[15], -x[16], -x[8]))
 
-		elif mode == "ADN":	# Alpha sort with new date, newest first
+		elif mode == "ADN":  # Alpha sort with new date, newest first
 			if not order:
 				sortlist.sort(key=lambda x: (x[1], -x[12], -x[13], -x[14], -x[15], -x[16], x[8]))
 			else:
 				sortlist.sort(key=lambda x: (x[1], x[12], x[13], x[14], x[15], x[16], -x[8]))
 
-		elif mode == "AM":	# Alpha sort with meta
+		elif mode == "AM":  # Alpha sort with meta
 			if not order:
 				sortlist.sort(key=lambda x: (x[1], x[9], x[12], x[13], x[14], x[15], x[16], x[8]))
 			else:
 				sortlist.sort(key=lambda x: (x[1], x[9], -x[12], -x[13], -x[14], -x[15], -x[16], -x[8]))
 
-		elif mode == "AMDN":	# Alpha sort with meta and new date, newest first
+		elif mode == "AMDN":  # Alpha sort with meta and new date, newest first
 			if not order:
 				sortlist.sort(key=lambda x: (x[1], x[9], -x[12], -x[13], -x[14], -x[15], -x[16], x[8]))
 			else:
 				sortlist.sort(key=lambda x: (x[1], x[9], x[12], x[13], x[14], x[15], x[16], -x[8]))
 
-		elif mode == "P":	# Progress
+		elif mode == "P":  # Progress
 			if not order:
-				sortlist.sort(key=lambda x: (getProgress(x[0], x[6]))) #,x[2],x[8]) )
+				sortlist.sort(key=lambda x: (getProgress(x[0], x[6])))  # ,x[2],x[8]) )
 			else:
-				sortlist.sort(key=lambda x: (getProgress(x[0], x[6]))) # ,x[2],-x[8]) )
+				sortlist.sort(key=lambda x: (getProgress(x[0], x[6])))  # ,x[2],-x[8]) )
 
 		# Combine lists
 		if order:
@@ -1331,10 +1319,10 @@ class MovieCenterData(VlcPluginInterfaceList, PermanentSort, E2Bookmarks, EMCBoo
 				# But it is very slow
 
 				service = getPlayerService(path, "", ext)
-				
+
 				if service:
 					serviceInfo = self.serviceHandler.info(service)
-					
+
 				if movie_metaload and not isExtHDDSleeping:
 					if serviceInfo:
 						metastring = serviceInfo.getName(service)
@@ -1351,7 +1339,7 @@ class MovieCenterData(VlcPluginInterfaceList, PermanentSort, E2Bookmarks, EMCBoo
 				if not metastring and movie_eitload and not isExtHDDSleeping:
 					if serviceInfo:
 						event = serviceInfo and serviceInfo.getEvent(service)
-						if event:							
+						if event:
 							eitstring = event.getEventName()
 							if not date:
 								starttimestamp = event.getBeginTime()
@@ -1511,10 +1499,7 @@ class MovieCenterData(VlcPluginInterfaceList, PermanentSort, E2Bookmarks, EMCBoo
 			path = os.path.dirname(timer.Filename)
 			if os.path.realpath(path) == os.path.realpath(self.currentPath):
 				# EMC shows the directory which contains the recording
-				if not isDreamOS:
-					filename = timer.Filename + ".ts"
-				else:
-					filename = timer.Filename
+				filename = timer.Filename + ".ts"
 				if timer.state == TimerEntry.StateRunning:
 					if not self.list:
 						# Empty list it will be better to reload it complete
@@ -1567,7 +1552,7 @@ class MovieCenterData(VlcPluginInterfaceList, PermanentSort, E2Bookmarks, EMCBoo
 					# Then the files are sorted and played in their correct order
 					# So we don't have the whole dir and file recognition handling twice
 					# Simulate reload:	tmplist = self.reload(path, True)
-				for root, dirs, files in os.walk(path): #,False):
+				for root, dirs, files in os.walk(path):  # ,False):
 					if dirs:
 						for dir in dirs:
 							pathname = os.path.join(root, dir)
@@ -1676,16 +1661,16 @@ class MovieCenterData(VlcPluginInterfaceList, PermanentSort, E2Bookmarks, EMCBoo
 	def toggleSelectionInternal(self, entry, index, overrideNum, invalidateFunction=None):
 		if self.selectionList == None:
 			self.selectionList = []
-		newselnum = entry[5]	# init with old selection number
+		newselnum = entry[5]  # init with old selection number
 		if overrideNum == None:
 			if self.serviceBusy(entry[0]):
-				return	# no toggle if file being operated on
+				return  # no toggle if file being operated on
 			# basic selection toggle
 			if newselnum == 0:
 				# was not selected
 				self.currentSelectionCount += 1
 				newselnum = self.currentSelectionCount
-				self.selectionList.append(entry[0]) # append service
+				self.selectionList.append(entry[0])  # append service
 			else:
 				# was selected, reset selection number and decrease all that had been selected after this
 				newselnum = 0
@@ -1693,20 +1678,20 @@ class MovieCenterData(VlcPluginInterfaceList, PermanentSort, E2Bookmarks, EMCBoo
 				count = 0
 				if entry is not None:
 					if entry[0] in self.selectionList:
-						self.selectionList.remove(entry[0]) # remove service
+						self.selectionList.remove(entry[0])  # remove service
 				for i in self.list:
 					if i[5] > entry[5]:
 						l = list(i)
 						l[5] = i[5] - 1
 						self.list[count] = tuple(l)
-						invalidateFunction and invalidateFunction(count) # force redraw
+						invalidateFunction and invalidateFunction(count)  # force redraw
 					count += 1
 		else:
 			newselnum = overrideNum * (newselnum == 0)
 		l = list(entry)
 		l[5] = newselnum
 		self.list[index] = tuple(l)
-		invalidateFunction and invalidateFunction(index) # force redraw of the modified item
+		invalidateFunction and invalidateFunction(index)  # force redraw of the modified item
 
 	def highlightServiceInternal(self, enable, mode, service):
 		if enable:
@@ -2690,7 +2675,7 @@ class MovieCenter(GUIComponent):
 					self.addCountsizeworker(path)
 			else:
 				self.addCountsizeworker(path)
-		else: # config_EMC_info_value == ""
+		else:  # config_EMC_info_value == ""
 			if config.EMC.directories_size_skin.value:
 				if getValues is not None:
 					if self.startWorker:
@@ -2702,7 +2687,7 @@ class MovieCenter(GUIComponent):
 
 	def addCountsizeworker(self, path):
 		if config.EMC.dir_info_usenoscan.value:
-			if self.checkNoScanPath(self.currentPath): #always scan sub-dirs of active no-scan dir
+			if self.checkNoScanPath(self.currentPath):  # always scan sub-dirs of active no-scan dir
 				countsizeworker.add(path)
 			elif not self.checkNoScanPath(path):
 				countsizeworker.add(path)
@@ -2735,14 +2720,10 @@ class MovieCenter(GUIComponent):
 	def postWidgetCreate(self, instance):
 		instance.setWrapAround(True)
 		instance.setContent(self.l)
-		try:
-			self.selectionChanged_conn = instance.selectionChanged.connect(self.selectionChanged)
-		except:
-			instance.selectionChanged.get().append(self.selectionChanged)
+		instance.selectionChanged.get().append(self.selectionChanged)
 
 	def preWidgetRemove(self, instance):
 		instance.setContent(None)
-		self.selectionChanged_conn = None
 
 	def removeService(self, service):
 		if service:
@@ -2786,7 +2767,7 @@ class MovieCenter(GUIComponent):
 		idx = self.getIndexOfService(service)
 		if idx < 0:
 			return
-		self.l.invalidateEntry(idx) # force redraw of the item
+		self.l.invalidateEntry(idx)  # force redraw of the item
 
 	def refreshList(self, worker=False):
 		# Just invalidate the whole list to force rebuild the entries

@@ -1,6 +1,4 @@
-﻿#!/usr/bin/python
-# encoding: utf-8
-#
+﻿#
 # Copyright (C) 2011 by Coolman & Swiss-MAD
 #
 # In case of reuse of this source code please do not remove this copyright.
@@ -18,7 +16,7 @@
 #	For more information on the GNU General Public License see:
 #	<http://www.gnu.org/licenses/>.
 #
-from __future__ import print_function, absolute_import
+from __future__ import print_function
 import os
 
 from enigma import eServiceReference, eServiceCenter
@@ -100,9 +98,9 @@ class VlcPluginInterfaceSel():
 			if entry:
 				self.hide()
 				#TODO Open EMC after playback ends if configured
-				try:	# v2.5
+				try:  # v2.5
 					self["list"].vlcServer.play(self, entry[4], entry[3], VlcFileListWrapper())
-				except:	# v2.6
+				except:  # v2.6
 					self["list"].vlcServer.play(self.session, entry[4], entry[3], VlcFileListWrapper())
 				self.close()
 		except Exception as e:
@@ -145,7 +143,7 @@ class VlcPluginInterfaceList():
 			for srv in self.vlcServers:
 				if srv.getName() == serverName:
 					emcDebugOut("[EMC_VLC] srv = " + str(srv))
-					server = srv	# find the server
+					server = srv  # find the server
 		if server is not None:
 			try:
 				self.vlcServer = server
