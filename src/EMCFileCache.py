@@ -157,13 +157,13 @@ class EMCFileCache():
 			isFile = isfile(path)
 		return isFile
 
-	def realpath(self, path):
-		realpath = None
+	def realPath(self, path):
+		_realpath = None
 		if config.EMC.files_cache.value and (path in self.cacheAttributeList):
-			realpath = self.cacheAttributeList[path][idx_realpath]
-		if realpath is None:
-			realpath = realpath(path)
-		return realpath
+			_realpath = self.cacheAttributeList[path][idx_realpath]
+		if _realpath is None:
+			_realpath = realpath(path)
+		return _realpath
 
 	def getDateInfoFromCacheForPath(self, path):
 		if config.EMC.files_cache.value and (path in self.cacheAttributeList):
