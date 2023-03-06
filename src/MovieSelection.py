@@ -1431,7 +1431,7 @@ class EMCSelection(Screen, HelpableScreen, SelectionEventInfo, VlcPluginInterfac
 			#t.start()
 
 	def resetInfo(self, preview=True):
-		print("EMC: resetInfo")
+		#print("EMC: resetInfo")
 		if self.delayTimer.isActive():
 			self.delayTimer.stop()
 		if self.coverTimer.isActive():
