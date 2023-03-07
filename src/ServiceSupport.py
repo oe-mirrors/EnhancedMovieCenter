@@ -198,34 +198,31 @@ class ServiceEvent:
 		extendedDescription = self.event and self.event.getExtendedDescription() or ""
 
 		if not extendedDescription:
-			if self.isfile:
-				if not self.event or not self.event.getShortDescription() and not self.serviceInfo.getInfoString(self.service, iServiceInformation.sDescription):
-					exts = [".txt"]
-					txtpath = getInfoFile(self.path, exts)[1]
+			if not self.isfile or not self.event or not self.event.getShortDescription() and not self.serviceInfo.getInfoString(self.service, iServiceInformation.sDescription):
+				exts = [".txt"]
+				txtpath = getInfoFile(self.path, exts)[1]
 
-					# read the playlist-entrys to show the list as overview
-					if self.ext == ".e2pls":
-						plistdesc = ""
-						plist = readPlaylist(self.path)
-						for x in plist:
-							plistdesc += x
-						extendedDescription = plistdesc
-					else:
-						if os.path.exists(txtpath):
-							txtdescarr = open(txtpath).readlines()
-							txtdesc = ""
-							for line in txtdescarr:
-								txtdesc += line
-							extendedDescription = txtdesc
-						elif config.EMC.show_path_extdescr.value:
-							if config.EMC.movie_real_path.value:
-								extendedDescription = os.path.realpath(self.path)
-							else:
-								extendedDescription = self.path
+				# read the playlist-entrys to show the list as overview
+				if self.isfile and self.ext == ".e2pls":
+					plistdesc = ""
+					plist = readPlaylist(self.path)
+					for x in plist:
+						plistdesc += x
+					extendedDescription = plistdesc
+				else:
+					if os.path.exists(txtpath):
+						txtdescarr = open(txtpath).readlines()
+						txtdesc = ""
+						for line in txtdescarr:
+							txtdesc += line
+						extendedDescription = txtdesc
+					elif config.EMC.show_path_extdescr.value:
+						if config.EMC.movie_real_path.value:
+							extendedDescription = os.path.realpath(self.path)
 						else:
-							extendedDescription = ""
-			else:
-				extendedDescription = self.path
+							extendedDescription = self.path
+					else:
+						extendedDescription = ""
 		return extendedDescription
 
 	def __getCutListLength(self):
