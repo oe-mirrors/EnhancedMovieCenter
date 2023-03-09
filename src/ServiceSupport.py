@@ -115,6 +115,7 @@ class ServiceEvent:
 		self.path = service.getPath()
 		self.isfile = os.path.isfile(self.path)
 		self.ext = self.path and os.path.splitext(self.path)[1].lower()
+		self.cutlist = None
 
 	def getBeginTime(self):
 		beginTime = None
@@ -231,6 +232,7 @@ class ServiceEvent:
 		return extendedDescription
 
 	def __getCutListLength(self):
-		cutlist = self.path and CutList(self.path) or []
-		length = cutlist and cutlist.getCutListLength() or 0
+		if self.cutlist is None:
+			self.cutlist = self.path and CutList(self.path) or []
+		length = self.cutlist and self.cutlist.getCutListLength() or 0
 		return length
