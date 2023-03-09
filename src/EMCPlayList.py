@@ -2,7 +2,7 @@
 import os
 
 from . import _
-from enigma import eListboxPythonMultiContent, RT_VALIGN_CENTER, RT_HALIGN_RIGHT, gFont, eListbox, getDesktop, eServiceCenter, iServiceInformation
+from enigma import eListboxPythonMultiContent, RT_VALIGN_CENTER, RT_HALIGN_RIGHT, eListbox, getDesktop, eServiceCenter, iServiceInformation
 
 from Screens.Screen import Screen
 from Screens.ChoiceBox import ChoiceBox
@@ -14,18 +14,17 @@ from Screens.VirtualKeyBoard import VirtualKeyBoard
 from Components.ActionMap import *
 from Components.Button import Button
 from Components.config import *
-from .configlistext import ConfigListScreenExt
 from Components.FileList import FileList
 from Components.GUIComponent import GUIComponent
 from Tools.Directories import fileExists
-
 from skin import parseColor, parseFont
+from .configlistext import ConfigListScreenExt
+
+global plyDVB
 
 from .CommonSupport import getMetaTitleFromDescription, plyDVB
 
 sz_w = getDesktop(0).size().width()
-
-global plyDVB
 
 config.EMC.playlist = ConfigSubsection()
 config.EMC.playlist.default_playlist_path = ConfigDirectory(default="/media/hdd/")

@@ -21,7 +21,7 @@ from __future__ import print_function
 from Components.config import *
 from Components.ActionMap import HelpableActionMap
 from Components.ServiceEventTracker import ServiceEventTracker, InfoBarBase
-from enigma import iPlayableService
+from enigma import iPlayableService, eServiceReference
 from Screens.InfoBarGenerics import *
 from Screens.MessageBox import MessageBox
 from Tools.BoundFunction import boundFunction
@@ -30,8 +30,6 @@ from Tools.Directories import fileExists, resolveFilename, SCOPE_PLUGINS
 from . import _
 from .EMCTasker import emcDebugOut
 from .DelayedFunction import DelayedFunction
-
-from .CommonSupport import sidDVD, sidDVB
 
 SeekbarPlg = "%s%s" % (resolveFilename(SCOPE_PLUGINS), "Extensions/Seekbar/plugin.py")
 
@@ -174,7 +172,7 @@ class InfoBarSupport(InfoBarBase,
 		# From Merlin2
 		elif config.EMC.movie_jump_first_mark.value == True:
 			self.jumpToFirstMark()
-		elif self.service and self.service.type == sidDVD:
+		elif self.service and self.service.type == eServiceReference.idServiceDVD:
 			DelayedFunction(50, boundFunction(self.dvdPlayerWorkaround))
 		self.showAfterSeek()
 
@@ -256,7 +254,7 @@ class InfoBarSupport(InfoBarBase,
 		else:
 			# Call baseclass function
 			InfoBarSeek.doSeek(self, pts)
-			if self.service and self.service.type == sidDVD:
+			if self.service and self.service.type == eServiceReference.idServiceDVD:
 				DelayedFunction(500, boundFunction(self.dvdPlayerWorkaround))
 			if pts and config.usage.show_infobar_on_skip.value:
 				# InfoBarSeek
@@ -316,5 +314,5 @@ class InfoBarSupport(InfoBarBase,
 			#DelayedFunction(800, boundFunction(InfoBarSeek._InfoBarSeek__evEOF, self))
 			##InfoBarSeek.doSeek(self, end)
 			#InfoBarSeek._InfoBarSeek__evEOF(self)
-			#if self.service.type != sidDVB:
+			#if self.service.type != eServiceReference.idDVB:
 			InfoBarSeek._InfoBarSeek__evEOF(self)

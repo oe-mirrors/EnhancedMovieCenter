@@ -57,7 +57,6 @@ from .EnhancedMovieCenter import _
 from .EMCTasker import emcTasker, emcDebugOut
 from .MovieCenter import MovieCenter, getPlayerService, getProgress, detectBLUStructure, detectBLUISO
 from .MovieSelectionMenu import MovieMenu
-from .EMCMediaCenter import EMCMediaCenter
 from .VlcPluginInterface import VlcPluginInterfaceSel
 from .CutListSupport import CutList
 from .DirectoryStack import DirectoryStack
@@ -69,12 +68,12 @@ from .MovieRetitle import MovieRetitle
 from Components.Sources.EMCServiceEvent import EMCServiceEvent
 from .MovieInfo import MovieInfoTMDb
 from .EMCPlayList import emcplaylist, EMCPlaylistScreen, EMCPlaylistSetup
-from .CommonSupport import getInfoFile, extList, extVideo, extMedia, extDir, extPlaylist, extAudio, plyAll, plyDVD, plyVideo, plyDVB
-
-from .MovieCenter import getMovieNameWithoutExt, getMovieNameWithoutPhrases, getNoPosterPath, getPosterPath, cmtBME2, cmtBMEMC, cmtDir
-
+from .MovieCenter import getMovieNameWithoutExt, getMovieNameWithoutPhrases, getNoPosterPath, getPosterPath
 
 global extList, extVideo, extMedia, extDir, plyAll, plyDVD, plyVideo, cmtBME2, cmtBMEMC, cmtDir, plyDVB, extPlaylist, extAudio
+
+from .CommonSupport import getInfoFile, extList, extVideo, extMedia, extDir, extPlaylist, extAudio, plyAll, plyDVD, plyVideo, plyDVB
+from .MovieCenter import cmtBME2, cmtBMEMC, cmtDir
 
 
 # Move all trashcan operations to a separate file / class

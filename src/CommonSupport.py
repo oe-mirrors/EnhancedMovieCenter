@@ -19,7 +19,6 @@
 
 import os
 import re
-from enigma import eServiceReference
 from .VlcPluginInterface import vlcFil
 from .EMCTasker import emcDebugOut
 
@@ -32,7 +31,6 @@ from .EMCTasker import emcDebugOut
 
 global extAudio, extDvd, extVideo, extPlaylist, extList, extMedia, extBlu
 global plyDVB, plyM2TS, plyDVD, plyMP3, plyVLC, plyAll
-global sidDVB, sidDVD, sidMP3
 
 # Set definitions (imported from MovieCenter.py)
 
@@ -65,21 +63,6 @@ plyVideo = extMedia - extAudio
 plyVLC = extVLC											# VLC Plugin
 #plyBLU      = extBlu | extIso							# BludiscPlayer Plugin
 plyAll = plyDVB | plyM2TS | plyDVD | plyMP3 | plyVLC | extBlu
-
-
-# Type definitions
-
-# Service ID types for E2 service identification
-sidDVB = eServiceReference.idDVB						# eServiceFactoryDVB::id   enum { id = 0x1 };
-sidDVD = 4369 											# eServiceFactoryDVD::id   enum { id = 0x1111 };
-sidMP3 = 4097											# eServiceFactoryMP3::id   enum { id = 0x1001 };
-# For later purpose
-sidM2TS = 3 											# eServiceFactoryM2TS::id  enum { id = 0x3 };
-#TODO
-#sidXINE = 4112											# eServiceFactoryXine::id  enum { id = 0x1010 };
-
-# Grouped service ids
-sidsCuts = frozenset([sidDVB, sidDVD])
 
 
 ## getInfoFile (imported from MetaSupport.py)
