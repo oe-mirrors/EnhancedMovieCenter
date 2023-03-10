@@ -37,13 +37,12 @@ from enigma import eListboxPythonMultiContent, eListbox, gFont, RT_HALIGN_LEFT, 
 from timer import TimerEntry
 
 from . import _
-from .CommonSupport import *
 from .EMCFileCache import movieFileCache
 from .EMCMountPoints import mountPoints
 from .RecordingsControl import RecordingsControl, getRecording
 from .DelayedFunction import DelayedFunction
 from .EMCTasker import emcDebugOut
-from .VlcPluginInterface import VlcPluginInterfaceList, vlcSrv, vlcDir, vlcFil
+from .VlcPluginInterface import VlcPluginInterfaceList
 from .VlcPluginInterface import DEFAULT_VIDEO_PID, DEFAULT_AUDIO_PID, ENIGMA_SERVICE_ID
 from operator import itemgetter
 from .CutListSupport import CutList
@@ -88,7 +87,9 @@ global extAudio, extDvd, extVideo, extPlaylist, extList, extMedia, extBlu
 global cmtDir, cmtUp, cmtTrash, cmtLRec, cmtVLC, cmtBME2, cmtBMEMC, virVLC, virAll, virToE, virToD
 global vlcSrv, vlcDir, vlcFil
 global plyDVB, plyM2TS, plyDVD, plyMP3, plyVLC, plyAll
-global sidDVB, sidDVD, sidMP3
+
+from .CommonSupport import *
+from .VlcPluginInterface import vlcSrv, vlcDir, vlcFil
 
 # Custom types: Used by EMC internally for sorting and type identification
 
@@ -229,11 +230,11 @@ def readBasicCfgFile(file):
 
 def getPlayerService(path, name="", ext=None):
 	if ext in plyDVB:
-		service = eServiceReference(sidDVB, 0, path)
+		service = eServiceReference(eServiceReference.idDVB, 0, path)
 	elif ext in plyMP3:
-		service = eServiceReference(sidMP3, 0, path)
+		service = eServiceReference(eServiceReference.idServiceMP3, 0, path)
 	elif ext in plyDVD:
-		service = eServiceReference(sidDVD, 0, path)
+		service = eServiceReference(eServiceReference.idServiceDVD, 0, path)
 		#QUESTION Is the special name handling really necessary
 		if service:
 			# Copied from dvd player
@@ -245,7 +246,7 @@ def getPlayerService(path, name="", ext=None):
 				else:
 					name = names[2]
 	elif ext in plyM2TS:
-		service = eServiceReference(sidM2TS, 0, path)
+		service = eServiceReference(eServiceReference.idServiceM2TS, 0, path)
 	else:
 		path = path.replace(":", "")  # because of VLC player
 		#service = eServiceReference("2:0:1:0:0:0:0:0:0:0:" + path)
@@ -259,7 +260,7 @@ def getPlayerService(path, name="", ext=None):
 
 
 def updatePlayerService(service, name):
-	if service and service.type != sidDVD and name:
+	if service and service.type != eServiceReference.idServiceDVD and name:
 		service.setName(name)
 
 

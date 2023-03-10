@@ -25,6 +25,7 @@ from .EMCFileCache import movieFileCache
 from .CutListSupport import CutList
 from .CommonSupport import getInfoFile, readPlaylist
 from .RecordingsControl import getRecording
+from .EMCTasker import emcDebugOut
 
 
 instance = None
@@ -114,6 +115,7 @@ class ServiceEvent:
 		self.path = service.getPath()
 		self.isfile = os.path.isfile(self.path)
 		self.ext = self.path and os.path.splitext(self.path)[1].lower()
+		self.cutlist = None
 
 	def getBeginTime(self):
 		beginTime = None
@@ -211,11 +213,15 @@ class ServiceEvent:
 					extendedDescription = plistdesc
 				else:
 					if os.path.exists(txtpath):
-						txtdescarr = open(txtpath).readlines()
-						txtdesc = ""
-						for line in txtdescarr:
-							txtdesc += line
-						extendedDescription = txtdesc
+						try:
+							txtdescarr = open(txtpath).readlines()
+							txtdesc = ""
+							for line in txtdescarr:
+								txtdesc += line
+							extendedDescription = txtdesc
+						except Exception as ex:
+							emcDebugOut("[EMCService] __getExtendedDescription (%s): %s" % (txtpath, str(ex)))
+							extendedDescription = ""
 					elif config.EMC.show_path_extdescr.value:
 						if config.EMC.movie_real_path.value:
 							extendedDescription = os.path.realpath(self.path)
@@ -226,6 +232,7 @@ class ServiceEvent:
 		return extendedDescription
 
 	def __getCutListLength(self):
-		cutlist = self.path and CutList(self.path) or []
-		length = cutlist and cutlist.getCutListLength() or 0
+		if self.cutlist is None:
+			self.cutlist = self.path and CutList(self.path) or []
+		length = self.cutlist and self.cutlist.getCutListLength() or 0
 		return length

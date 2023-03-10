@@ -41,8 +41,9 @@ from Plugins.Extensions.EnhancedMovieCenter.plugin import pluginOpen as emcsetup
 from .E2Bookmarks import E2Bookmarks
 from .EMCBookmarks import EMCBookmarks
 from .RogueFileCheck import RogueFileCheck
+
+global extTS, extMedia
 from .CommonSupport import extTS, extMedia
-global extTS
 
 cutsParser = struct.Struct('>QI')  # big-endian, 64-bit PTS and 32-bit type
 

@@ -25,7 +25,7 @@ from Components.ActionMap import ActionMap, HelpableActionMap
 from Components.Label import Label
 from Components.Pixmap import Pixmap
 from Components.ServiceEventTracker import ServiceEventTracker
-from enigma import iPlayableService, iServiceInformation, iServiceKeys, getDesktop
+from enigma import iPlayableService, iServiceInformation, iServiceKeys, getDesktop, eServiceReference
 from Screens.Screen import Screen
 from Screens.InfoBarGenerics import *
 from Screens.InfoBar import InfoBar
@@ -55,7 +55,6 @@ from Components.Pixmap import Pixmap
 from enigma import ePicLoad
 
 from .MovieCenter import toggleProgressService, getPosterPath
-from .CommonSupport import sidDVD, sidDVB
 
 from .RecordingsControl import getRecording
 import NavigationInstance
@@ -335,7 +334,7 @@ class EMCMediaCenter(CutList, Screen, HelpableScreen, InfoBarTimeshift, InfoBarS
 			# Avoid new playback if the user switches between MovieSelection and MoviePlayer
 			self.firstStart = False
 			self.evEOF()  # begin playback
-			if self.service and self.service.type != sidDVB:
+			if self.service and self.service.type != eServiceReference.idDVB:
 				self.realSeekLength = self.getSeekLength()
 
 	def evEOF(self, needToClose=False, prevTitle=False):
@@ -395,7 +394,7 @@ class EMCMediaCenter(CutList, Screen, HelpableScreen, InfoBarTimeshift, InfoBarS
 				toggleProgressService(service, True)
 				self.service = service
 
-				if service and service.type == sidDVD:
+				if service and service.type == eServiceReference.idServiceDVD:
 					# Only import DVDPlayer, if we want to play a DVDPlayer format
 					if fileExists(dvdPlayerPlg) or fileExists("%sc" % dvdPlayerPlg):
 						try:
@@ -441,10 +440,10 @@ class EMCMediaCenter(CutList, Screen, HelpableScreen, InfoBarTimeshift, InfoBarS
 				# Start playing movie
 				self.session.nav.playService(service)
 
-				if self.service and self.service.type != sidDVB:
+				if self.service and self.service.type != eServiceReference.idDVB:
 					self.realSeekLength = self.getSeekLength()
 
-				if service and service.type == sidDVD:
+				if service and service.type == eServiceReference.idServiceDVD:
 					# Seek will cause problems with DVDPlayer!
 					# ServiceDVD needs this to start
 					subs = self.getServiceInterface("subtitle")
@@ -482,7 +481,7 @@ class EMCMediaCenter(CutList, Screen, HelpableScreen, InfoBarTimeshift, InfoBarS
 		#if self.playall:
 		#	playall.close()
 
-		if self.service and self.service.type != sidDVB:
+		if self.service and self.service.type != eServiceReference.idDVB:
 			self.makeUpdateCutList()
 
 		reopen = False
@@ -519,7 +518,7 @@ class EMCMediaCenter(CutList, Screen, HelpableScreen, InfoBarTimeshift, InfoBarS
 		# [Cutlist.Workaround] - part 2
 		# Always make a backup-copy when recording is running and we stopped the playback
 		if self.stopped:
-			if self.service and self.service.type == sidDVB:
+			if self.service and self.service.type == eServiceReference.idDVB:
 				recFileName = self.service.getPath()
 				record = getRecording(recFileName)
 				if record:
@@ -624,7 +623,7 @@ class EMCMediaCenter(CutList, Screen, HelpableScreen, InfoBarTimeshift, InfoBarS
 			self.playlist = playlist
 			self.playall = playall
 
-			if self.service.type != sidDVB:
+			if self.service.type != eServiceReference.idDVB:
 				self.makeUpdateCutList()
 
 			self.evEOF()  # start playback of the first movie
@@ -840,7 +839,7 @@ class EMCMediaCenter(CutList, Screen, HelpableScreen, InfoBarTimeshift, InfoBarS
 		self.sendKey(iServiceKeys.keyUser + 8)
 
 	def sendKey(self, key):
-		if self.service and self.service.type != sidDVD:
+		if self.service and self.service.type != eServiceReference.idServiceDVD:
 			return None
 		keys = self.getServiceInterface("keys")
 		if keys:
@@ -961,7 +960,7 @@ class EMCMediaCenter(CutList, Screen, HelpableScreen, InfoBarTimeshift, InfoBarS
 			self["SeekActions"].setEnabled(True)
 
 	def createSummary(self):
-		if self.service and self.service.type == sidDVD and (fileExists(dvdPlayerPlg) or fileExists("%sc" % dvdPlayerPlg)):
+		if self.service and self.service.type == eServiceReference.idServiceDVD and (fileExists(dvdPlayerPlg) or fileExists("%sc" % dvdPlayerPlg)):
 			from Plugins.Extensions.DVDPlayer.plugin import DVDSummary
 			return DVDSummary
 		else:
@@ -1018,7 +1017,7 @@ class EMCMediaCenter(CutList, Screen, HelpableScreen, InfoBarTimeshift, InfoBarS
 
 	# InfoBarNumberZap
 	def keyNumberGlobal(self, number):
-		if self.service and self.service.type == sidDVD:
+		if self.service and self.service.type == eServiceReference.idServiceDVD:
 			if fileExists(dvdPlayerPlg) or fileExists("%sc" % dvdPlayerPlg):
 				if fileExists('/usr/lib/enigma2/python/Screens/DVD.py') or fileExists('/usr/lib/enigma2/python/Screens/DVD.pyc'):
 					from Screens.DVD import ChapterZap
@@ -1089,7 +1088,7 @@ class EMCMediaCenter(CutList, Screen, HelpableScreen, InfoBarTimeshift, InfoBarS
 				##	self.setSeekState(self.SEEK_STATE_PLAY)
 				#	return
 
-		if self.service.type != sidDVB:
+		if self.service.type != eServiceReference.idDVB:
 			self.makeUpdateCutList()
 
 		self.evEOF()
