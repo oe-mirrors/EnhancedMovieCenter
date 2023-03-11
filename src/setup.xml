@@ -1,0 +1,13 @@
+<setupxml>
+	<setup key="MovieInfoSetup" title="Movie Information Download Setup">
+		<item level="0" text="Language:" description="Language:">config.EMC.movieinfo.language</item>
+		<item level="0" text="Load Runtime:" description="Load Runtime:">config.EMC.movieinfo.ldruntime</item>
+		<item level="0" text="Load Genre:" description="Load Genre:">config.EMC.movieinfo.ldgenre</item>
+		<item level="0" text="Load Production Countries:" description="Load Production Countries:">config.EMC.movieinfo.ldcountries</item>
+		<item level="0" text="Load Release Date:" description="Load Release Date:">config.EMC.movieinfo.ldreleasedate</item>
+		<item level="0" text="Load Vote:" description="Load Vote:">config.EMC.movieinfo.ldvote</item>
+		<item level="0" text="Save Cover" description="Save Cover">config.EMC.movieinfo.coversave</item>
+		<item level="0" text="Coversize" description="Coversize">config.EMC.movieinfo.coversize</item>
+		<item level="0" text="Cover delay in ms" description="Cover delay in ms">config.EMC.movieinfo.cover_delay</item>
+	</setup>
+</setupxml>

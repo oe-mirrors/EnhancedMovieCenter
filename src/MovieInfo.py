@@ -1,36 +1,29 @@
-﻿from __future__ import print_function
-from . import _
+﻿from . import _, defaultlang
+from os import remove
+from re import match, sub, IGNORECASE
+from requests import get, exceptions
+from shutil import copy2
+from six import ensure_binary
+from twisted.internet.reactor import callInThread
+from enigma import ePicLoad, eTimer, getDesktop
+from Components.config import config, ConfigSubsection, ConfigSelection, ConfigYesNo, ConfigSelectionNumber
 from Components.ActionMap import HelpableActionMap
+from Components.AVSwitch import AVSwitch
 from Components.MenuList import MenuList
-from Components.Button import Button
 from Components.Label import Label
 from Components.ProgressBar import ProgressBar
+from Components.Pixmap import Pixmap
 from Components.ScrollLabel import ScrollLabel
 from Screens.Screen import Screen
+from Screens.Setup import Setup
 from Screens.MessageBox import MessageBox
-from Components.config import *
-from .configlistext import ConfigListScreenExt
-
+from Tools.Directories import fileExists
 from .MovieCenter import getMovieNameWithoutExt, getMovieNameWithoutPhrases, getNoPosterPath
-
-import json
-import os
-import re
-from twisted.web.client import downloadPage
+import tmdbsimple as tmdb
 
 # Cover
-from Tools.Directories import fileExists
-from Components.AVSwitch import AVSwitch
-from Components.Pixmap import Pixmap
-from enigma import ePicLoad, eTimer, getDesktop
-import shutil
-
-from urllib.parse import quote
-from urllib.request import Request, urlopen
-import six
-
 config.EMC.movieinfo = ConfigSubsection()
-config.EMC.movieinfo.language = ConfigSelection(default='en', choices=[('en', _('English')), ('de', _('German')), ('it', _('Italian')), ('es', _('Spanish')), ('fr', _('French')), ('pt', _('Portuguese'))])
+config.EMC.movieinfo.language = ConfigSelection(default=defaultlang, choices=[('en', _('English')), ('de', _('German')), ('it', _('Italian')), ('es', _('Spanish')), ('fr', _('French')), ('pt', _('Portuguese')), ('cs', _('Czech'))])
 config.EMC.movieinfo.ldruntime = ConfigSelection(default='1', choices=[('1', _('Yes')), ('0', _('No'))])
 config.EMC.movieinfo.ldcountries = ConfigSelection(default='1', choices=[('1', _('Yes')), ('0', _('No'))])
 config.EMC.movieinfo.ldreleasedate = ConfigSelection(default='1', choices=[('1', _('Yes')), ('0', _('No'))])
@@ -44,165 +37,114 @@ sz_w = getDesktop(0).size().width()
 
 
 def getMovieList(moviename):
-	response = fetchdata("http://api.themoviedb.org/3/search/movie?api_key=8789cfd3fbab7dccf1269c3d7d867aff&query=" + quote(moviename))
-	response1 = fetchdata("http://api.themoviedb.org/3/search/tv?api_key=8789cfd3fbab7dccf1269c3d7d867aff&query=" + quote(moviename))
+	lang = config.EMC.movieinfo.language.value
 	movielist = []
-	idx = 0
-	if response or response1 is not None:
-		movies = response["results"]
-		movielist = []
-		for mov in movies:
-			movielist.append((str(mov["title"]) + " - " + _("Movies"), mov["id"], "movie"))
-
-		tvshows = response1["results"]
-		for shows in tvshows:
-			movielist.append((str(shows["name"]) + " - " + _("TV Shows"), shows["id"], "tvshows"))
-
-		idx = len(movies) + len(tvshows)
-
-		return movielist, idx
-
-
-def fetchdata(url):
-	try:
-		headers = {"Accept": "application/json"}
-		request = Request(url, headers=headers)
-		jsonresponse = urlopen(request).read()
-		response = json.loads(jsonresponse)
-		return response
-	except:
-		return None
+	m = match(r'^(.*) \((19\d\d|20\d\d)\)$', moviename)
+	year = None
+	text = moviename
+	if m:
+		text, year = m.groups()
+	search = tmdb.Search()
+	json_data = search.multi(query=text, language=lang, year=year) if year else search.multi(query=text, language=lang)
+	for result in json_data["results"]:
+		media = result.get("media_type", "")
+		id = result.get("id", "")
+		title = result.get("title", result.get("name", ""))
+		if media == "movie":
+			movielist.append(("%s - %s" % (title, _("Movies")), id, "movie"))
+		else:
+			movielist.append(("%s - %s" % (title, _("TV Shows")), id, "tvshows"))
+	return movielist, len(movielist)
 
 
-def getMovieInfo(id, cat, getAll=True, onlyPoster=False):
+def getMovieInfo(movieID, cat, getAll=True, onlyPoster=False):
 	lang = config.EMC.movieinfo.language.value
 	posterUrl = None
+	movie = tmdb.Movies(int(movieID)) if cat == "movie" else tmdb.TV(int(movieID))
+	MI = movie.info(language=lang)
+	print(MI)
+	if not MI:
+		return None
+	posterUrl = MI["poster_path"]
 
-	# TODO: try a loop here,
-	# to get the details if answer is to slow
-	response = fetchdata("http://api.themoviedb.org/3/movie/" + str(id) + "?api_key=8789cfd3fbab7dccf1269c3d7d867aff&language=" + lang)
-	response1 = fetchdata("http://api.themoviedb.org/3/tv/" + str(id) + "?api_key=8789cfd3fbab7dccf1269c3d7d867aff&language=" + lang)
-
-	if cat == "movie":
-		if response is not None:
-			posterUrl = six.ensure_str(str(response["poster_path"]))
-	if cat == "tvshows":
-		if response1 is not None:
-			posterUrl = six.ensure_str(str(response1["poster_path"]))
 	if posterUrl is not None:
 		getTempCover(posterUrl)
 	if onlyPoster:
 		return
 
+	blurb = MI["overview"]
+
 	if cat == "movie":
-		if response is not None:
-			blurb = six.ensure_str(str(response["overview"]))
-
-			if config.EMC.movieinfo.ldruntime.value == '1':
-				runtime = six.ensure_str(str(response["runtime"]))
-				if response["runtime"] == 0:
-					runtime = ""
-			else:
+		if config.EMC.movieinfo.ldruntime.value == '1':
+			runtime = MI["runtime"]
+			if runtime == 0:
 				runtime = ""
-
-			if config.EMC.movieinfo.ldreleasedate.value == '1':
-				releasedate = six.ensure_str(str(response["release_date"]))
-			else:
-				releasedate = ""
-
-			if config.EMC.movieinfo.ldvote.value == '1':
-				vote = six.ensure_str(str(response["vote_average"]))
-			else:
-				vote = ""
-
-			if config.EMC.movieinfo.ldgenre.value == '1':
-				genrelist = response["genres"]
-				genres = ""
-				for i in genrelist:
-					if genres == "":
-						genres = i["name"]
-					else:
-						genres = genres + ", " + i["name"]
-				genres = six.ensure_str(genres)
-			else:
-				genres = ""
-
-			if config.EMC.movieinfo.ldcountries.value == '1':
-				countrylist = response["production_countries"]
-				countries = ""
-				for i in countrylist:
-					if countries == "":
-						countries = i["name"]
-					else:
-						countries = countries + ", " + i["name"]
-				countries = six.ensure_str(countries)
-			else:
-				countries = ""
-
-			txt = (_("Content:") + " " + blurb + "\n\n" + _("Runtime:") + " " + runtime + " " + _("Minutes") + "\n" + _("Genre:") + " " + genres + "\n" + _("Production Countries:") + " " + countries + "\n" + _("Release Date:") + " " + releasedate + "\n" + _("Vote:") + " " + vote + "\n")
-
-			if getAll:
-				return txt
-			else:
-				getTempTxt(txt)
-				return blurb, runtime, genres, countries, releasedate, vote
+			runtime = str(runtime)
 		else:
-			return None
+			runtime = ""
+		releasedate = MI["release_date"] if config.EMC.movieinfo.ldreleasedate.value == '1' else ""
+		vote = str(MI["vote_average"]) if config.EMC.movieinfo.ldvote.value == '1' else ""
+
+		if config.EMC.movieinfo.ldgenre.value == '1':
+			genrelist = MI["genres"]
+			genres = ""
+			for i in genrelist:
+				genres = i["name"] if genres == "" else "%s, %s" % (genres, i["name"])
+		else:
+			genres = ""
+
+		if config.EMC.movieinfo.ldcountries.value == '1':
+			countrylist = MI["production_countries"]
+			countries = ""
+			for i in countrylist:
+				countries = i["name"] if countries == "" else countries + ", " + i["name"]
+		else:
+			countries = ""
+
+		txt = (_("Content:") + " " + blurb + "\n\n" + _("Runtime:") + " " + runtime + " " + _("Minutes") + "\n" + _("Genre:") + " " + genres + "\n" + _("Production Countries:") + " " + countries + "\n" + _("Release Date:") + " " + releasedate + "\n" + _("Vote:") + " " + vote + "\n")
+
+		if getAll:
+			return txt
+		else:
+			getTempTxt(txt)
+			return blurb, runtime, genres, countries, releasedate, vote
 
 	if cat == "tvshows":
-		if response1 is not None:
-			blurb = six.ensure_str(str(response1["overview"]))
-
-			if config.EMC.movieinfo.ldruntime.value == '1':
-				runtime = six.ensure_str(str(response1["episode_run_time"]))
-				if response1["episode_run_time"] == 0:
-					runtime = _("unknown")
-			else:
-				runtime = ""
-
-			if config.EMC.movieinfo.ldreleasedate.value == '1':
-				releasedate = six.ensure_str(str(response1["first_air_date"]))
-			else:
-				releasedate = ""
-
-			if config.EMC.movieinfo.ldvote.value == '1':
-				vote = six.ensure_str(str(response1["vote_average"]))
-			else:
-				vote = ""
-
-			if config.EMC.movieinfo.ldgenre.value == '1':
-				genrelist = response1["genres"]
-				genres = ""
-				for i in genrelist:
-					if genres == "":
-						genres = i["name"]
-					else:
-						genres = genres + ", " + i["name"]
-				genres = six.ensure_str(genres)
-			else:
-				genres = ""
-
-			if config.EMC.movieinfo.ldcountries.value == '1':
-				countrylist = response1["origin_country"]
-				countries = ""
-				for i in countrylist:
-					if countries == "":
-						countries = i
-					else:
-						countries = countries + ", " + i
-				countries = six.ensure_str(countries)
-			else:
-				countries = ""
-
-			txt = (_("Content:") + " " + blurb + "\n\n" + _("Runtime:") + " " + runtime + " " + _("Minutes") + "\n" + _("Genre:") + " " + genres + "\n" + _("Production Countries:") + " " + countries + "\n" + _("Release Date:") + " " + releasedate + "\n" + _("Vote:") + " " + vote + "\n")
-
-			if getAll:
-				return txt
-			else:
-				getTempTxt(txt)
-				return blurb, runtime, genres, countries, releasedate, vote
+		if config.EMC.movieinfo.ldruntime.value == '1':
+			runtime = MI["episode_run_time"]
+			if runtime and isinstance(runtime, list):
+				runtime = runtime[0]
+			if runtime == 0:
+				runtime = _("unknown")
+			runtime = str(runtime)
 		else:
-			return None
+			runtime = ""
+		releasedate = MI["first_air_date"] if config.EMC.movieinfo.ldreleasedate.value == '1' else ""
+		vote = str(MI["vote_average"]) if config.EMC.movieinfo.ldvote.value == '1' else ""
+
+		if config.EMC.movieinfo.ldgenre.value == '1':
+			genrelist = MI["genres"]
+			genres = ""
+			for i in genrelist:
+				genres = i["name"] if genres == "" else "%s, %s" % (genres, i["name"])
+		else:
+			genres = ""
+
+		if config.EMC.movieinfo.ldcountries.value == '1':
+			countrylist = MI["origin_country"]
+			countries = ""
+			for i in countrylist:
+				countries = i if countries == "" else "%s, %s" % (countries, i)
+		else:
+			countries = ""
+
+		txt = (_("Content:") + " " + blurb + "\n\n" + _("Runtime:") + " " + runtime + " " + _("Minutes") + "\n" + _("Genre:") + " " + genres + "\n" + _("Production Countries:") + " " + countries + "\n" + _("Release Date:") + " " + releasedate + "\n" + _("Vote:") + " " + vote + "\n")
+
+		if getAll:
+			return txt
+		else:
+			getTempTxt(txt)
+			return blurb, runtime, genres, countries, releasedate, vote
 
 
 def getTempTxt(txt):
@@ -211,24 +153,37 @@ def getTempTxt(txt):
 			txtpath = "/tmp/previewTxt.txt"
 			open(txtpath, 'w').write(txt)
 		except Exception as e:
-			print(('[EMC] MovieInfo getTempTxt exception failure: ', str(e)))
+			print(('[EMC] MovieInfo getTempTxt exception failure: %s' % str(e)))
 
 
 def getTempCover(posterUrl):
 	if posterUrl is not None:
 		try:
 			if fileExists("/tmp/previewCover.jpg"):
-				os.remove("/tmp/previewCover.jpg")
+				remove("/tmp/previewCover.jpg")
 			coverpath = "/tmp/previewCover.jpg"
 			url = "http://image.tmdb.org/t/p/%s%s" % (config.EMC.movieinfo.coversize.value, posterUrl)
-			url = six.ensure_binary(url)
-			downloadPage(url, coverpath).addErrback(dataError)
+			callInThread(DownloadPage, url, coverpath, None, fail=dataError)
 		except Exception as e:
-			print(('[EMC] MovieInfo getTempCover exception failure: ', str(e)))
+			print(('[EMC] MovieInfo getTempCover exception failure: %s' % str(e)))
+
+
+def DownloadPage(link, file, success, fail=None):
+	link = link.encode('ascii', 'xmlcharrefreplace').decode().replace(' ', '%20').replace('\n', '')
+	try:
+		response = get(ensure_binary(link), timeout=(3.05, 6))
+		response.raise_for_status()
+		with open(file, "wb") as f:
+			f.write(response.content)
+		if success is not None:
+			success(file)
+	except exceptions.RequestException as error:
+		if fail is not None:
+			fail(error)
 
 
 def dataError(error):
-	print("[EMC] MovieInfo ERROR:", error)
+	print("[EMC] MovieInfo ERROR: %s" % error)
 
 
 class MovieInfoTMDb(Screen):
@@ -326,6 +281,7 @@ class MovieInfoTMDb(Screen):
 		self["save"] = Label(_("Save"))
 		self["key_green"] = Pixmap()
 		self.ratingstars = -1
+		tmdb.API_KEY = bytes.fromhex("38373839636664336662616237646363663132363963336437643836376166666"[:-1]).decode('utf-8')
 		self.movielist = getMovieList(moviename)
 		if self.movielist is not None:
 			self["previewlist"] = MenuList(self.movielist[0])
@@ -346,13 +302,11 @@ class MovieInfoTMDb(Screen):
 			self["movie_name"] = Label(_("Search results for:") + "   " + moviename)
 			self["contenttxt"].setText(_("Nothing was found !"))
 
-		self.file_format = "(\.ts|\.avi|\.mkv|\.divx|\.f4v|\.flv|\.img|\.iso|\.m2ts|\.m4v|\.mov|\.mp4|\.mpeg|\.mpg|\.mts|\.vob|\.asf|\.wmv|.\stream|.\webm)"
-
+		self.file_format = r"(\.ts|\.avi|\.mkv|\.divx|\.f4v|\.flv|\.img|\.iso|\.m2ts|\.m4v|\.mov|\.mp4|\.mpeg|\.mpg|\.mts|\.vob|\.asf|\.wmv|.\stream|.\webm)"
 		# for file-operations
 		self.txtsaved = False
 		self.jpgsaved = False
 		self.mpath = None
-
 		self.onLayoutFinish.append(self.layoutFinished)
 		self["actions"] = HelpableActionMap(self, "EMCMovieInfo",
 		{
@@ -428,61 +382,58 @@ class MovieInfoTMDb(Screen):
 				self["ratingtxt"].show()
 				self["contenttxt"].setText(content)
 				if runtime != "":
-					self["runtimetxt"].setText(runtime + " " + _("Minutes"))
+					self["runtimetxt"].setText("%s %s" % (runtime, _("Minutes")))
 				else:
 					self["runtimetxt"].setText(runtime)
 				self["genretxt"].setText(genres)
 				self["countrytxt"].setText(countries)
 				self["releasetxt"].setText(release)
+				self["starsbg"].show()
 				if vote:
 					self["ratingtxt"].setText(vote.replace('\n', '') + " / 10")
 					self.ratingstars = int(10 * round(float(vote.replace(',', '.')), 1))
 					if self.ratingstars > 0:
-						self["starsbg"].show()
 						self["stars"].show()
 						self["stars"].setValue(self.ratingstars)
 					else:
-						self["starsbg"].show()
 						self["stars"].hide()
 				else:
 					self["ratingtxt"].setText(" 0 / 10")
-					self["starsbg"].show()
 					self["stars"].hide()
 				self["save"].show()
 				self["key_green"].show()
 				self.previewTimer.start(int(config.EMC.movieinfo.cover_delay.value), True)
 
 	def showMsg(self, askNo=False):
+		txtpath = "%s.txt" % self.mpath
+		coverpath = "%s.jpg" % self.mpath
+		msg = ""
 		if self.txtsaved and self.jpgsaved:
 			msg = (_('Movie Information and Cover downloaded successfully!'))
 		elif self.txtsaved and not self.jpgsaved:
 			if config.EMC.movieinfo.coversave.value:
-				if askNo:
-					msg = (_('Movie Information downloaded successfully!'))
-				else:
-					msg = (_('Movie Information downloaded successfully!\n\nCan not write Movie Cover File\n\n%s') % (self.mpath + ".jpg"))
+				msg = (_('Movie Information downloaded successfully!')) if askNo else (_('Movie Information downloaded successfully!\n\nCan not write Movie Cover File\n\n%s') % coverpath)
 			else:
 				msg = (_('Movie Information downloaded successfully!'))
 		elif self.jpgsaved and not self.txtsaved:
-			msg = (_('Movie Cover downloaded successfully!\n\nCan not write Movie Information File\n\n%s') % (self.mpath + ".txt"))
+			msg = (_('Movie Cover downloaded successfully!\n\nCan not write Movie Information File\n\n%s') % txtpath)
 		elif not self.jpgsaved and not self.txtsaved:
-			msg = (_('Can not write Movie Information and Cover File\n\n%(info)s\n%(file)s') % {'info': self.mpath + ".txt", 'file': self.mpath + ".jpg"})
+			msg = (_('Can not write Movie Information and Cover File\n\n%(info)s\n%(file)s') % {'info': txtpath, 'file': coverpath})
 		elif not self.txtsaved and not config.EMC.movieinfo.coversave.value:
-			msg = (_('Can not write Movie Information File\n\n%s') % (self.mpath + ".txt"))
-
+			msg = (_('Can not write Movie Information File\n\n%s') % txtpath)
 		self.session.open(MessageBox, msg, MessageBox.TYPE_INFO, 5)
 
 	def save(self):
 		if self.page == 0 and self.spath is not None:
 			self.txtsaved = False
-			self.mpath = re.sub(self.file_format + "$", '.jpg', self.spath, flags=re.IGNORECASE)
+			self.mpath = sub(self.file_format + "$", '.jpg', self.spath, flags=IGNORECASE)
 			try:
-				txtpath = self.mpath + ".txt"
+				txtpath = "%s.txt" % self.mpath
 				if fileExists("/tmp/previewTxt.txt"):
-					shutil.copy2("/tmp/previewTxt.txt", txtpath)
+					copy2("/tmp/previewTxt.txt", txtpath)
 					self.txtsaved = True
 			except Exception as e:
-				print(('[EMC] MovieInfo saveTxt exception failure: ', str(e)))
+				print(('[EMC] MovieInfo saveTxt exception failure: %s' % str(e)))
 
 			if config.EMC.movieinfo.coversave.value:
 				self.getPoster()
@@ -490,18 +441,20 @@ class MovieInfoTMDb(Screen):
 				self.showMsg()
 
 	def getPoster(self):
-		if fileExists(self.mpath + ".jpg"):
-			self.session.openWithCallback(self.posterCallback, MessageBox, _("Cover %s exists!\n\nDo you want to replace the existing cover?") % (self.mpath + ".jpg"), MessageBox.TYPE_YESNO)
+		coverpath = "%s.jpg" % self.mpath
+		if fileExists(coverpath):
+			self.session.openWithCallback(self.posterCallback, MessageBox, _("Cover %s exists!\n\nDo you want to replace the existing cover?") % coverpath, MessageBox.TYPE_YESNO)
 		else:
 			self.savePoster()
 
 	def posterCallback(self, result):
 		if result:
+			coverpath = "%s.jpg" % self.mpath
 			try:
-				if fileExists(self.mpath + ".jpg"):
-					os.remove(self.mpath + ".jpg")
+				if fileExists(coverpath):
+					remove(coverpath)
 			except Exception as e:
-				print(('[EMC] MovieInfo posterCallback exception failure: ', str(e)))
+				print(('[EMC] MovieInfo posterCallback exception failure: %s' % str(e)))
 			self.savePoster()
 		else:
 			self.showMsg(True)
@@ -509,19 +462,17 @@ class MovieInfoTMDb(Screen):
 	def savePoster(self):
 		self.jpgsaved = False
 		try:
-			coverpath = self.mpath + ".jpg"
+			coverpath = "%s.jpg" % self.mpath
 			if fileExists("/tmp/previewCover.jpg"):
-				shutil.copy2("/tmp/previewCover.jpg", coverpath)
+				copy2("/tmp/previewCover.jpg", coverpath)
 				self.jpgsaved = True
 		except Exception as e:
-			print(('[EMC] MovieInfo savePoster exception failure: ', str(e)))
+			print(('[EMC] MovieInfo savePoster exception failure: %s' % str(e)))
 
 		self.showMsg()
 
 	def ok(self):
-		if self.page == 0:
-			pass
-		else:
+		if self.page != 0:
 			sel = self["previewlist"].l.getCurrentSelection()
 			if sel is not None:
 				self["previewlist"].hide()
@@ -555,10 +506,7 @@ class MovieInfoTMDb(Screen):
 			self["previewcover"].hide()
 
 	def showPreviewCover(self):
-		if fileExists("/tmp/previewCover.jpg"):
-			previewpath = "/tmp/previewCover.jpg"
-		else:
-			previewpath = getNoPosterPath()  # "/usr/lib/enigma2/python/Plugins/Extensions/EnhancedMovieCenter/img/no_poster.png"
+		previewpath = "/tmp/previewCover.jpg" if fileExists("/tmp/previewCover.jpg") else getNoPosterPath()  # "/usr/lib/enigma2/python/Plugins/Extensions/EnhancedMovieCenter/img/no_poster.png"
 		sc = AVSwitch().getFramebufferScale()
 		self.picload.setPara((self["previewcover"].instance.size().width(), self["previewcover"].instance.size().height(), sc[0], sc[1], False, 1, "#00000000"))
 		self.picload.startDecode(previewpath)
@@ -571,9 +519,9 @@ class MovieInfoTMDb(Screen):
 				self.switchPage()
 			else:
 				if fileExists("/tmp/previewCover.jpg"):
-					os.remove("/tmp/previewCover.jpg")
+					remove("/tmp/previewCover.jpg")
 				if fileExists("/tmp/previewTxt.txt"):
-					os.remove("/tmp/previewTxt.txt")
+					remove("/tmp/previewTxt.txt")
 				if self.selectionTimer.isActive():
 					self.selectionTimer.stop()
 				if self.previewTimer.isActive():
@@ -586,66 +534,6 @@ class MovieInfoTMDb(Screen):
 		self.session.open(MovieInfoSetup)
 
 
-class MovieInfoSetup(Screen, ConfigListScreenExt):
-	if sz_w == 1920:
-		skin = """
-		<screen name="EMCMovieInfoSetup" position="center,170" size="1200,820" title="Movie Information Download Setup">
-		<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/EnhancedMovieCenter/img_fhd/red.png" position="10,5" size="300,70" alphatest="blend"/>
-		<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/EnhancedMovieCenter/img_fhd/green.png" position="310,5" size="300,70" alphatest="blend"/>
-		<widget backgroundColor="#9f1313" font="Regular;30" halign="center" name="key_red" position="10,5" foregroundColor="white" shadowColor="black" shadowOffset="-2,-2" size="300,70" transparent="1" valign="center" zPosition="1" />
-		<widget backgroundColor="#1f771f" font="Regular;30" halign="center" name="key_green" position="310,5" foregroundColor="white" shadowColor="black" shadowOffset="-2,-2" size="300,70" transparent="1" valign="center" zPosition="1" />
-		<widget font="Regular;34" halign="right" position="1050,25" render="Label" size="120,40" source="global.CurrentTime">
-			<convert type="ClockToText">Default</convert>
-		</widget>
-		<widget font="Regular;34" halign="right" position="800,25" render="Label" size="240,40" source="global.CurrentTime">
-			<convert type="ClockToText">Date</convert>
-		</widget>
-		<eLabel backgroundColor="#818181" position="10,80" size="1180,1" />
-		<widget enableWrapAround="1" name="config" position="10,90" itemHeight="45" scrollbarMode="showOnDemand" size="1180,720" />
-		</screen>"""
-	else:
-		skin = """
-		<screen name="EMCMovieInfoSetup" position="center,120" size="820,520" title="Movie Information Download Setup">
-		<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/EnhancedMovieCenter/img/red.png" position="10,5" size="200,40" alphatest="blend"/>
-		<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/EnhancedMovieCenter/img/green.png" position="210,5" size="200,40" alphatest="blend"/>
-		<widget name="key_red" position="10,5" size="200,40" zPosition="1" font="Regular;20" halign="center" valign="center" backgroundColor="#9f1313" transparent="1" foregroundColor="white" shadowColor="black" shadowOffset="-2,-2" />
-		<widget name="key_green" position="210,5" size="200,40" zPosition="1" font="Regular;20" halign="center" valign="center" backgroundColor="#1f771f" transparent="1" foregroundColor="white" shadowColor="black" shadowOffset="-2,-2" />
-		<widget source="global.CurrentTime" render="Label" position="740,14" size="70,24" font="Regular;22" halign="right">
-			<convert type="ClockToText">Default</convert>
-		</widget>
-		<eLabel position="10,50" size="800,1" backgroundColor="#818181" />
-		<widget name="config" itemHeight="30" position="10,60" size="800,450" enableWrapAround="1" scrollbarMode="showOnDemand" />
-		</screen>"""
-
+class MovieInfoSetup(Setup):
 	def __init__(self, session):
-		Screen.__init__(self, session)
-		self.list = []
-		self.list.append(getConfigListEntry(_("Language:"), config.EMC.movieinfo.language))
-		self.list.append(getConfigListEntry(_("Load Runtime:"), config.EMC.movieinfo.ldruntime))
-		self.list.append(getConfigListEntry(_("Load Genre:"), config.EMC.movieinfo.ldgenre))
-		self.list.append(getConfigListEntry(_("Load Production Countries:"), config.EMC.movieinfo.ldcountries))
-		self.list.append(getConfigListEntry(_("Load Release Date:"), config.EMC.movieinfo.ldreleasedate))
-		self.list.append(getConfigListEntry(_("Load Vote:"), config.EMC.movieinfo.ldvote))
-		self.list.append(getConfigListEntry(_("Save Cover"), config.EMC.movieinfo.coversave))
-		self.list.append(getConfigListEntry(_("Coversize"), config.EMC.movieinfo.coversize))
-		self.list.append(getConfigListEntry(_("Cover delay in ms"), config.EMC.movieinfo.cover_delay))
-
-		ConfigListScreenExt.__init__(self, self.list, session)
-		self["actions"] = HelpableActionMap(self, "EMCMovieInfo",
-		{
-			"EMCEXIT": self.keyCancel,
-			"EMCGreen": self.keySave,
-			"EMCRed": self.keyCancel,
-		}, -1)
-		self["key_red"] = Button(_("Cancel"))
-		self["key_green"] = Button(_("OK"))
-		self.onLayoutFinish.append(self.layoutFinished)
-
-	def layoutFinished(self):
-		self.setTitle(_("Movie Information Download Setup"))
-
-	def keySave(self):
-		for x in self["config"].list:
-			x[1].save()
-		configfile.save()
-		self.close()
+		Setup.__init__(self, session, "MovieInfoSetup", plugin="Extensions/EnhancedMovieCenter", PluginLanguageDomain="EnhancedMovieCenter")
