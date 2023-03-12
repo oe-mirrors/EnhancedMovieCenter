@@ -16,26 +16,15 @@
 #	For more information on the GNU General Public License see:
 #	<http://www.gnu.org/licenses/>.
 #
-from __future__ import print_function
-from Components.config import *
+from copy import copy
 from Components.ActionMap import ActionMap
-from Plugins.Plugin import PluginDescriptor
-from Screens.MessageBox import MessageBox
-
-#from Components.Sources import EMCCurrentService
-#from Components.Sources import EMCServiceEvent
-#from Components.Renderer import EMCPositionGauge
-#from Components.Converter import EMCClockToText
-#from Components.Converter import EMCEventName
-#from Components.Converter import EMCServicePosition
-#from Components.Converter import EMCRecordPosition
-#from Components.Converter import EMCServiceTime
-
-from . import _
+from Components.config import config, ConfigText, ConfigYesNo, ConfigSubsection, ConfigNothing, ConfigSelection, ConfigSelectionNumber, NoSave, ConfigClock
 from Components.Language import language
+from Screens.MessageBox import MessageBox
+from Plugins.Plugin import PluginDescriptor
 from .ISO639 import ISO639Language
 from .EMCTasker import emcTasker, emcDebugOut
-import copy
+from . import _
 
 
 class ConfigTextWOHelp(ConfigText):
@@ -217,13 +206,13 @@ colorbutton_choices = [("MH", _("Movie home")),
 			("", _("Button disabled"))]
 
 red_choices = colorbutton_choices
-green_choices = copy.copy(colorbutton_choices)
+green_choices = copy(colorbutton_choices)
 green_choices.extend([("ST", _("Sort Options"))])
 yellow_choices = colorbutton_choices
 blue_choices = colorbutton_choices
 
-#green_choices = copy.copy(blueyellowgreen_choices)
-#longblueyellowgreen_choices = copy.copy(blueyellowgreen_choices)
+#green_choices = copy(blueyellowgreen_choices)
+#longblueyellowgreen_choices = copy(blueyellowgreen_choices)
 
 longcolorbutton_choices = [("MH", _("Movie home")),
 				("DL", _("Delete")),
@@ -415,7 +404,7 @@ try:
 	ngettext("%d second", "%d seconds", 30)
 	nget = True
 except Exception as e:
-	print("[EMC] ngettext failed:", e)
+	print("[EMC] ngettext failed: %s" % e)
 limitreclist = []
 if nget:
 	for i in range(86400, 604800, 86400):
