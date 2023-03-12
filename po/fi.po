@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: EMC\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-12 22:31+0100\n"
+"POT-Creation-Date: 2023-03-12 09:04+0100\n"
 "PO-Revision-Date: 2021-06-23 20:22+0300\n"
 "Last-Translator: tomppaa www.huoltovalikko.com\n"
 "Language-Team: \n"
@@ -14,9 +14,6 @@ msgstr ""
 "X-Poedit-Basepath: ..\n"
 "X-Generator: Poedit 3.0\n"
 "X-Poedit-SearchPath-0: src\n"
-
-msgid " (without counting cover range)"
-msgstr ""
 
 msgid " Deleting remotely recorded and it will display an rec-error dialog on the other DB."
 msgstr ""
@@ -196,6 +193,9 @@ msgstr "Kanavanäppäimien (+/-) toiminto"
 msgid "Button disabled"
 msgstr "Ei käytössä"
 
+msgid "COVER-SEARCH"
+msgstr ""
+
 msgid "CSFD"
 msgstr "CSFD"
 
@@ -356,6 +356,9 @@ msgid "Cursor predictive move after selection"
 msgstr "Siirrä kohdistinta edelleen valinnan jälkeen"
 
 msgid "Custom"
+msgstr ""
+
+msgid "Czech"
 msgstr ""
 
 msgid "DD.MM. HH:MM"
@@ -1602,9 +1605,6 @@ msgstr ""
 msgid "Nothing was found !"
 msgstr "Mitään ei löytynyt!"
 
-msgid "OK"
-msgstr "OK"
-
 msgid "OSError - please reload list (EMC menu)"
 msgstr ""
 
@@ -1826,6 +1826,9 @@ msgstr "Kelaa katsotut tallenteet alkuun ennen toistoa"
 msgid "Runtime:"
 msgstr "Kesto:"
 
+msgid "SINGLE COVER-SEARCH"
+msgstr ""
+
 msgid "SKIN-SETTINGS"
 msgstr "Teema asetukset"
 
@@ -1859,8 +1862,12 @@ msgstr "Skannaa linkitetyt hakemistot"
 msgid "Search"
 msgstr "Hae"
 
-#, fuzzy, python-format
-msgid "Search Results per Search Site%s:"
+#, fuzzy
+msgid "Search Results per Search Site (without counting cover range):"
+msgstr "Hakutulokset tallenteelle:"
+
+#, fuzzy
+msgid "Search Results per Search Site:"
 msgstr "Hakutulokset tallenteelle:"
 
 msgid "Search filter for matching existing terms in the title:"

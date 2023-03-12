@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-12 22:31+0100\n"
+"POT-Creation-Date: 2023-03-12 09:04+0100\n"
 "PO-Revision-Date: 2020-08-27 16:47+0800\n"
 "Last-Translator: 孤独之剑 <haotzyy1970@163.com>\n"
 "Language-Team: \n"
@@ -14,9 +14,6 @@ msgstr ""
 "X-Poedit-Basepath: ..\n"
 "X-Generator: Poedit 2.1\n"
 "X-Poedit-SearchPath-0: src\n"
-
-msgid " (without counting cover range)"
-msgstr ""
 
 msgid " Deleting remotely recorded and it will display an rec-error dialog on the other DB."
 msgstr " 删除远程记录，它将显示另一个数据库的记录错误对话框."
@@ -191,6 +188,9 @@ msgstr "书签键行为"
 msgid "Button disabled"
 msgstr "按钮禁用"
 
+msgid "COVER-SEARCH"
+msgstr ""
+
 msgid "CSFD"
 msgstr "CSFD"
 
@@ -354,6 +354,9 @@ msgstr "选择后光标预测移动"
 
 msgid "Custom"
 msgstr "自定义"
+
+msgid "Czech"
+msgstr ""
 
 msgid "DD.MM. HH:MM"
 msgstr "DD.MM. HH:MM"
@@ -1524,9 +1527,6 @@ msgstr "不停止任何重复定时器.用定时器编辑器修改它们."
 msgid "Nothing was found !"
 msgstr "什么也没发现 !"
 
-msgid "OK"
-msgstr "ΟΚ"
-
 msgid "OSError - please reload list (EMC menu)"
 msgstr ""
 
@@ -1736,6 +1736,9 @@ msgstr "播放前完成电影"
 msgid "Runtime:"
 msgstr "运行时间:"
 
+msgid "SINGLE COVER-SEARCH"
+msgstr ""
+
 msgid "SKIN-SETTINGS"
 msgstr "皮肤设置"
 
@@ -1769,8 +1772,12 @@ msgstr "扫描链接文件夹"
 msgid "Search"
 msgstr "搜索"
 
-#, fuzzy, python-format
-msgid "Search Results per Search Site%s:"
+#, fuzzy
+msgid "Search Results per Search Site (without counting cover range):"
+msgstr "搜索结果:"
+
+#, fuzzy
+msgid "Search Results per Search Site:"
 msgstr "搜索结果:"
 
 msgid "Search filter for matching existing terms in the title:"

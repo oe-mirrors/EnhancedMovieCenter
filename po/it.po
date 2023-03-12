@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: EnhancedMovieCenterReport-Msgid-Bugs-To:\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-12 22:31+0100\n"
+"POT-Creation-Date: 2023-03-12 09:04+0100\n"
 "PO-Revision-Date: 2022-11-12 09:59+0100\n"
 "Last-Translator: Massimo Pissarello <mapi68@gmail.com>\n"
 "Language-Team: Italian <>\n"
@@ -14,9 +14,6 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Lokalize 22.08.3\n"
 "X-Poedit-SourceCharset: UTF-8\n"
-
-msgid " (without counting cover range)"
-msgstr " (senza contare l'intervallo della cover)"
 
 msgid " Deleting remotely recorded and it will display an rec-error dialog on the other DB."
 msgstr " Cancellazione registrazione remota in corso: il ricevitore remoto mostrerà un messaggio di errore."
@@ -191,6 +188,9 @@ msgstr "Comportamento del tasto bouquet"
 msgid "Button disabled"
 msgstr "Tasto disabilitato"
 
+msgid "COVER-SEARCH"
+msgstr ""
+
 msgid "CSFD"
 msgstr "CSFD"
 
@@ -354,6 +354,9 @@ msgstr "Spostamento predittivo cursore dopo la selezione"
 
 msgid "Custom"
 msgstr "Personalizzato"
+
+msgid "Czech"
+msgstr ""
 
 msgid "DD.MM. HH:MM"
 msgstr "GG.MM. HH:MM"
@@ -1599,9 +1602,6 @@ msgstr "Non tutti i timer sono stati fermati. Modificali con l'editor del timer.
 msgid "Nothing was found !"
 msgstr "Non è stato trovato nulla!"
 
-msgid "OK"
-msgstr "OK"
-
 msgid "OSError - please reload list (EMC menu)"
 msgstr "OSError - si prega di ricaricare l'elenco (menu EMC)"
 
@@ -1810,6 +1810,9 @@ msgstr "Riavvolgi film riprodotti interamente prima di riprodurli"
 msgid "Runtime:"
 msgstr "Durata:"
 
+msgid "SINGLE COVER-SEARCH"
+msgstr ""
+
 msgid "SKIN-SETTINGS"
 msgstr "IMPOSTAZIONI SKIN"
 
@@ -1843,9 +1846,12 @@ msgstr "Scansiona cartelle collegate"
 msgid "Search"
 msgstr "Cerca"
 
-#, python-format
-msgid "Search Results per Search Site%s:"
-msgstr "Risultati per motore di ricerca %s:"
+#, fuzzy
+msgid "Search Results per Search Site (without counting cover range):"
+msgstr " (senza contare l'intervallo della cover)"
+
+msgid "Search Results per Search Site:"
+msgstr "Risultati per motore di ricerca:"
 
 msgid "Search filter for matching existing terms in the title:"
 msgstr "Filtro di ricerca per la corrispondenza dei termini esistenti nel titolo:"

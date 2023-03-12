@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-12 22:31+0100\n"
+"POT-Creation-Date: 2023-03-12 09:04+0100\n"
 "PO-Revision-Date: 2016-05-08 15:10+0200\n"
 "Last-Translator: neoatomic <neoatomic@users.noreply.github.com>\n"
 "Language-Team: \n"
@@ -17,9 +17,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Generator: Poedit 1.8.7\n"
-
-msgid " (without counting cover range)"
-msgstr ""
 
 msgid " Deleting remotely recorded and it will display an rec-error dialog on the other DB."
 msgstr " effacer un enregistrement distant et cela affichera une erreur d’enregistement sur l’autre récepteur."
@@ -195,6 +192,9 @@ msgstr "Comportement des boutons du bouquet"
 msgid "Button disabled"
 msgstr "Bouton désactivé"
 
+msgid "COVER-SEARCH"
+msgstr ""
+
 msgid "CSFD"
 msgstr "CSFD"
 
@@ -358,6 +358,9 @@ msgstr "Déplacement prédictif du curseur après une sélection"
 
 msgid "Custom"
 msgstr "Personnaliser"
+
+msgid "Czech"
+msgstr ""
 
 msgid "DD.MM. HH:MM"
 msgstr "JJ.MM HH:MM"
@@ -1543,9 +1546,6 @@ msgstr "Ne pas arrêter les programmations qui se répètent. Les modifier avec 
 msgid "Nothing was found !"
 msgstr "Rien n’a été trouvé!"
 
-msgid "OK"
-msgstr "OK"
-
 msgid "OSError - please reload list (EMC menu)"
 msgstr ""
 
@@ -1755,6 +1755,9 @@ msgstr "Rebobinner les films terminés avant de les lire"
 msgid "Runtime:"
 msgstr "Durée:"
 
+msgid "SINGLE COVER-SEARCH"
+msgstr ""
+
 msgid "SKIN-SETTINGS"
 msgstr ""
 
@@ -1788,8 +1791,12 @@ msgstr "Scanner les répertoires liés"
 msgid "Search"
 msgstr "Recherche"
 
-#, fuzzy, python-format
-msgid "Search Results per Search Site%s:"
+#, fuzzy
+msgid "Search Results per Search Site (without counting cover range):"
+msgstr "Rechercher les résultats pour:"
+
+#, fuzzy
+msgid "Search Results per Search Site:"
 msgstr "Rechercher les résultats pour:"
 
 msgid "Search filter for matching existing terms in the title:"

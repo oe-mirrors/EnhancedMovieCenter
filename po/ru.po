@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: EMC V.4.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-12 22:31+0100\n"
+"POT-Creation-Date: 2023-03-12 09:04+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: litvcom\n"
 "Language-Team: \n"
@@ -14,9 +14,6 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Generator: Poedit 2.4.2\n"
-
-msgid " (without counting cover range)"
-msgstr " (без учета диапазона обложек)"
 
 msgid " Deleting remotely recorded and it will display an rec-error dialog on the other DB."
 msgstr " Удаление удаленной записи, ошибка записи будет отображаться на другом ресивере."
@@ -192,6 +189,9 @@ msgstr "Функция кнопок 'Букет'"
 msgid "Button disabled"
 msgstr "Кнопка отключена"
 
+msgid "COVER-SEARCH"
+msgstr ""
+
 msgid "CSFD"
 msgstr "CSFD"
 
@@ -355,6 +355,9 @@ msgstr "Переместить курсор после выбора"
 
 msgid "Custom"
 msgstr "Пользовательский"
+
+msgid "Czech"
+msgstr ""
 
 msgid "DD.MM. HH:MM"
 msgstr "ДД.ММ. ЧЧ:ММ"
@@ -1563,9 +1566,6 @@ msgstr "Не все таймеры остановлены. Измените их
 msgid "Nothing was found !"
 msgstr "Ничего не найдено!"
 
-msgid "OK"
-msgstr "OK"
-
 msgid "OSError - please reload list (EMC menu)"
 msgstr "Ошибка - обновите список (меню EMC)"
 
@@ -1774,6 +1774,9 @@ msgstr "Перед воспроизведением перейти в начал
 msgid "Runtime:"
 msgstr "Длительность:"
 
+msgid "SINGLE COVER-SEARCH"
+msgstr ""
+
 msgid "SKIN-SETTINGS"
 msgstr "УСТАНОВКИ СКИНА"
 
@@ -1807,9 +1810,12 @@ msgstr "Искать структуры в ссылках на каталоги"
 msgid "Search"
 msgstr "Поиск"
 
-#, python-format
-msgid "Search Results per Search Site%s:"
-msgstr "Результаты на странице поиска %s:"
+#, fuzzy
+msgid "Search Results per Search Site (without counting cover range):"
+msgstr " (без учета диапазона обложек)"
+
+msgid "Search Results per Search Site:"
+msgstr "Результаты на странице поиска:"
 
 msgid "Search filter for matching existing terms in the title:"
 msgstr "Фильтр поиска совпадений по терминам в заголовке:"

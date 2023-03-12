@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Translation to Arabic language for EMC Enigma2 plugin\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-12 22:31+0100\n"
+"POT-Creation-Date: 2023-03-12 09:04+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: mosad <abo-mishal@hotmail.com>\n"
 "Language-Team: mosad\n"
@@ -16,9 +16,6 @@ msgstr ""
 "X-Poedit-Basepath: ../src\n"
 "Plural-Forms: nplurals=6; plural=(n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5);\n"
 "X-Poedit-SearchPath-0: .\n"
-
-msgid " (without counting cover range)"
-msgstr " (دون احتساب مساحة غلاف الفلم("
 
 msgid " Deleting remotely recorded and it will display an rec-error dialog on the other DB."
 msgstr " حذف المسجلة عن بعد سيتم عرض الحوار rec-خطا علي DB الأخرى."
@@ -197,6 +194,9 @@ msgstr "أزرار وظائف الباقة"
 msgid "Button disabled"
 msgstr "تم تعطيل الزر"
 
+msgid "COVER-SEARCH"
+msgstr ""
+
 msgid "CSFD"
 msgstr "CSFD"
 
@@ -358,6 +358,9 @@ msgstr "المؤشر الانتقال التنبؤيه بعد التحديد"
 
 msgid "Custom"
 msgstr "خيار طول شاشة الرسيفر"
+
+msgid "Czech"
+msgstr ""
 
 msgid "DD.MM. HH:MM"
 msgstr "DD.MM: MM"
@@ -1527,9 +1530,6 @@ msgstr "لم يتم إيقاف كافة أجهزه ضبط التوقيت. تعد
 msgid "Nothing was found !"
 msgstr "لم يتم العثور علي شيء!"
 
-msgid "OK"
-msgstr "موافق"
-
 msgid "OSError - please reload list (EMC menu)"
 msgstr "Oserror--يرجى تحديث قائمه (ضبط مركز مشغل الافلام)"
 
@@ -1739,6 +1739,9 @@ msgstr "ترجيع الفلم لاخر توقف شاهدتها قبل التشغ
 msgid "Runtime:"
 msgstr "وقت التشغيل:"
 
+msgid "SINGLE COVER-SEARCH"
+msgstr ""
+
 msgid "SKIN-SETTINGS"
 msgstr "إعدادات السكن"
 
@@ -1772,9 +1775,12 @@ msgstr "بحث روابط المجلدات"
 msgid "Search"
 msgstr "بحث"
 
-#, python-format
-msgid "Search Results per Search Site%s:"
-msgstr "نتائج البحث لكل موقع بحث %s:"
+#, fuzzy
+msgid "Search Results per Search Site (without counting cover range):"
+msgstr " (دون احتساب مساحة غلاف الفلم("
+
+msgid "Search Results per Search Site:"
+msgstr "نتائج البحث لكل موقع بحث :"
 
 msgid "Search filter for matching existing terms in the title:"
 msgstr "فلتر البحث لمطابقه المصطلحات الموجودة في العنوان:"

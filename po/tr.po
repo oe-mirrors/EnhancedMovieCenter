@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: EMC\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-12 22:31+0100\n"
+"POT-Creation-Date: 2023-03-12 09:04+0100\n"
 "PO-Revision-Date: 2016-05-08 15:10+0200\n"
 "Last-Translator: neoatomic <neoatomic@users.noreply.github.com>\n"
 "Language-Team: Turkish <sunder67@hotmail.com>\n"
@@ -16,9 +16,6 @@ msgstr ""
 "X-Poedit-Basepath: ..\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Poedit-SearchPath-0: src\n"
-
-msgid " (without counting cover range)"
-msgstr ""
 
 msgid " Deleting remotely recorded and it will display an rec-error dialog on the other DB."
 msgstr ""
@@ -187,6 +184,9 @@ msgstr ""
 msgid "Button disabled"
 msgstr ""
 
+msgid "COVER-SEARCH"
+msgstr ""
+
 msgid "CSFD"
 msgstr ""
 
@@ -337,6 +337,9 @@ msgstr ""
 
 msgid "Custom"
 msgstr "Özel"
+
+msgid "Czech"
+msgstr ""
 
 msgid "DD.MM. HH:MM"
 msgstr ""
@@ -1466,9 +1469,6 @@ msgstr ""
 msgid "Nothing was found !"
 msgstr ""
 
-msgid "OK"
-msgstr "Tamam"
-
 msgid "OSError - please reload list (EMC menu)"
 msgstr ""
 
@@ -1674,6 +1674,9 @@ msgstr ""
 msgid "Runtime:"
 msgstr ""
 
+msgid "SINGLE COVER-SEARCH"
+msgstr ""
+
 msgid "SKIN-SETTINGS"
 msgstr ""
 
@@ -1707,8 +1710,10 @@ msgstr ""
 msgid "Search"
 msgstr "Arama"
 
-#, python-format
-msgid "Search Results per Search Site%s:"
+msgid "Search Results per Search Site (without counting cover range):"
+msgstr ""
+
+msgid "Search Results per Search Site:"
 msgstr ""
 
 msgid "Search filter for matching existing terms in the title:"

@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: EMC V.4.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-12 22:31+0100\n"
+"POT-Creation-Date: 2023-03-12 09:04+0100\n"
 "PO-Revision-Date: 2019-05-24 23:33+0300\n"
 "Last-Translator: kvinto <badsystem@ukr.net>\n"
 "Language-Team: <sat-ukraine.info>\n"
@@ -14,9 +14,6 @@ msgstr ""
 "X-Poedit-Basepath: ..\n"
 "X-Generator: Poedit 2.2.3\n"
 "X-Poedit-SearchPath-0: src\n"
-
-msgid " (without counting cover range)"
-msgstr ""
 
 msgid " Deleting remotely recorded and it will display an rec-error dialog on the other DB."
 msgstr " Дистанційне видалення запису і на дисплеї з'явиться діалогове вікно rec-error з іншої БД."
@@ -195,6 +192,9 @@ msgstr "Поведінка кнопки Фаворити"
 msgid "Button disabled"
 msgstr "Кнопку вимкнено"
 
+msgid "COVER-SEARCH"
+msgstr ""
+
 msgid "CSFD"
 msgstr "CSFD"
 
@@ -358,6 +358,9 @@ msgstr "Прогнозування руху курсору після вибор
 
 msgid "Custom"
 msgstr "Користувацький"
+
+msgid "Czech"
+msgstr ""
 
 msgid "DD.MM. HH:MM"
 msgstr "ДД.ММ. ГГ:ХХ"
@@ -1533,9 +1536,6 @@ msgstr "Не всі таймери були зупинені. Змініть ї�
 msgid "Nothing was found !"
 msgstr "Нічого не знайдено !"
 
-msgid "OK"
-msgstr ""
-
 msgid "OSError - please reload list (EMC menu)"
 msgstr "OS Помилка - перезавантажте список (меню EMC)"
 
@@ -1745,6 +1745,9 @@ msgstr "Перейти на початок переглянутих фільмі
 msgid "Runtime:"
 msgstr "Час відтворення:"
 
+msgid "SINGLE COVER-SEARCH"
+msgstr ""
+
 msgid "SKIN-SETTINGS"
 msgstr "НАЛАШТУВАННЯ СКІНУ"
 
@@ -1778,8 +1781,12 @@ msgstr "Сканувати пов'язані папки"
 msgid "Search"
 msgstr "Пошук"
 
-#, fuzzy, python-format
-msgid "Search Results per Search Site%s:"
+#, fuzzy
+msgid "Search Results per Search Site (without counting cover range):"
+msgstr "Пошук результатів для:"
+
+#, fuzzy
+msgid "Search Results per Search Site:"
 msgstr "Пошук результатів для:"
 
 msgid "Search filter for matching existing terms in the title:"

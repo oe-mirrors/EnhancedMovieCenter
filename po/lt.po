@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: EMC - betonme git\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-12 22:31+0100\n"
+"POT-Creation-Date: 2023-03-12 09:04+0100\n"
 "PO-Revision-Date: 2021-01-24 15:11+0200\n"
 "Last-Translator: Vytenis P. <vyteniui@gmail.com>\n"
 "Language-Team: Vytenis P. <vyteniui@gmail.com>\n"
@@ -16,9 +16,6 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-SearchPath-0: src\n"
-
-msgid " (without counting cover range)"
-msgstr " (neskaitant viršelių grupės)"
 
 msgid " Deleting remotely recorded and it will display an rec-error dialog on the other DB."
 msgstr " Nuotolinių įrašų pašalinimas ir kitoje DB parodys REC klaidos pranešimą."
@@ -194,6 +191,9 @@ msgstr "'Bukietų' mygtuko elgesys"
 msgid "Button disabled"
 msgstr "Mygtukas išjungtas"
 
+msgid "COVER-SEARCH"
+msgstr ""
+
 msgid "CSFD"
 msgstr "CSFD"
 
@@ -357,6 +357,9 @@ msgstr "Žymeklio nuspėjamas judėjimas po pasirinkimo"
 
 msgid "Custom"
 msgstr "Pasirinktinis"
+
+msgid "Czech"
+msgstr ""
 
 msgid "DD.MM. HH:MM"
 msgstr "MM.DD HH:MM"
@@ -1597,9 +1600,6 @@ msgstr "Sustabdyt ne visi laikmačiai. Redaguokite juos laikmačių redaktoriumi
 msgid "Nothing was found !"
 msgstr "Nieko nerasta!"
 
-msgid "OK"
-msgstr "Gerai"
-
 msgid "OSError - please reload list (EMC menu)"
 msgstr "OS klaida - įkelkite sąrašą iš naujo (per EMC meniu)"
 
@@ -1808,6 +1808,9 @@ msgstr "Atsukti baigtus filmus prieš juos rodant"
 msgid "Runtime:"
 msgstr "Darbo trukmė:"
 
+msgid "SINGLE COVER-SEARCH"
+msgstr ""
+
 msgid "SKIN-SETTINGS"
 msgstr "IŠVAIZDOS NUSTATYMAI"
 
@@ -1841,9 +1844,12 @@ msgstr "Nuskaityti pakatalogių nuorodas"
 msgid "Search"
 msgstr "Paieška"
 
-#, python-format
-msgid "Search Results per Search Site%s:"
-msgstr "Paieškos rezultatai svetainėje %s:"
+#, fuzzy
+msgid "Search Results per Search Site (without counting cover range):"
+msgstr " (neskaitant viršelių grupės)"
+
+msgid "Search Results per Search Site:"
+msgstr "Paieškos rezultatai svetainėje:"
 
 msgid "Search filter for matching existing terms in the title:"
 msgstr "Terminų pavadinime atitikimo paieškos filtras:"

@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Enhanced Movie Center Portuguese translation\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-12 22:31+0100\n"
+"POT-Creation-Date: 2023-03-12 09:04+0100\n"
 "PO-Revision-Date: 2016-11-28 19:08+0000\n"
 "Last-Translator: nunigaia\n"
 "Language-Team: BH Team\n"
@@ -15,9 +15,6 @@ msgstr ""
 "X-Generator: Poedit 1.8.11\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-SearchPath-0: src\n"
-
-msgid " (without counting cover range)"
-msgstr ""
 
 msgid " Deleting remotely recorded and it will display an rec-error dialog on the other DB."
 msgstr "Apagar o gravado remotamente  e será exibido uma caixa de diálogo \"rec-erro\" na outra STB."
@@ -193,6 +190,9 @@ msgstr "Comportamento de Teclas de bouquet"
 msgid "Button disabled"
 msgstr "Tecla desativada"
 
+msgid "COVER-SEARCH"
+msgstr ""
+
 msgid "CSFD"
 msgstr "CSFD"
 
@@ -356,6 +356,9 @@ msgstr "Movimento preditivo de cursor após seleção"
 
 msgid "Custom"
 msgstr "Personalizado"
+
+msgid "Czech"
+msgstr ""
 
 msgid "DD.MM. HH:MM"
 msgstr "DD.MM. HH: MM"
@@ -1537,9 +1540,6 @@ msgstr "Não parar para quaisquer Timers repetidos. Modificá-los com o editor d
 msgid "Nothing was found !"
 msgstr "Nada foi encontrado!"
 
-msgid "OK"
-msgstr "OK"
-
 msgid "OSError - please reload list (EMC menu)"
 msgstr ""
 
@@ -1749,6 +1749,9 @@ msgstr "Rebobinar filmes acabados antes de reproduzir"
 msgid "Runtime:"
 msgstr "Duração:"
 
+msgid "SINGLE COVER-SEARCH"
+msgstr ""
+
 msgid "SKIN-SETTINGS"
 msgstr ""
 
@@ -1782,8 +1785,12 @@ msgstr "Procurar por pastas ligadas"
 msgid "Search"
 msgstr "Procura"
 
-#, fuzzy, python-format
-msgid "Search Results per Search Site%s:"
+#, fuzzy
+msgid "Search Results per Search Site (without counting cover range):"
+msgstr "Resultados de procura para:"
+
+#, fuzzy
+msgid "Search Results per Search Site:"
 msgstr "Resultados de procura para:"
 
 msgid "Search filter for matching existing terms in the title:"

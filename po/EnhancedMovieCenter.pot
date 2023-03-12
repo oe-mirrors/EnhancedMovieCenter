@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-12 22:31+0100\n"
+"POT-Creation-Date: 2023-03-12 09:04+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,9 +17,6 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
-
-msgid " (without counting cover range)"
-msgstr ""
 
 msgid " Deleting remotely recorded and it will display an rec-error dialog on the other DB."
 msgstr ""
@@ -188,6 +185,9 @@ msgstr ""
 msgid "Button disabled"
 msgstr ""
 
+msgid "COVER-SEARCH"
+msgstr ""
+
 msgid "CSFD"
 msgstr ""
 
@@ -337,6 +337,9 @@ msgid "Cursor predictive move after selection"
 msgstr ""
 
 msgid "Custom"
+msgstr ""
+
+msgid "Czech"
 msgstr ""
 
 msgid "DD.MM. HH:MM"
@@ -1467,9 +1470,6 @@ msgstr ""
 msgid "Nothing was found !"
 msgstr ""
 
-msgid "OK"
-msgstr ""
-
 msgid "OSError - please reload list (EMC menu)"
 msgstr ""
 
@@ -1675,6 +1675,9 @@ msgstr ""
 msgid "Runtime:"
 msgstr ""
 
+msgid "SINGLE COVER-SEARCH"
+msgstr ""
+
 msgid "SKIN-SETTINGS"
 msgstr ""
 
@@ -1708,8 +1711,10 @@ msgstr ""
 msgid "Search"
 msgstr ""
 
-#, python-format
-msgid "Search Results per Search Site%s:"
+msgid "Search Results per Search Site (without counting cover range):"
+msgstr ""
+
+msgid "Search Results per Search Site:"
 msgstr ""
 
 msgid "Search filter for matching existing terms in the title:"

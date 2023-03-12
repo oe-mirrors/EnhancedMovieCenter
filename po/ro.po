@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: EMC\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-12 22:31+0100\n"
+"POT-Creation-Date: 2023-03-12 09:04+0100\n"
 "PO-Revision-Date: 2016-05-08 15:10+0200\n"
 "Last-Translator: neoatomic <neoatomic@users.noreply.github.com>\n"
 "Language-Team: \n"
@@ -15,9 +15,6 @@ msgstr ""
 "X-Poedit-Basepath: ..\n"
 "Plural-Forms: nplurals=3; plural=(n==1?0:(((n%100>19)||((n%100==0)&&(n!=0)))?2:1));\n"
 "X-Poedit-SearchPath-0: src\n"
-
-msgid " (without counting cover range)"
-msgstr ""
 
 msgid " Deleting remotely recorded and it will display an rec-error dialog on the other DB."
 msgstr " Stergerea unei inregistrari la distanta genereaza o eroare"
@@ -191,6 +188,9 @@ msgstr "Comportamentul butonului buchet"
 msgid "Button disabled"
 msgstr "Buton dezactivat"
 
+msgid "COVER-SEARCH"
+msgstr ""
+
 msgid "CSFD"
 msgstr "CSFD"
 
@@ -341,6 +341,9 @@ msgstr "Predictie miscare dupa selectie"
 
 msgid "Custom"
 msgstr "Personalizat"
+
+msgid "Czech"
+msgstr ""
 
 msgid "DD.MM. HH:MM"
 msgstr "DD.MM HH:MM"
@@ -1484,9 +1487,6 @@ msgstr "Not stopping any repeating timers. Modify them with the timer editor."
 msgid "Nothing was found !"
 msgstr ""
 
-msgid "OK"
-msgstr "OK"
-
 msgid "OSError - please reload list (EMC menu)"
 msgstr ""
 
@@ -1692,6 +1692,9 @@ msgstr "Repune la inceputul filmului inainte de play"
 msgid "Runtime:"
 msgstr "Runtime :"
 
+msgid "SINGLE COVER-SEARCH"
+msgstr ""
+
 msgid "SKIN-SETTINGS"
 msgstr ""
 
@@ -1725,8 +1728,12 @@ msgstr "Scaneaza directoarele referite"
 msgid "Search"
 msgstr "Căutare"
 
-#, fuzzy, python-format
-msgid "Search Results per Search Site%s:"
+#, fuzzy
+msgid "Search Results per Search Site (without counting cover range):"
+msgstr "REzultat cautare pentru :"
+
+#, fuzzy
+msgid "Search Results per Search Site:"
 msgstr "REzultat cautare pentru :"
 
 msgid "Search filter for matching existing terms in the title:"

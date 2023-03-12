@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: EMC\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-12 22:31+0100\n"
+"POT-Creation-Date: 2023-03-12 09:04+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: dhwz <dhwz@gmx.net>\n"
 "Language-Team: \n"
@@ -16,9 +16,6 @@ msgstr ""
 "X-Poedit-Basepath: ../src\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-SearchPath-0: .\n"
-
-msgid " (without counting cover range)"
-msgstr " (ohne Zählung der Cover-Auswahl)"
 
 msgid " Deleting remotely recorded and it will display an rec-error dialog on the other DB."
 msgstr " Löschen einer entfernten Aufnahmen zeigt einen Fehler auf der anderen DB."
@@ -193,6 +190,9 @@ msgstr "Verhalten der Bouquet-Tasten"
 msgid "Button disabled"
 msgstr "Taste deaktiviert"
 
+msgid "COVER-SEARCH"
+msgstr ""
+
 msgid "CSFD"
 msgstr "CSFD"
 
@@ -356,6 +356,9 @@ msgstr "Cursor nach Auswahl weiterbewegen"
 
 msgid "Custom"
 msgstr "Benutzerdefiniert"
+
+msgid "Czech"
+msgstr ""
 
 msgid "DD.MM. HH:MM"
 msgstr "TT.MM. HH:MM"
@@ -1643,9 +1646,6 @@ msgstr "Nicht alle Timer konnten angehalten werden. Bitte diese mit dem Timer-Ed
 msgid "Nothing was found !"
 msgstr "Es wurde nichts gefunden !"
 
-msgid "OK"
-msgstr "OK"
-
 msgid "OSError - please reload list (EMC menu)"
 msgstr "OS-Fehler - bitte Filmliste neu laden (EMC Menü oder lange TV-Taste)"
 
@@ -1854,6 +1854,9 @@ msgstr "Start am Anfang von fertig gespielten Aufnahmen"
 msgid "Runtime:"
 msgstr "Laufzeit:"
 
+msgid "SINGLE COVER-SEARCH"
+msgstr ""
+
 msgid "SKIN-SETTINGS"
 msgstr "SKIN-EINSTELLUNGEN"
 
@@ -1887,9 +1890,11 @@ msgstr "Suche nach Medienstrukturen in Symlink-Verzeichnissen"
 msgid "Search"
 msgstr "Suchen"
 
-#, python-format
-msgid "Search Results per Search Site%s:"
-msgstr "Resultate pro Such-Seite%s:"
+msgid "Search Results per Search Site (without counting cover range):"
+msgstr "Resultate pro Such-Seite (ohne Zählung der Cover-Auswahl):"
+
+msgid "Search Results per Search Site:"
+msgstr "Resultate pro Such-Seite:"
 
 msgid "Search filter for matching existing terms in the title:"
 msgstr "Suchfilter für gleiche existierende Ausdrücke im Titel:"

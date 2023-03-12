@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: EMC V.4.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-12 22:31+0100\n"
+"POT-Creation-Date: 2023-03-12 09:04+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: neoatomic <neoatomic@users.noreply.github.com>\n"
 "Language-Team: \n"
@@ -14,9 +14,6 @@ msgstr ""
 "X-Poedit-Basepath: ..\n"
 "X-Generator: Poedit 3.0.1\n"
 "X-Poedit-SearchPath-0: src\n"
-
-msgid " (without counting cover range)"
-msgstr " (geen rekening houden met de grootte van de cover)"
 
 msgid " Deleting remotely recorded and it will display an rec-error dialog on the other DB."
 msgstr " Verwijder remote opname, er zal een opnamefout worden getoond op de andere ontvanger."
@@ -191,6 +188,9 @@ msgstr "Functie van de Bouquet knop"
 msgid "Button disabled"
 msgstr "Knop uitgeschakeld"
 
+msgid "COVER-SEARCH"
+msgstr ""
+
 msgid "CSFD"
 msgstr "CSFD"
 
@@ -354,6 +354,9 @@ msgstr "Cursor verplaatsen na selecteren"
 
 msgid "Custom"
 msgstr "Voorkeur"
+
+msgid "Czech"
+msgstr ""
 
 msgid "DD.MM. HH:MM"
 msgstr "DD.MM. HH:MM"
@@ -1592,9 +1595,6 @@ msgstr "Niet alle timers zijn gestopt. Bewerk ze met de Timer-Editor."
 msgid "Nothing was found !"
 msgstr "Niets gevonden !"
 
-msgid "OK"
-msgstr "Bevestigen"
-
 msgid "OSError - please reload list (EMC menu)"
 msgstr "OSError - actualiseer de lijst a.u.b. (EMC menu)"
 
@@ -1803,6 +1803,9 @@ msgstr "Terugspoelen van bekeken opnames voor het afspelen"
 msgid "Runtime:"
 msgstr "Speeltijd:"
 
+msgid "SINGLE COVER-SEARCH"
+msgstr ""
+
 msgid "SKIN-SETTINGS"
 msgstr "SKIN-INSTELLINGEN"
 
@@ -1836,9 +1839,12 @@ msgstr "Naar DVD-structuren zoeken blokkeren (symlinks)"
 msgid "Search"
 msgstr "Zoeken"
 
-#, python-format
-msgid "Search Results per Search Site%s:"
-msgstr "Zoekresultaten per zoeksite %s:"
+#, fuzzy
+msgid "Search Results per Search Site (without counting cover range):"
+msgstr " (geen rekening houden met de grootte van de cover)"
+
+msgid "Search Results per Search Site:"
+msgstr "Zoekresultaten per zoeksite:"
 
 msgid "Search filter for matching existing terms in the title:"
 msgstr "Zoekfilter voor overeenkomsten in termen in de titel:"

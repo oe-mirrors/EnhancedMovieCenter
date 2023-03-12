@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-12 22:31+0100\n"
+"POT-Creation-Date: 2023-03-12 09:04+0100\n"
 "PO-Revision-Date: 2018-02-09 01:09+0200\n"
 "Last-Translator: MCelliot_g <mcelliot_g@hotmail.com>\n"
 "Language-Team: \n"
@@ -19,9 +19,6 @@ msgstr ""
 "X-Poedit-Basepath: ..\n"
 "X-Generator: Poedit 2.0.6\n"
 "X-Poedit-SearchPath-0: src\n"
-
-msgid " (without counting cover range)"
-msgstr " (χωρίς μέτρηση του εύρους εξωφύλλων)"
 
 msgid " Deleting remotely recorded and it will display an rec-error dialog on the other DB."
 msgstr " Διαγραφή απομακρυσμένων εγγραφών και θα εμφανιστεί ένας διάλογος σφάλματος εγγραφής στην άλλη Β/Δ."
@@ -196,6 +193,9 @@ msgstr "Συμπεριφορά πλήκτρου Μπουκέτων"
 msgid "Button disabled"
 msgstr "Πλήκτρο ανενεργό"
 
+msgid "COVER-SEARCH"
+msgstr ""
+
 msgid "CSFD"
 msgstr "CSFD"
 
@@ -359,6 +359,9 @@ msgstr "Προβλεπόμενη κίνηση κέρσορα μετά την ε�
 
 msgid "Custom"
 msgstr "Προσαρμογή"
+
+msgid "Czech"
+msgstr ""
 
 msgid "DD.MM. HH:MM"
 msgstr "ΗΗ.ΜΜ. ΩΩ:ΛΛ"
@@ -1538,9 +1541,6 @@ msgstr "Μη διακοπή κανενός επαναλαμβανόμενου χ
 msgid "Nothing was found !"
 msgstr "Δεν βρέθηκε τίποτα !"
 
-msgid "OK"
-msgstr "ΟΚ"
-
 msgid "OSError - please reload list (EMC menu)"
 msgstr "Σφάλμα OS - παρακαλώ επαναφορτώστε τη λίστα (μενού EMC)"
 
@@ -1749,6 +1749,9 @@ msgstr "Προώθηση προς τα πίσω των ολοκληρωμένω�
 msgid "Runtime:"
 msgstr "Χρονική διάρκεια:"
 
+msgid "SINGLE COVER-SEARCH"
+msgstr ""
+
 msgid "SKIN-SETTINGS"
 msgstr ""
 
@@ -1782,9 +1785,12 @@ msgstr "Αναζήτηση σε συνδεδεμένους φακέλους"
 msgid "Search"
 msgstr "Αναζήτηση"
 
-#, python-format
-msgid "Search Results per Search Site%s:"
-msgstr "Αποτελέσματα Αναζήτησης ανά Ιστότοπο Αναζήτησης %s:"
+#, fuzzy
+msgid "Search Results per Search Site (without counting cover range):"
+msgstr " (χωρίς μέτρηση του εύρους εξωφύλλων)"
+
+msgid "Search Results per Search Site:"
+msgstr "Αποτελέσματα Αναζήτησης ανά Ιστότοπο Αναζήτησης :"
 
 msgid "Search filter for matching existing terms in the title:"
 msgstr "Φίλτρο αναζήτησης για υπάρχοντες όρους που ταιριάζουν στον τίτλο:"

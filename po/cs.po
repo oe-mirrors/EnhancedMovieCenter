@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: EMC V.4.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-12 22:31+0100\n"
+"POT-Creation-Date: 2023-03-12 09:04+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: neoatomic <neoatomic@users.noreply.github.com>\n"
 "Language-Team: Swiss-MAD\n"
@@ -15,9 +15,6 @@ msgstr ""
 "X-Poedit-Basepath: ..\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 "X-Poedit-SearchPath-0: src\n"
-
-msgid " (without counting cover range)"
-msgstr ""
 
 msgid " Deleting remotely recorded and it will display an rec-error dialog on the other DB."
 msgstr "Odebrání vzdálených nahrávek a zobrazení dialogu chyb nahrávání na druhém přístroji."
@@ -194,6 +191,9 @@ msgstr "Chování tlačítka Bouquet"
 msgid "Button disabled"
 msgstr "Tlačítko vypnuto"
 
+msgid "COVER-SEARCH"
+msgstr ""
+
 msgid "CSFD"
 msgstr "CSFD"
 
@@ -344,6 +344,9 @@ msgstr "Předvolený posun kurzoru po výběru"
 
 msgid "Custom"
 msgstr "Uživatelský"
+
+msgid "Czech"
+msgstr ""
 
 msgid "DD.MM. HH:MM"
 msgstr "DD.MM. HH:MM"
@@ -1505,9 +1508,6 @@ msgstr "Nezastavovat žádné opakující se časovače. Mohou se upravit editor
 msgid "Nothing was found !"
 msgstr ""
 
-msgid "OK"
-msgstr "OK"
-
 msgid "OSError - please reload list (EMC menu)"
 msgstr ""
 
@@ -1713,6 +1713,9 @@ msgstr "Po přehrátí filmu se vrátit na začátek"
 msgid "Runtime:"
 msgstr "Délka filmu:"
 
+msgid "SINGLE COVER-SEARCH"
+msgstr ""
+
 msgid "SKIN-SETTINGS"
 msgstr ""
 
@@ -1746,8 +1749,12 @@ msgstr "Prohledat odkazy (linky) na složky"
 msgid "Search"
 msgstr "Hledat"
 
-#, fuzzy, python-format
-msgid "Search Results per Search Site%s:"
+#, fuzzy
+msgid "Search Results per Search Site (without counting cover range):"
+msgstr "Vyhledané výsledky pro:"
+
+#, fuzzy
+msgid "Search Results per Search Site:"
 msgstr "Vyhledané výsledky pro:"
 
 msgid "Search filter for matching existing terms in the title:"

@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: enigma2-plugins EMC GIT20181227\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-12 22:31+0100\n"
+"POT-Creation-Date: 2023-03-12 09:04+0100\n"
 "PO-Revision-Date: 2019-11-12 20:23+0000\n"
 "Last-Translator: @Kos\n"
 "Language-Team: special OpenATV\n"
@@ -12,9 +12,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 2.2.4\n"
-
-msgid " (without counting cover range)"
-msgstr " (bez liczenia zakresu okładki)"
 
 msgid " Deleting remotely recorded and it will display an rec-error dialog on the other DB."
 msgstr "Usunie zdalnie zarejstrowane nagrania i wyświetli okno dialogowe błędów nagrywania na innych DB."
@@ -187,6 +184,9 @@ msgstr "Zachowanie przycisków bukietu"
 msgid "Button disabled"
 msgstr "Przycisk wyłączony"
 
+msgid "COVER-SEARCH"
+msgstr ""
+
 msgid "CSFD"
 msgstr ""
 
@@ -356,6 +356,9 @@ msgid "Cursor predictive move after selection"
 msgstr "Przesunąć kursor w dalszej selekcji"
 
 msgid "Custom"
+msgstr ""
+
+msgid "Czech"
 msgstr ""
 
 msgid "DD.MM. HH:MM"
@@ -1662,9 +1665,6 @@ msgstr "Nie zatrzymano żadnych powtarzających się Timerów. Zmień je za pomo
 msgid "Nothing was found !"
 msgstr "Nic nie znaleziono!"
 
-msgid "OK"
-msgstr "Zapisz"
-
 msgid "OSError - please reload list (EMC menu)"
 msgstr ""
 
@@ -1879,6 +1879,9 @@ msgstr "Przewiń zakończone filmy przed odtwarzaniem"
 msgid "Runtime:"
 msgstr "Czas:"
 
+msgid "SINGLE COVER-SEARCH"
+msgstr ""
+
 msgid "SKIN-SETTINGS"
 msgstr "USTAWIENIA SKÓRY"
 
@@ -1913,9 +1916,12 @@ msgstr "Skanuj połączone foldery"
 msgid "Search"
 msgstr "Szukaj"
 
-#, python-format
-msgid "Search Results per Search Site%s:"
-msgstr "Wyniki wyszukiwania według witryny wyszukiwania%s:"
+#, fuzzy
+msgid "Search Results per Search Site (without counting cover range):"
+msgstr " (bez liczenia zakresu okładki)"
+
+msgid "Search Results per Search Site:"
+msgstr "Wyniki wyszukiwania według witryny wyszukiwania:"
 
 msgid "Search filter for matching existing terms in the title:"
 msgstr "Filtr wyszukiwania pasujący do istniejących terminów w tytule:"

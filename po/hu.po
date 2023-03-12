@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: EMC v1.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-12 22:31+0100\n"
+"POT-Creation-Date: 2023-03-12 09:04+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Alec <alex1vagyok@gmail.com>\n"
 "Language-Team: alec <alex1vagyok@gmail.com>\n"
@@ -13,9 +13,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 2.0.7\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-
-msgid " (without counting cover range)"
-msgstr " (a borító számlálása nélkül)"
 
 msgid " Deleting remotely recorded and it will display an rec-error dialog on the other DB."
 msgstr " Távoli rögzítés törlése és egy másik hibaüzenet jelenik meg a másik DB-ben."
@@ -190,6 +187,9 @@ msgstr "Csatornacsomag gombok viselkedése"
 msgid "Button disabled"
 msgstr "A gomb letiltva"
 
+msgid "COVER-SEARCH"
+msgstr ""
+
 msgid "CSFD"
 msgstr "CSFD"
 
@@ -353,6 +353,9 @@ msgstr "A kurzor előrejelző mozgása a kiválasztás után"
 
 msgid "Custom"
 msgstr "Egyedi"
+
+msgid "Czech"
+msgstr ""
 
 msgid "DD.MM. HH:MM"
 msgstr "MM.DD. HH:MM"
@@ -1603,9 +1606,6 @@ msgstr "Nem állít meg semmilyen ismétlődő időzítőt. Módosítsa őket az
 msgid "Nothing was found !"
 msgstr "Nincs találat!"
 
-msgid "OK"
-msgstr "OK"
-
 msgid "OSError - please reload list (EMC menu)"
 msgstr "OSError - kérjük, töltse újra a listát (EMC menü)"
 
@@ -1814,6 +1814,9 @@ msgstr "Felvétel készítés után tekerjen az elejére a lejátszás előtt"
 msgid "Runtime:"
 msgstr "Futásidő:"
 
+msgid "SINGLE COVER-SEARCH"
+msgstr ""
+
 msgid "SKIN-SETTINGS"
 msgstr ""
 
@@ -1847,9 +1850,12 @@ msgstr "A linkelt mappák beolvasása"
 msgid "Search"
 msgstr "Keresés"
 
-#, python-format
-msgid "Search Results per Search Site%s:"
-msgstr "Keresési találatok a(z) %s Keresés helyén:"
+#, fuzzy
+msgid "Search Results per Search Site (without counting cover range):"
+msgstr " (a borító számlálása nélkül)"
+
+msgid "Search Results per Search Site:"
+msgstr "Keresési találatok a(z) Keresés helyén:"
 
 msgid "Search filter for matching existing terms in the title:"
 msgstr "Keresési szűrő a meglévő kifejezésekhez a címben:"
