@@ -30,4 +30,10 @@
 		<item level="0" text="Set path to save the folder Cover:" description="Set path to save the folder Cover:">config.EMC.imdb.singlesearch_foldercoverpath</item>
 	</setup>
 
+	<setup key="EMCPlaylistSetup" title="EMC Playlist Setup">
+		<item level="0" text="Default Playlist path" description="Default Playlist path">config.EMC.playlist.default_playlist_path</item>
+		<item level="0" text="Default Playlist name" description="Default Playlist name">config.EMC.playlist.default_playlist_name</item>
+		<item level="0" text="Always save current Playlist" description="Always save current Playlist">config.EMC.playlist.save_default_list</item>
+	</setup>
+
 </setupxml>

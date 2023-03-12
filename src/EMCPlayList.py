@@ -1,28 +1,24 @@
-﻿from __future__ import print_function
-import os
+﻿import os
 
-from . import _
 from enigma import eListboxPythonMultiContent, RT_VALIGN_CENTER, RT_HALIGN_RIGHT, eListbox, getDesktop, eServiceCenter, iServiceInformation
 
-from Screens.Screen import Screen
+from Components.ActionMap import ActionMap, HelpableActionMap
+from Components.Button import Button
+from Components.config import config, ConfigSubsection, ConfigDirectory, ConfigText, ConfigYesNo
+from Components.FileList import FileList
+from Components.GUIComponent import GUIComponent
 from Screens.ChoiceBox import ChoiceBox
 from Screens.HelpMenu import HelpableScreen
 from Screens.InputBox import InputBox
 from Screens.LocationBox import LocationBox
 from Screens.MessageBox import MessageBox
-from Screens.VirtualKeyBoard import VirtualKeyBoard
-from Components.ActionMap import *
-from Components.Button import Button
-from Components.config import *
-from Components.FileList import FileList
-from Components.GUIComponent import GUIComponent
+from Screens.Screen import Screen
+from Screens.Setup import Setup
 from Tools.Directories import fileExists
 from skin import parseColor, parseFont
-from .configlistext import ConfigListScreenExt
-
-global plyDVB
-
 from .CommonSupport import getMetaTitleFromDescription, plyDVB
+from . import _
+
 
 sz_w = getDesktop(0).size().width()
 
@@ -64,7 +60,7 @@ class EMCPlaylist():
 	def delCurrentPlaylistEntry(self, path):
 		if path in self.currentPlaylist:
 			del self.currentPlaylist[path]
-		print("EMC delete currentPlaylistEntry: ", path)
+		print("EMC delete currentPlaylistEntry: %s" % path)
 
 	def delCurrentPlaylist(self):
 		self.currentPlaylist = {}
@@ -230,13 +226,12 @@ class EMCPlaylistScreen(Screen):
 			tmplist.sort(key=lambda x: (x[0]))
 
 			try:
-				file = open(filename + ".e2pls", "w")
-				for x in tmplist:
-					file.write(str(x[2].toString()).replace(":%s" % x[1], "") + "\n")
-				file.close()
+				with open(filename + ".e2pls", "w") as fd:
+					for x in tmplist:
+						fd.write(str(x[2].toString()).replace(":%s" % x[1], "") + "\n")
 				self.session.open(MessageBox, (_("Current Playlist saved successfully!")), MessageBox.TYPE_INFO, 5)
-			except Exception as e:
-				print(('[EMCPlayList] savePlaylist get failed: ', str(e)))
+			except OSError as e:
+				print(('[EMCPlayList] savePlaylist get failed: %s' % str(e)))
 				self.session.open(MessageBox, (_("Can not save current Playlist!")), MessageBox.TYPE_ERROR, 10)
 
 	def keyYellow(self):
@@ -288,7 +283,7 @@ class PlayList(GUIComponent):
 			try:
 				f()
 			except Exception as e:
-				emcDebugOut("[EMCPlayList] External observer exception: \n" + str(e))
+				emcDebugOut("[EMCPlayList] External observer exception: \n%s" % str(e))
 
 	def applySkin(self, desktop, parent):
 		attribs = []
@@ -385,101 +380,35 @@ class PlayList(GUIComponent):
 		self.l.setItemHeight(self.itemHeight)
 
 
-class EMCPlaylistSetup(Screen, ConfigListScreenExt):
-	if sz_w == 1920:
-		skin = """
-		<screen position="center,170" size="1200,820" title="EMC Playlist Setup">
-		<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/EnhancedMovieCenter/img_fhd/red.png" position="10,5" size="300,70" alphatest="blend"/>
-		<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/EnhancedMovieCenter/img_fhd/green.png" position="310,5" size="300,70" alphatest="blend"/>
-		<widget backgroundColor="#9f1313" font="Regular;30" halign="center" name="cancel" position="10,5" foregroundColor="white" shadowColor="black" shadowOffset="-2,-2" size="300,70" transparent="1" valign="center" zPosition="1" />
-		<widget backgroundColor="#1f771f" font="Regular;30" halign="center" name="save" position="310,5" foregroundColor="white" shadowColor="black" shadowOffset="-2,-2" size="300,70" transparent="1" valign="center" zPosition="1" />
-		<widget font="Regular;34" halign="right" position="1050,25" render="Label" size="120,40" source="global.CurrentTime">
-			<convert type="ClockToText">Default</convert>
-		</widget>
-		<widget font="Regular;34" halign="right" position="800,25" render="Label" size="240,40" source="global.CurrentTime">
-			<convert type="ClockToText">Date</convert>
-		</widget>
-		<eLabel backgroundColor="#818181" position="10,80" size="1180,1" />
-		<widget enableWrapAround="1" name="config" itemHeight="45" position="10,90" scrollbarMode="showOnDemand" size="1180,720" />
-		</screen>"""
-	else:
-		skin = """
-		<screen position="center,120" size="820,520" title="EMC Playlist Setup">
-		<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/EnhancedMovieCenter/img/red.png" position="10,5" size="200,40" alphatest="blend"/>
-    		<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/EnhancedMovieCenter/img/green.png" position="210,5" size="200,40" alphatest="blend"/>
-    		<widget name="cancel" position="10,5" size="200,40" zPosition="1" font="Regular;20" halign="center" valign="center" backgroundColor="#9f1313" transparent="1" foregroundColor="white" shadowColor="black" shadowOffset="-2,-2" />
-    		<widget name="save" position="210,5" size="200,40" zPosition="1" font="Regular;20" halign="center" valign="center" backgroundColor="#1f771f" transparent="1" foregroundColor="white" shadowColor="black" shadowOffset="-2,-2" />
-    		<widget source="global.CurrentTime" render="Label" position="740,14" size="70,24" font="Regular;22" halign="right">
-			<convert type="ClockToText">Default</convert>
-    		</widget>
-		<eLabel position="10,50" size="800,1" backgroundColor="#818181" />
-     		<widget name="config" itemHeight="30" position="10,60" size="800,450" enableWrapAround="1" scrollbarMode="showOnDemand" />
-		</screen>"""
-
+class EMCPlaylistSetup(Setup):
 	def __init__(self, session):
-		Screen.__init__(self, session)
-		self.list = []
-		self.list.append(getConfigListEntry(_("Default Playlist path"), config.EMC.playlist.default_playlist_path))
-		self.list.append(getConfigListEntry(_("Default Playlist name"), config.EMC.playlist.default_playlist_name))
-		self.list.append(getConfigListEntry(_("Always save current Playlist"), config.EMC.playlist.save_default_list))
+		Setup.__init__(self, session, "EMCPlaylistSetup", plugin="Extensions/EnhancedMovieCenter", PluginLanguageDomain="EnhancedMovieCenter")
 
-		ConfigListScreenExt.__init__(self, self.list, session)
-		self["actions"] = ActionMap(["SetupActions", "ColorActions"],
-		{
-			"ok": self.ok,
-			"cancel": self.keyCancel,
-			"red": self.keyCancel,
-			"green": self.keySave,
-		}, -2)
-		self["cancel"] = Button(_("Cancel"))
-		self["save"] = Button(_("Save"))
-		self.onLayoutFinish.append(self.layoutFinished)
+	def keySelect(self):
+		item = self.getCurrentItem()
+		if item == config.EMC.playlist.default_playlist_path:
+			try:
+				self.session.openWithCallback(
+					self.keySelectCallback,
+					LocationBox,
+						windowTitle=_("Choose Directory:"),
+						text=_("Choose directory"),
+						currDir=str(config.EMC.playlist.default_playlist_path.value),
+						bookmarks=config.movielist.videodirs,
+						autoAdd=False,
+						editDir=True,
+						inhibitDirs=["/bin", "/boot", "/dev", "/etc", "/home", "/lib", "/proc", "/run", "/sbin", "/sys", "/usr", "/var"],
+						minFree=15)
+			except Exception as e:
+				print(('[EMCPlayList] openDirectoryBrowser get failed: %s' % str(e)))
+		else:
+			Setup.keySelect(self)
 
-	def layoutFinished(self):
-		self.setTitle(_("EMC Playlist Setup"))
-
-	def openDirectoryBrowser(self, path):
-		try:
-			self.session.openWithCallback(
-				self.openDirectoryBrowserCB,
-				LocationBox,
-					windowTitle=_("Choose Directory:"),
-					text=_("Choose directory"),
-					currDir=str(path),
-					bookmarks=config.movielist.videodirs,
-					autoAdd=False,
-					editDir=True,
-					inhibitDirs=["/bin", "/boot", "/dev", "/etc", "/home", "/lib", "/proc", "/run", "/sbin", "/sys", "/usr", "/var"],
-					minFree=15)
-		except Exception as e:
-			print(('[EMCPlayList] openDirectoryBrowser get failed: ', str(e)))
-
-	def openDirectoryBrowserCB(self, path):
+	def keySelectCallback(self, path):
 		if path is not None:
 			config.EMC.playlist.default_playlist_path.setValue(path)
-
-	def openVirtualKeyboard(self, name):
-		try:
-			self.session.openWithCallback(lambda x: self.openVirtualKeyboardCB(x, 'playlist_name'), VirtualKeyBoard, title=(_('Enter Name for Playlist')), text=name)
-		except Exception as e:
-			print(('[EMCPlayList] openVirtualKeyboard get failed: ', str(e)))
-
-	def openVirtualKeyboardCB(self, callback=None, entry=None):
-		if callback is not None and len(callback) and entry is not None and len(entry):
-			if entry == 'playlist_name':
-				config.EMC.playlist.default_playlist_name.setValue(callback)
-
-	def ok(self):
-		if self["config"].getCurrent()[1] == config.EMC.playlist.default_playlist_path:
-			self.openDirectoryBrowser(config.EMC.playlist.default_playlist_path.value)
-		else:
-			pass
-
-	def keySave(self):
-		for x in self["config"].list:
-			x[1].save()
-		configfile.save()
-		self.close()
+		self["config"].invalidateCurrent()
+		self.changedEntry()
 
 
 class EMCFileBrowser(Screen, HelpableScreen):
