@@ -162,7 +162,7 @@ def getTempCover(posterUrl):
 			if fileExists("/tmp/previewCover.jpg"):
 				remove("/tmp/previewCover.jpg")
 			coverpath = "/tmp/previewCover.jpg"
-			url = "http://image.tmdb.org/t/p/%s%s" % (config.EMC.movieinfo.coversize.value, posterUrl)
+			url = "https://image.tmdb.org/t/p/%s%s" % (config.EMC.movieinfo.coversize.value, posterUrl)
 			callInThread(DownloadPage, url, coverpath, None, fail=dataError)
 		except Exception as e:
 			print(('[EMC] MovieInfo getTempCover exception failure: %s' % str(e)))

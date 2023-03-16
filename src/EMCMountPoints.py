@@ -40,13 +40,8 @@ class EMCMountPoints:
 		return self.mountpoint(os.path.dirname(path), False)
 
 	def getMountPointDevice(self, path):
-		try:
-			from Components.Harddisk import getProcMounts
-			procMounts = getProcMounts()
-		except:
-			# http://git.opendreambox.org/?p=enigma2.git;a=blob;f=usr/lib/enigma2/python/Components/Harddisk.py
-			from Components.Harddisk import Util
-			procMounts = Util.mtab(virt=False)
+		from Components.Harddisk import getProcMounts
+		procMounts = getProcMounts()
 		device = ""
 		for x in procMounts:
 			for entry in x:

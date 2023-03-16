@@ -361,10 +361,10 @@ class EMCImdbScan(Screen):
 							(season, episode) = seasonEpisode[0]
 						name2 = getMovieNameWithoutPhrases(s_title)
 						name2 = sub(r'[Ss][0-9]+[Ee][0-9]+.*[a-zA-Z0-9_]+', '', name2, flags=S | I)
-						url = 'http://thetvdb.com/api/GetSeries.php?seriesname=%s&language=%s' % (quote(str(name2)), self.lang)
+						url = 'https://thetvdb.com/api/GetSeries.php?seriesname=%s&language=%s' % (quote(str(name2)), self.lang)
 						urls.append(("serie", title, url, cover_path, season, episode))
 					else:
-						url = 'http://api.themoviedb.org/3/search/movie?api_key=8789cfd3fbab7dccf1269c3d7d867aff&query=%s&language=%s' % (quote(str(m_title)), self.lang)
+						url = 'https://api.themoviedb.org/3/search/movie?api_key=8789cfd3fbab7dccf1269c3d7d867aff&query=%s&language=%s' % (quote(str(m_title)), self.lang)
 						urls.append(("movie", title, url, cover_path, None, None))
 			if len(urls) != 0:
 				ds = defer.DeferredSemaphore(tokens=3)
@@ -405,7 +405,7 @@ class EMCImdbScan(Screen):
 				if isinstance(data, list):
 					data = data[0]
 				poster_path = data["poster_path"].strip('/')
-				purl = "http://image.tmdb.org/t/p/%s/%s" % (config.EMC.imdb.preferred_coversize.value, poster_path)
+				purl = "https://image.tmdb.org/t/p/%s/%s" % (config.EMC.imdb.preferred_coversize.value, poster_path)
 				self.counter_download += 1
 				self.end_time = process_time()
 				elapsed = (self.end_time - self.start_time) * 1000
@@ -442,7 +442,7 @@ class EMCImdbScan(Screen):
 						callInThread(self.DownloadPage, purl, cover_path, success=None, fail=self.dataError)
 					# get description
 					if config.EMC.imdb.savetotxtfile.value and season and episode:
-						iurl = "http://www.thetvdb.com/api/2AAF0562E31BCEEC/series/%s/default/%s/%s/%s.xml" % (str(items[0]), str(int(season)), str(int(episode)), self.lang)
+						iurl = "https://www.thetvdb.com/api/2AAF0562E31BCEEC/series/%s/default/%s/%s/%s.xml" % (str(items[0]), str(int(season)), str(int(episode)), self.lang)
 						callInThread(GetPage, iurl, boundFunction(self.getInfos, id, type, cover_path), self.dataError)
 			else:
 				self.counter_no_poster += 1
@@ -686,7 +686,7 @@ class getCover(Screen):
 		for item in part:
 			if finish:
 				break
-			url = 'http://api.themoviedb.org/3/search/movie?api_key=8789cfd3fbab7dccf1269c3d7d867aff&query=%s&language=%s' % (quote(str(item)), self.lang)
+			url = 'https://api.themoviedb.org/3/search/movie?api_key=8789cfd3fbab7dccf1269c3d7d867aff&query=%s&language=%s' % (quote(str(item)), self.lang)
 			headers = {"User-Agent": choice(agents)}
 			data = yield deferToThread(GetPage, url, headers=headers, success=None, fail=boundFunction(self.errorLoad, title))
 #			data = yield str(GetPage(url, headers=headers, success=None, fail=boundFunction(self.errorLoad, title)))
@@ -701,7 +701,7 @@ class getCover(Screen):
 							continue
 						coverlist.append(m_cover)
 						self.cover_count += 1
-						tmdb_url = "http://image.tmdb.org/t/p/%s/%s" % (coversize, str(m_cover).strip('/'))
+						tmdb_url = "https://image.tmdb.org/t/p/%s/%s" % (coversize, str(m_cover).strip('/'))
 						templist.append(self.showCoverlist(m_title, tmdb_url, self.o_path, "tmdb: "))
 						if siteresults and len(coverlist) >= siteresults:
 							finish = True
@@ -726,7 +726,7 @@ class getCover(Screen):
 		for item in part:
 			if finish:
 				break
-			url = "http://www.thetvdb.com/api/GetSeries.php?seriesname=%s&language=%s" % (quote(str(item)), self.lang)
+			url = "https://www.thetvdb.com/api/GetSeries.php?seriesname=%s&language=%s" % (quote(str(item)), self.lang)
 			headers = {"User-Agent": choice(agents)}
 			data = yield deferToThread(GetPage, url, headers=headers, success=None, fail=boundFunction(self.errorLoad, title))
 #			data = yield GetPage(url, headers=headers, success=None, fail=boundFunction(self.errorLoad, title))
@@ -781,7 +781,7 @@ class getCover(Screen):
 		for item in part:
 			if finish:
 				break
-			url = 'http://m.imdb.com/find?q=%s' % quote(str(item))
+			url = 'https://m.imdb.com/find?q=%s' % quote(str(item))
 			headers = {"User-Agent": choice(agents)}
 			data = yield deferToThread(GetPage, url, headers=headers, success=None, fail=boundFunction(self.errorLoad, title))
 #			data = yield GetPage(url, headers=headers, success=None, fail=boundFunction(self.errorLoad, title))
@@ -828,7 +828,7 @@ class getCover(Screen):
 			if m_url:
 				#m_url = findall(r'(.*?)\.', m_url)
 				#extra_imdb_convert = "._V1_SX320.jpg"
-				#m_url = "http://ia.media-imdb.com/images/%s%s" % (m_url[0], extra_imdb_convert)
+				#m_url = "https://ia.media-imdb.com/images/%s%s" % (m_url[0], extra_imdb_convert)
 				print("EMC iMDB: Download Poster - %s" % m_url)
 				try:
 					req = session()
