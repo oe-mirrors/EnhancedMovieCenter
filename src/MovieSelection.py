@@ -727,7 +727,7 @@ class EMCSelection(Screen, HelpableScreen, SelectionEventInfo, VlcPluginInterfac
 				self.currentPath = config.EMC.movie_homepath.value
 				config.EMC.needsreload.value = True
 
-	def gotThreadMsg(self, msg):
+	def gotThreadMsg(self, _msg):
 		print('[EMCMovieSelection] gotThreadMsg')
 		from .MovieCenter import countsizeworker
 		msg = countsizeworker.Message.pop()

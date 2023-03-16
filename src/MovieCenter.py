@@ -16,8 +16,7 @@
 #	For more information on the GNU General Public License see:
 #	<http://www.gnu.org/licenses/>.
 #
-from __future__ import print_function, division
-import math
+from math import ceil
 import os
 import random
 import re
@@ -57,23 +56,10 @@ sz_w = getDesktop(0).size().width()
 
 # Check if image is vti or dream, is needed for build entrys in MovieCenter with picons
 try:
-	from boxbranding import getImageDistro
-	distro = getImageDistro()
-	imgVti = 'vti' in distro.lower()
-except:
-	try:
-		from enigma import BT_FIXRATIO
-		imgVti = True
-	except:
-		imgVti = False
-try:
 	from Components.Renderer.Picon import getPiconName
 	newPiconRenderer = True
 except:
 	newPiconRenderer = False
-
-if imgVti:
-	from enigma import BT_SCALE, BT_FIXRATIO as BT_KEEP_ASPECT_RATIO
 
 if newPiconRenderer:
 	try:
@@ -292,9 +278,9 @@ def getMovieNameWithoutPhrases(moviename=""):
 def getProgress(service, length=0, last=0, forceRecalc=False, cuts=None):
 	# All calculations are done in seconds
 	# The progress of a recording isn't correct, because we only get the actual length not the final
-	cuts = None
+	# cuts = None
 	progress = 0
-	#updlen = length
+	# updlen = length
 	if last <= 0:
 		# Get last position from cut file
 		if cuts is None:
@@ -359,7 +345,7 @@ def calculateProgress(last, length):
 		# else we will never see the 100%
 		adjlength = float(length) / 100.0 * 98.0
 		# Calculate progress and round up
-		progress = int(math.ceil(float(last) / float(adjlength) * 100.0))
+		progress = int(ceil(float(last) / float(adjlength) * 100.0))
 		# Normalize progress
 		if progress < 0:
 			progress = 0
@@ -388,7 +374,7 @@ def toggleProgressService(service, preparePlayback, forceProgress=-1, first=Fals
 	# All calculations are done in seconds
 	cuts = CutList(path)
 	last = cuts.getCutListLast()
-	#length = self.getLengthOfService(service)
+	# length = self.getLengthOfService(service)
 	progress, length = getProgress(service, length=0, last=last, forceRecalc=True, cuts=cuts)
 
 	if not preparePlayback:
@@ -472,46 +458,37 @@ def dirInfo(folder, bsize=False):
 
 
 def detectDVDStructure(checkPath):
-	if not os.path.isdir(checkPath):
-		return None
-	elif not config.EMC.scan_linked.value and os.path.islink(checkPath):
-		return None
-	dvdpath = os.path.join(checkPath, "VIDEO_TS.IFO")
-	if fileExists(dvdpath):
-		return dvdpath
-	dvdpath = os.path.join(checkPath, "VIDEO_TS/VIDEO_TS.IFO")
-	if fileExists(dvdpath):
-		return dvdpath
-	dvdpath = os.path.join(checkPath, "DVD/VIDEO_TS/VIDEO_TS.IFO")
-	if fileExists(dvdpath):
-		return dvdpath
+	if os.path.isdir(checkPath) or (os.path.islink(checkPath) and config.EMC.scan_linked.value):
+		dvdpath = os.path.join(checkPath, "VIDEO_TS.IFO")
+		if fileExists(dvdpath):
+			return dvdpath
+		dvdpath = os.path.join(checkPath, "VIDEO_TS/VIDEO_TS.IFO")
+		if fileExists(dvdpath):
+			return dvdpath
+		dvdpath = os.path.join(checkPath, "DVD/VIDEO_TS/VIDEO_TS.IFO")
+		if fileExists(dvdpath):
+			return dvdpath
 	return None
 
 
 def detectMOVStructure(checkPath):
-	if not os.path.isdir(checkPath):
-		return None
-	elif not config.EMC.scan_linked.value and os.path.islink(checkPath):
-		return None
-	extMovie = extVideo - extBlu
-	for ext in extMovie:
-		movpath = os.path.join(checkPath, os.path.basename(checkPath)) + ext
-		if fileExists(movpath):
-			return movpath
+	if os.path.isdir(checkPath) or (os.path.islink(checkPath) and config.EMC.scan_linked.value):
+		extMovie = extVideo - extBlu
+		for ext in extMovie:
+			movpath = os.path.join(checkPath, os.path.basename(checkPath)) + ext
+			if fileExists(movpath):
+				return movpath
 	return None
 
 
 def detectBLUStructure(checkPath):
-	if not os.path.isdir(checkPath):
-		return None
-	elif not config.EMC.scan_linked.value and os.path.islink(checkPath):
-		return None
-	blupath = os.path.join(checkPath, "BDMV/index.bdmv")
-	if fileExists(blupath):
-		return blupath
-	blupath = os.path.join(checkPath, "BRD/BDMV/index.bdmv")
-	if fileExists(blupath):
-		return blupath
+	if os.path.isdir(checkPath) or (os.path.islink(checkPath) and config.EMC.scan_linked.value):
+		blupath = os.path.join(checkPath, "BDMV/index.bdmv")
+		if fileExists(blupath):
+			return blupath
+		blupath = os.path.join(checkPath, "BRD/BDMV/index.bdmv")
+		if fileExists(blupath):
+			return blupath
 	return None
 
 
@@ -580,7 +557,7 @@ class CountSizeWorker(Thread):
 		self.__list.push(item)
 		if not self.__running and not self.isStartedSet():
 			self.__running = True
-#			print'[EMC] CountSizeWorker Start'
+			# print('[EMC] CountSizeWorker Start')
 			self.start()
 
 	def run(self):
@@ -589,13 +566,13 @@ class CountSizeWorker(Thread):
 				break
 
 			item = self.__list.pop()
-#			print'[EMC] CountSizeWorker processing: ', item
+			# print('[EMC] CountSizeWorker processing: %s' % item)
 			result = None
 
 			try:
 				result = dirInfo(item, bsize=True)
 			except Exception as e:
-				print(('[EMC] CountSizeWorker result exception:', str(e)))
+				print(('[EMC] CountSizeWorker result exception: %s' % str(e)))
 
 				# Exception finish job with error
 				result = str(e)
@@ -1017,8 +994,6 @@ class MovieCenterData(VlcPluginInterfaceList, PermanentSort, E2Bookmarks, EMCBoo
 
 		val = int(config.EMC.latest_recordings_limit.value)
 		if val != -1:
-			if imgVti:			# is needed for vti, "val" is 1-365 in days
-				val = val * 86400
 			for path, name, ext in filelist:
 				fdate = self.checkDate(path)
 				nowDate = time()         # time from now in seconds, 86400 is one day
@@ -2222,7 +2197,7 @@ class MovieCenter(GUIComponent):
 										textX += piconW + 5
 										textSizeX = self.l.getItemSize().width() - textX - 5
 								# Special way for vti-images, directly over "eListboxPythonMultiContent", they have no "flags=..", only "options=.."
-								if newPiconRenderer or imgVti:
+								if newPiconRenderer:
 									append((eListboxPythonMultiContent.TYPE_PIXMAP_ALPHABLEND, piconX, piconY, piconW, piconH, picon, None, None, BT_SCALE | BT_KEEP_ASPECT_RATIO))
 								else:
 									append((eListboxPythonMultiContent.TYPE_PIXMAP_ALPHABLEND, piconX, piconY, piconW, piconH, picon, None, None))
@@ -2343,7 +2318,7 @@ class MovieCenter(GUIComponent):
 							if self.CoolPiconWidth == -1:
 								self.CoolPiconWidth = 110
 							# Special way for vti-images, directly over "eListboxPythonMultiContent", they have no "flags=..", only "options=.."
-							if newPiconRenderer or imgVti:
+							if newPiconRenderer:
 								progresssub = 0
 								numsub = 0
 								if config.EMC.movie_icons.value:

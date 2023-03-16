@@ -16,7 +16,6 @@
 #	For more information on the GNU General Public License see:
 #	<http://www.gnu.org/licenses/>.
 #
-from __future__ import print_function
 
 from Components.config import *
 from Components.ActionMap import HelpableActionMap
@@ -32,16 +31,6 @@ from .EMCTasker import emcDebugOut
 from .DelayedFunction import DelayedFunction
 
 SeekbarPlg = "%s%s" % (resolveFilename(SCOPE_PLUGINS), "Extensions/Seekbar/plugin.py")
-
-try:
-	from boxbranding import getImageDistro
-	distro = getImageDistro()
-	if distro.lower() in ('openatv', 'openbh', 'openvix', 'openmips'):
-		hasmkvcuesheetsupport = True
-	else:
-		hasmkvcuesheetsupport = False
-except:
-	hasmkvcuesheetsupport = False
 
 # Overwrite Seekbar
 
@@ -119,15 +108,10 @@ class InfoBarSupport(InfoBarBase,
 		self.is_closing = False
 		self.resume_point = 0
 
-		if hasmkvcuesheetsupport:
-			self.__event_tracker = ServiceEventTracker(screen=self, eventmap={
-					iPlayableService.evStart: self.__serviceStarted,
-					iPlayableService.evCuesheetChanged: self.downloadCuesheet,
-				})
-		else:
-			self.__event_tracker = ServiceEventTracker(screen=self, eventmap={
-					iPlayableService.evStart: self.__serviceStarted,
-				})
+		self.__event_tracker = ServiceEventTracker(screen=self, eventmap={
+				iPlayableService.evStart: self.__serviceStarted,
+				iPlayableService.evCuesheetChanged: self.downloadCuesheet,
+			})
 
 	##############################################################################
 	## Override from InfoBarGenerics.py
