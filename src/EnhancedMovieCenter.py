@@ -231,18 +231,10 @@ class EnhancedMovieCenterMenu(ConfigListScreenExt, Screen):
 		self.skin = EnhancedMovieCenterMenu.skin
 		self.screenTitle = _("Setup")
 
-		self["actions"] = ActionMap(["SetupActions", "OkCancelActions", "EMCConfigActions"],
+		self["actions"] = ActionMap(["ColorActions"],
 		{
-			"ok": self.keyOK,
-			"cancel": self.keyCancel,
-			"red": self.keyCancel,
-			"up": self.keyUp,
-			"down": self.keyDown,
-			"green": self.keySaveNew,
-			"blueshort": self.loadPredefinedSettings,
+			"blue": self.loadPredefinedSettings,
 			"bluelong": self.loadDefaultSettings,
-			"nextBouquet": self.keyPreviousSection,
-			"prevBouquet": self.keyNextSection,
 		}, -2)  # higher priority
 
 		self["key_red"] = Button(_("Cancel"))
@@ -630,14 +622,14 @@ class EnhancedMovieCenterMenu(ConfigListScreenExt, Screen):
 			res = os.path.normpath(res)
 			self["config"].getCurrent()[1].value = res
 
-	def keyOK(self):
-		try:
-			current = self["config"].getCurrent()
-			current and current[3](current[1])
-		except:
-			pass
+#	def keyOK(self):
+#		try:
+#			current = self["config"].getCurrent()
+#			current and current[3](current[1])
+#		except:
+#			pass
 
-	def keySaveNew(self):
+	def keySave(self):
 		config.EMC.needsreload.value = True
 
 		if isinstance(config.EMC.movie_finished_clean.notifiers, dict):
