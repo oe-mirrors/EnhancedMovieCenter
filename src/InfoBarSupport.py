@@ -222,7 +222,7 @@ class InfoBarSupport(InfoBarBase,
 			from Plugins.Extensions.Seekbar.plugin import Seekbar, seekbar
 			Seekbar.keyOK = EMCkeyOK
 			seekbar(self)
-			Seekbar.keyOK = Seekbar.keyOK
+			Seekbar.keyOK = Seekbar.keyOK  # NOSONAR
 		else:
 			# InfoBarSeek
 			InfoBarSeek.seekFwdManual(self)
@@ -233,7 +233,7 @@ class InfoBarSupport(InfoBarBase,
 			from Plugins.Extensions.Seekbar.plugin import Seekbar, seekbarBack
 			Seekbar.keyOK = EMCkeyOK
 			seekbarBack(self)
-			Seekbar.keyOK = Seekbar.keyOK
+			Seekbar.keyOK = Seekbar.keyOK  # NOSONAR
 		else:
 			# InfoBarSeek
 			InfoBarSeek.seekBackManual(self)
