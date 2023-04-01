@@ -214,14 +214,19 @@ class ServiceEvent:
 				else:
 					if os.path.exists(txtpath):
 						try:
-							txtdescarr = open(txtpath).readlines()
-							txtdesc = ""
-							for line in txtdescarr:
-								txtdesc += line
-							extendedDescription = txtdesc
-						except Exception as ex:
-							emcDebugOut("[EMCService] __getExtendedDescription (%s): %s" % (txtpath, str(ex)))
-							extendedDescription = ""
+							with open(txtpath, "r", encoding="utf-8") as fd:
+								txtdescarr = fd.readlines()
+						except UnicodeDecodeError:
+							try:
+								with open(txtpath, "r", encoding="latin-1") as fd:
+									txtdescarr = fd.readlines()
+							except Exception as ex:
+								emcDebugOut("[EMCService] __getExtendedDescription read latin-1 (%s): %s" % (txtpath, str(ex)))
+								txtdescarr = ""
+						txtdesc = ""
+						for line in txtdescarr:
+							txtdesc += line
+						extendedDescription = txtdesc
 					elif config.EMC.show_path_extdescr.value:
 						if config.EMC.movie_real_path.value:
 							extendedDescription = os.path.realpath(self.path)
