@@ -15,7 +15,6 @@
 #	<http://www.gnu.org/licenses/>.
 #
 
-from __future__ import print_function
 from Components.config import config
 from os.path import isfile, isdir, islink, exists, realpath
 
@@ -234,19 +233,19 @@ class EMCFileCache():
 	def debugPrintFileCache(self):
 		print("cacheFileList:")
 		for p in self.cacheFileList:
-			print(p, self.cacheFileList[p])
+			print("%s %s" % (p, self.cacheFileList[p]))
 		print("")
 
 	def debugPrintDirCache(self):
 		print("cacheDirectoryList:")
 		for p in self.cacheDirectoryList:
-			print(p, self.cacheDirectoryList[p])
+			print("%s %s" % (p, self.cacheDirectoryList[p]))
 		print("")
 
 	def debugPrintFileAttributeCache(self):
 		print("cacheAttributeList:")
 		for p in self.cacheAttributeList:
-			print(p, self.cacheAttributeList[p])
+			print("%s %s" % (p, self.cacheAttributeList[p]))
 		print("")
 
 	def deleteAssociatedListEntries(self, list):

@@ -16,8 +16,7 @@
 #	For more information on the GNU General Public License see:
 #	<http://www.gnu.org/licenses/>.
 #
-from __future__ import print_function
-import os
+from os.path import join, splitext
 
 from enigma import eServiceReference, eServiceCenter
 from .EMCTasker import emcDebugOut
@@ -123,7 +122,7 @@ class VlcPluginInterfaceList():
 				for srv in self.vlcServers:
 					srvName = srv.getName()
 					emcDebugOut("[EMC_VLC] srvName = " + str(srvName))
-					vlcserverlist.append((os.path.join(loadPath, srvName), srvName, vlcSrv))
+					vlcserverlist.append((join(loadPath, srvName), srvName, vlcSrv))
 			return vlcserverlist
 		except:
 			pass
@@ -152,7 +151,7 @@ class VlcPluginInterfaceList():
 				#vlcPath = vlcPath[len(serverName):]
 				emcDebugOut("[EMC_VLC] vlcPath = " + vlcPath)
 				# Build path
-				path = os.path.join(baseDir, vlcPath)
+				path = join(baseDir, vlcPath)
 				# Load path
 				emcDebugOut("[EMC_VLC] path = " + path)
 				try:
@@ -163,13 +162,13 @@ class VlcPluginInterfaceList():
 				if vlcDirs:
 					for name, path in vlcDirs:
 						emcDebugOut("[EMC_VLC] dir = " + str(name))
-						vlcdirlist.append((os.path.join(loadPath, name), name, vlcDir))
-						#vlcdirlist.append( (os.path.join(loadPath, path), name, vlcDir) )
+						vlcdirlist.append((join(loadPath, name), name, vlcDir))
+						#vlcdirlist.append( (join(loadPath, path), name, vlcDir) )
 						#vlcdirlist.append( (path, name, vlcDir) )
 				if vlcFiles:
 					for name, path in vlcFiles:
 						from Plugins.Extensions.VlcPlayer.VlcFileList import MEDIA_EXTENSIONS
-						ext = os.path.splitext(name)[1].lower()[1:]
+						ext = splitext(name)[1].lower()[1:]
 						#TODO all media extensions should be indicated by the vlc player
 						if ext in MEDIA_EXTENSIONS:
 							# Maybe later return real file extension

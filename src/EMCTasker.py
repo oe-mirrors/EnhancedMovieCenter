@@ -16,33 +16,30 @@
 #	For more information on the GNU General Public License see:
 #	<http://www.gnu.org/licenses/>.
 #
+from itertools import zip_longest
+from os.path import exists, join
+from random import randint
+from time import localtime
 
-from __future__ import print_function
 from enigma import eTimer, eConsoleAppContainer
-from Components.config import *
-from Screens.Standby import *
+from Components.config import config
+from Screens.Standby import Standby, TryQuitMainloop
+from Screens.MessageBox import MessageBox
 import Screens.Standby
-import os
 import sys
-import traceback
-try:
-	#Python >= 3.10
-	from collections.abc import Callable
-except ImportError:
-	from collections import Callable
+from traceback import print_exc
+from collections.abc import Callable
 from collections import deque
 from pipes import quote
-
-import six
 
 
 def emcDebugOut(outtxt, outfile=None, fmode="a", forced=False):
 	try:  # fails if called too early during Enigma startup
 		if config.EMC.debug.value or forced:
-			if not os.path.exists(config.EMC.folder.value):
+			if not exists(config.EMC.folder.value):
 				emcTasker.shellExecute("mkdir " + config.EMC.folder.value)
 			if outfile is None:
-				outfile = os.path.join(config.EMC.folder.value, config.EMC.debugfile.value)
+				outfile = join(config.EMC.folder.value, config.EMC.debugfile.value)
 				ltim = localtime()
 				headerstr = "%04d%02d%02d %02d:%02d " % (ltim[0], ltim[1], ltim[2], ltim[3], ltim[4])
 				outtxt = headerstr + outtxt
@@ -52,10 +49,10 @@ def emcDebugOut(outtxt, outfile=None, fmode="a", forced=False):
 		# Print detailed informationon error
 		if sys.exc_info()[0]:
 			print("Unexpected error:", sys.exc_info()[0])
-			traceback.print_exc(file=sys.stdout)
-			traceback.print_exc(file=deb)
+			print_exc(file=sys.stdout)
+			print_exc(file=deb)
 		deb.close()
-	except:
+	except Exception:
 		pass
 
 
@@ -92,7 +89,7 @@ class EMCExecutioner:
 			self.script.append(script)
 			self.associated.append(associated)
 		else:
-			for s, a in six.moves.zip_longest(script, associated):
+			for s, a in zip_longest(script, associated):
 				self.script.append(s)
 				self.associated.append([a])
 
@@ -179,8 +176,7 @@ class EMCTasker:
 				x.shellExecute(script, associated, sync)
 				return
 		# all were busy, just append to any task list randomly
-		import random
-		self.executioners[random.randint(0, 2)].shellExecute(script, associated, sync)
+		self.executioners[randint(0, 2)].shellExecute(script, associated, sync)
 
 	def Initialize(self, session):
 		self.session = session
@@ -225,7 +221,7 @@ class EMCTasker:
 	def LaunchRestart(self, confirmFlag=True):
 		if confirmFlag:
 			emcDebugOut("+++ Enigma restart NOW")
-			flag = os.path.join(config.EMC.folder.value, "EMC_standby_flag.tmp")
+			flag = join(config.EMC.folder.value, "EMC_standby_flag.tmp")
 			if Screens.Standby.inStandby or config.EMC.restart_stby.value:
 				emcDebugOut("!", flag, fmode="w", forced=True)
 			else:
