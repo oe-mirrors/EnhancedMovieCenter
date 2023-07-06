@@ -3279,10 +3279,10 @@ class IMDbEventViewSimple(EventViewSimple):
 			else:
 				self.IMDbSearchName(nameM)
 
-	def setService(self, service):
-		EventViewSimple.setService(self, service)
-		if self.isRecording:
-			self["channel"].setText("")
+#	def setService(self, service):
+#		EventViewSimple.setService(self, service)
+#		if self.isRecording:
+#			self["channel"].setText("")
 
 	def setEvent(self, event):
 		EventViewSimple.setEvent(self, event)
