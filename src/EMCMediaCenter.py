@@ -16,11 +16,12 @@
 #	For more information on the GNU General Public License see:
 #	<http://www.gnu.org/licenses/>.
 #
-from __future__ import print_function
-import os
+from os.path import basename, exists
+from shutil import copy2
+
 from time import time
 
-from Components.config import *
+from Components.config import config
 from Components.ActionMap import ActionMap, HelpableActionMap
 from Components.Label import Label
 from Components.Pixmap import Pixmap
@@ -267,7 +268,7 @@ class EMCMediaCenter(CutList, Screen, HelpableScreen, InfoBarTimeshift, InfoBarS
 		service = self.playlist[self.playcount]
 		path = service.getPath()
 		jpgpath = getPosterPath(path)
-		if not os.path.exists(jpgpath):
+		if not exists(jpgpath):
 			self["Cover"].hide()
 		else:
 			sc = AVSwitch().getFramebufferScale()  # Maybe save during init
@@ -286,7 +287,7 @@ class EMCMediaCenter(CutList, Screen, HelpableScreen, InfoBarTimeshift, InfoBarS
 	def CoolAVSwitch(self):
 		idx = 0
 		choices = []
-		if os.path.exists("/proc/stb/video/policy_choices"):
+		if exists("/proc/stb/video/policy_choices"):
 			f = open("/proc/stb/video/policy_choices")
 			entrys = f.readline().replace("\n", "").split(" ", -1)
 			for x in entrys:
@@ -294,7 +295,7 @@ class EMCMediaCenter(CutList, Screen, HelpableScreen, InfoBarTimeshift, InfoBarS
 				entry = idx, x
 				choices.append(entry)
 			f.close()
-			if os.path.exists("/proc/stb/video/policy"):
+			if exists("/proc/stb/video/policy"):
 				act = open("/proc/stb/video/policy").read()[:-1]
 				for x in choices:
 					if act == x[1]:
@@ -341,7 +342,7 @@ class EMCMediaCenter(CutList, Screen, HelpableScreen, InfoBarTimeshift, InfoBarS
 		# see if there are more to play
 		playlist_string = "[ "
 		for p in self.playlist:
-			playlist_string += (os.path.basename(p.getPath()) + " ")
+			playlist_string += (basename(p.getPath()) + " ")
 		playlist_string += "]"
 		print("EMC PLAYER evEOF", self.playall, self.playcount, playlist_string)
 		if self.playall:
@@ -371,7 +372,7 @@ class EMCMediaCenter(CutList, Screen, HelpableScreen, InfoBarTimeshift, InfoBarS
 			service = self.playlist[self.playcount]
 			#TODO Problem with VLC
 			path = service and service.getPath()
-			if os.path.exists(path):  # TODO use ext != vlc but must be prepared first
+			if exists(path):  # TODO use ext != vlc but must be prepared first
 				# Why should the file be removed? Maybe that's the problem with "no Cutlist while recording"
 				#cutspath = path + ".cuts"
 				#if os.path.exists(cutspath):
@@ -524,9 +525,8 @@ class EMCMediaCenter(CutList, Screen, HelpableScreen, InfoBarTimeshift, InfoBarS
 				if record:
 					cutspath = recFileName + '.cuts'
 					bcutspath = cutspath + '.save'
-					if os.path.exists(cutspath):
-						import shutil
-						shutil.copy2(cutspath, bcutspath)
+					if exists(cutspath):
+						copy2(cutspath, bcutspath)
 		self.close(reopen, self.service)
 
 	def recEvent(self, timer):
@@ -602,11 +602,11 @@ class EMCMediaCenter(CutList, Screen, HelpableScreen, InfoBarTimeshift, InfoBarS
 		callEOF = False
 		for x in deletedlist:
 			#TEST
-			xp = os.path.basename(x.getPath())
-			if xp == os.path.basename(self.service.getPath()):
+			xp = basename(x.getPath())
+			if xp == basename(self.service.getPath()):
 				callEOF = True
 			for p in self.playlist:
-				if xp == os.path.basename(p.getPath()):
+				if xp == basename(p.getPath()):
 					self.playlist.remove(p)
 		if callEOF:
 			self.playcount -= 1  # need to go one back since the current was removed
@@ -729,9 +729,7 @@ class EMCMediaCenter(CutList, Screen, HelpableScreen, InfoBarTimeshift, InfoBarS
 			if langC[match][0] == e[2]:
 				emcDebugOut("[EMCPlayer] subtitle match: " + str(e))
 				if self.selected_subtitle != e[0]:
-					self.subtitles_enabled = False
-					self.selected_subtitle = e[0]
-					self.subtitles_enabled = True
+					self.enableSubtitle(e[0])
 					return True
 			else:
 				print("nomatch")
