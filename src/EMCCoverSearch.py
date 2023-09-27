@@ -57,7 +57,7 @@ sz_w = getDesktop(0).size().width()
 
 config.EMC.imdb = ConfigSubsection()
 #search/automatic
-config.EMC.imdb.language = ConfigSelection(default='en', choices=[('en', _('English')), ('de', _('German')), ('it', _('Italian')), ('es', _('Spanish')), ('fr', _('French')), ('pt', _('Portuguese'))])
+config.EMC.imdb.language = ConfigSelection(default='en', choices=[('en', _('English')), ('de', _('German')), ('it', _('Italian')), ('es', _('Spanish')), ('fr', _('French')), ('pt', _('Portuguese')), ('cs', _('Czech'))])
 config.EMC.imdb.search_filter = ConfigSelection(default='3', choices=[('0', _('overall')), ('2', _('two contiguous')), ('3', _('three contiguous'))])
 config.EMC.imdb.savetotxtfile = ConfigYesNo(default=False)
 #single/manually
