@@ -287,7 +287,7 @@ class EnhancedMovieCenterMenu(ConfigListScreenExt, Screen):
 		self["config"].onSelectionChanged.append(self.updateHelp)
 
 		#Todo Remove if there is another solution, maybe thinkabout xml
-		config.EMC.movie_finished_clean.addNotifier(self.changedEntry, initial_call=False, immediate_feedback=True)
+		# config.EMC.movie_finished_clean.addNotifier(self.changedEntry, initial_call=False, immediate_feedback=True)
 
 	def defineConfig(self):
 
