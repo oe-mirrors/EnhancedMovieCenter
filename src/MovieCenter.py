@@ -32,7 +32,7 @@ from Components.MultiContent import MultiContentEntryText, MultiContentEntryPixm
 from Tools.LoadPixmap import LoadPixmap
 from Tools.Directories import fileExists, resolveFilename, SCOPE_CURRENT_SKIN
 from skin import parseColor, parseFont, parseSize
-from enigma import eListboxPythonMultiContent, eListbox, gFont, RT_HALIGN_LEFT, RT_HALIGN_RIGHT, RT_HALIGN_CENTER, eServiceReference, eServiceCenter, ePythonMessagePump, loadPNG, getDesktop, iServiceInformation
+from enigma import eListboxPythonMultiContent, eListbox, gFont, BT_SCALE, BT_KEEP_ASPECT_RATIO, RT_HALIGN_LEFT, RT_HALIGN_RIGHT, RT_HALIGN_CENTER, eServiceReference, eServiceCenter, ePythonMessagePump, loadPNG, getDesktop, iServiceInformation
 from timer import TimerEntry
 
 from . import _
@@ -53,21 +53,6 @@ from .ThreadQueue import ThreadQueue
 
 
 sz_w = getDesktop(0).size().width()
-
-# Check if image is vti or dream, is needed for build entrys in MovieCenter with picons
-try:
-	from Components.Renderer.Picon import getPiconName
-	newPiconRenderer = True
-except:
-	newPiconRenderer = False
-
-if newPiconRenderer:
-	try:
-		from enigma import BT_SCALE, BT_KEEP_ASPECT_RATIO
-	except ImportError as ie:
-		newPiconRenderer = False
-		BT_SCALE = None
-		BT_KEEP_ASPECT_RATIO = None
 
 global extAudio, extDvd, extVideo, extPlaylist, extList, extMedia, extBlu
 global cmtDir, cmtUp, cmtTrash, cmtLRec, cmtVLC, cmtBME2, cmtBMEMC, virVLC, virAll, virToE, virToD
@@ -1332,13 +1317,10 @@ class MovieCenterData(VlcPluginInterfaceList, PermanentSort, E2Bookmarks, EMCBoo
 							if pos != -1:
 								metaref = metaref[:pos].rstrip(':').replace(':', '_')
 						# now we need to check if picon-file exists
-						if newPiconRenderer:
-							if config.EMC.movie_picons_path_own.value:
-								picon = config.EMC.movie_picons_path.value + "/" + metaref + '.png'
-							else:
-								picon = getPiconName(metaref)
-						else:
+						if config.EMC.movie_picons_path_own.value:
 							picon = config.EMC.movie_picons_path.value + "/" + metaref + '.png'
+						else:
+							picon = getPiconName(metaref)
 						if fileExists(picon):
 							piconpath = picon
 
@@ -2126,10 +2108,10 @@ class MovieCenter(GUIComponent):
 						else:
 							selPic = pixmap
 						if not config.EMC.skin_able.value:
-							append(MultiContentEntryPixmapAlphaBlend(pos=(5, 2), size=(24, 24), png=selPic, **{}))
+							append(MultiContentEntryPixmapAlphaBlend(pos=(5, 2), size=(24, 24), png=selPic, flags=BT_SCALE | BT_KEEP_ASPECT_RATIO, **{}))
 							offset = 35
 						else:
-							append(MultiContentEntryPixmapAlphaBlend(pos=(self.CoolIconPos, self.CoolIconHPos), size=(self.CoolIconSize.width(), self.CoolIconSize.height()), png=selPic, **{}))
+							append(MultiContentEntryPixmapAlphaBlend(pos=(self.CoolIconPos, self.CoolIconHPos), size=(self.CoolIconSize.width(), self.CoolIconSize.height()), png=selPic, flags=BT_SCALE | BT_KEEP_ASPECT_RATIO, **{}))
 							offset = self.CoolIconPos + self.CoolIconSize.width() + 5
 					else:
 						offset = 5
@@ -2196,11 +2178,7 @@ class MovieCenter(GUIComponent):
 										piconX = offset
 										textX += piconW + 5
 										textSizeX = self.l.getItemSize().width() - textX - 5
-								# Special way for vti-images, directly over "eListboxPythonMultiContent", they have no "flags=..", only "options=.."
-								if newPiconRenderer:
-									append((eListboxPythonMultiContent.TYPE_PIXMAP_ALPHABLEND, piconX, piconY, piconW, piconH, picon, None, None, BT_SCALE | BT_KEEP_ASPECT_RATIO))
-								else:
-									append((eListboxPythonMultiContent.TYPE_PIXMAP_ALPHABLEND, piconX, piconY, piconW, piconH, picon, None, None))
+								append((eListboxPythonMultiContent.TYPE_PIXMAP_ALPHABLEND, piconX, piconY, piconW, piconH, picon, None, None, BT_SCALE | BT_KEEP_ASPECT_RATIO))
 
 								append(MultiContentEntryText(pos=(textX, textY), size=(textSizeX, textSizeY), font=usedFont, flags=RT_HALIGN_LEFT, text=title, color=colortitle, color_sel=colorhighlight, backcolor=self.BackColor, backcolor_sel=self.BackColorSel))
 							else:
@@ -2317,35 +2295,20 @@ class MovieCenter(GUIComponent):
 								self.CoolPiconHPos = 2
 							if self.CoolPiconWidth == -1:
 								self.CoolPiconWidth = 110
-							# Special way for vti-images, directly over "eListboxPythonMultiContent", they have no "flags=..", only "options=.."
-							if newPiconRenderer:
-								progresssub = 0
-								numsub = 0
-								if config.EMC.movie_icons.value:
-									if progressval == "MC" or progressval == "":
-										if self.CoolBarPos < CoolPiconPos:
-											progresssub = self.CoolBarSizeSa.width() + 5
-								else:
-									if selnumtxt is None:
-										numsub = self.CoolIconSize.width()
-									if progressval == "MC" or progressval == "":
-										if self.CoolBarPos < CoolPiconPos:
-											progresssub = self.CoolBarSizeSa.width()
-								append((eListboxPythonMultiContent.TYPE_PIXMAP_ALPHABLEND, CoolPiconPos - numsub - progresssub, self.CoolPiconHPos, self.CoolPiconWidth, self.CoolPiconHeight, picon, None, None, BT_SCALE | BT_KEEP_ASPECT_RATIO))
+
+							progresssub = 0
+							numsub = 0
+							if config.EMC.movie_icons.value:
+								if progressval == "MC" or progressval == "":
+									if self.CoolBarPos < CoolPiconPos:
+										progresssub = self.CoolBarSizeSa.width() + 5
 							else:
-								progresssub = 0
-								numsub = 0
-								if config.EMC.movie_icons.value:
-									if progressval == "MC" or progressval == "":
-										if self.CoolBarPos < CoolPiconPos:
-											progresssub = self.CoolBarSizeSa.width() + 5
-								else:
-									if selnumtxt is None:
-										numsub = self.CoolIconSize.width()
-									if progressval == "MC" or progressval == "":
-										if self.CoolBarPos < CoolPiconPos:
-											progresssub = self.CoolBarSizeSa.width()
-								append((eListboxPythonMultiContent.TYPE_PIXMAP_ALPHABLEND, CoolPiconPos - numsub - progresssub, self.CoolPiconHPos, self.CoolPiconWidth, self.CoolPiconHeight, picon, None, None))
+								if selnumtxt is None:
+									numsub = self.CoolIconSize.width()
+								if progressval == "MC" or progressval == "":
+									if self.CoolBarPos < CoolPiconPos:
+										progresssub = self.CoolBarSizeSa.width()
+							append((eListboxPythonMultiContent.TYPE_PIXMAP_ALPHABLEND, CoolPiconPos - numsub - progresssub, self.CoolPiconHPos, self.CoolPiconWidth, self.CoolPiconHeight, picon, None, None, BT_SCALE | BT_KEEP_ASPECT_RATIO))
 
 							progresssub = 0
 							progressadd = 0
@@ -2491,9 +2454,9 @@ class MovieCenter(GUIComponent):
 					else:
 						dirPic = pixmap
 					if not config.EMC.skin_able.value:
-						append(MultiContentEntryPixmapAlphaBlend(pos=(5, 2), size=(24, 24), png=dirPic, **{}))
+						append(MultiContentEntryPixmapAlphaBlend(pos=(5, 2), size=(24, 24), png=dirPic, flags=BT_SCALE | BT_KEEP_ASPECT_RATIO, **{}))
 					else:
-						append(MultiContentEntryPixmapAlphaBlend(pos=(self.CoolIconPos, self.CoolIconHPos), size=(self.CoolIconSize.width(), self.CoolIconSize.height()), png=dirPic, **{}))
+						append(MultiContentEntryPixmapAlphaBlend(pos=(self.CoolIconPos, self.CoolIconHPos), size=(self.CoolIconSize.width(), self.CoolIconSize.height()), png=dirPic, flags=BT_SCALE | BT_KEEP_ASPECT_RATIO, **{}))
 
 				# Directory left side
 				if not config.EMC.skin_able.value:
@@ -2553,7 +2516,7 @@ class MovieCenter(GUIComponent):
 								datepicH = self.l.getItemSize().height() - 6
 								datepicW = self.pic_directory_search.size().width()
 								datepicY = 3
-								append(MultiContentEntryPixmapAlphaBlend(pos=(listW - datepicW, datepicY), size=(datepicW, datepicH), png=self.pic_directory_search, **{}))
+								append(MultiContentEntryPixmapAlphaBlend(pos=(listW - datepicW, datepicY), size=(datepicW, datepicH), png=self.pic_directory_search, flags=BT_SCALE | BT_KEEP_ASPECT_RATIO, **{}))
 						else:
 							if datepic is not None:
 								count = config.EMC.count_default_text.value
