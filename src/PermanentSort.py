@@ -17,9 +17,9 @@
 #	For more information on the GNU General Public License see:
 #	<http://www.gnu.org/licenses/>.
 #
-import os
+from os.path import dirname, exists, normpath
 import pickle
-import six
+from six import ensure_text  # TODO
 
 from collections import defaultdict
 
@@ -42,7 +42,7 @@ class PermanentSort():
 
 	def __init__(self, path=None):
 		self.__permanentSort = defaultdict(list)
-		if os.path.exists(XML_FILE):
+		if exists(XML_FILE):
 			self.__permanentSort.update(self.__readPermanentSortXmlFile())
 		else:
 			#read old format and convert to xml
@@ -53,43 +53,43 @@ class PermanentSort():
 		return self.hasFolderPermanentSort(path) or self.hasParentPermanentSort(path)
 
 	def hasFolderPermanentSort(self, path):
-		path = six.ensure_text(os.path.normpath(path))
+		path = ensure_text(normpath(path))
 		if path in self.__permanentSort:
 			return True
 		else:
 			return False
 
 	def hasParentPermanentSort(self, path):
-		path = six.ensure_text(os.path.normpath(path))
+		path = ensure_text(normpath(path))
 		while len(path) > 1:
-			path = six.ensure_text(os.path.dirname(path))
+			path = ensure_text(dirname(path))
 			if path in self.__permanentSort:
 				return path
 		return False
 
 	def setPermanentSort(self, path, sort):
-		path = six.ensure_text(os.path.normpath(path))
+		path = ensure_text(normpath(path))
 		self.__permanentSort[path] = sort
 		self.__writePermanentSortXmlFile(self.__permanentSort)
 
 	def getPermanentSort(self, path):
-		path = six.ensure_text(os.path.normpath(path))
+		path = ensure_text(normpath(path))
 		while len(path) > 1:
 			if path in self.__permanentSort:
 				sort, order = self.__permanentSort[path]
 				return sort, order
-			path = six.ensure_text(os.path.dirname(path))
+			path = ensure_text(dirname(path))
 		return None
 
 	def removePermanentSort(self, path):
-		path = six.ensure_text(os.path.normpath(path))
+		path = ensure_text(normpath(path))
 		if path in self.__permanentSort:
 			del self.__permanentSort[path]
 			self.__writePermanentSortXmlFile(self.__permanentSort)
 
 	def __readPermanentSortXmlFile(self):
 		data = {}
-		if os.path.exists(XML_FILE):
+		if exists(XML_FILE):
 			f = None
 
 			# Read from file
@@ -142,7 +142,7 @@ class PermanentSort():
 
 	def __readPermanentSortCfgFile(self):
 		data = {}
-		if os.path.exists(CFG_FILE):
+		if exists(CFG_FILE):
 			f = None
 
 			# Read from file

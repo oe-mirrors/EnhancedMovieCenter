@@ -17,8 +17,7 @@
 #	For more information on the GNU General Public License see:
 #	<http://www.gnu.org/licenses/>.
 #
-import os
-
+from os.path import exists, getmtime
 from .EMCTasker import emcDebugOut
 
 
@@ -62,8 +61,8 @@ class IsoSupport():
 			# Attention: Read can be very slow !!!
 			name = ""
 			path = self.iso_file
-			if path and os.path.exists(path) and path.lower().endswith(".iso"):
-				mtime = os.path.getmtime(path)
+			if path and exists(path) and path.lower().endswith(".iso"):
+				mtime = getmtime(path)
 				if self.iso_mtime == mtime:
 					# File has not changed
 					pass

@@ -17,19 +17,20 @@
 #	<http://www.gnu.org/licenses/>.
 #
 
-from __future__ import print_function
 from . import _
-from Components.config import *
+from os.path import join, exists, normpath
+from os import makedirs
+from Components.config import *  # TODO
 from Components.config import config
 from Components.Button import Button
 from .configlistext import ConfigListScreenExt
-from Components.Language import *
+from Components.Language import *  # TODO
 from Components.ActionMap import ActionMap
 from Components.Sources.StaticText import StaticText
 from Screens.Screen import Screen
 from Screens.LocationBox import LocationBox
 from Screens.MessageBox import MessageBox
-from Screens.ServiceScan import *
+from Screens.ServiceScan import *  # TODO
 import Screens.Standby
 from Tools import Notifications
 from enigma import eServiceEvent, eTimer, getDesktop
@@ -127,10 +128,10 @@ def EMCStartup(session):
 
 	# Go into standby if the reason for restart was EMC auto-restart
 	if config.EMC.restart.value != "":
-		if not os.path.exists(config.EMC.folder.value):
+		if not exists(config.EMC.folder.value):
 			emcTasker.shellExecute("mkdir " + config.EMC.folder.value)
-		flag = os.path.join(config.EMC.folder.value, "EMC_standby_flag.tmp")
-		if os.path.exists(flag):
+		flag = join(config.EMC.folder.value, "EMC_standby_flag.tmp")
+		if exists(flag):
 			emcDebugOut("+++ Going into Standby mode after auto-restart")
 			Notifications.AddNotification(Screens.Standby.Standby)
 			emcTasker.shellExecute("rm -f " + flag)
@@ -623,11 +624,11 @@ class EnhancedMovieCenterMenu(ConfigListScreenExt, Screen):
 		if element.value == True:
 			pass
 		else:
-			emcTasker.shellExecute("rm -f " + os.path.join(config.EMC.folder.value, config.EMC.debugfile.value))
+			emcTasker.shellExecute("rm -f " + join(config.EMC.folder.value, config.EMC.debugfile.value))
 
 	def dirSelected(self, res):
 		if res is not None:
-			res = os.path.normpath(res)
+			res = normpath(res)
 			self["config"].getCurrent()[1].value = res
 
 	def keyOK(self):
@@ -701,7 +702,7 @@ class EnhancedMovieCenterMenu(ConfigListScreenExt, Screen):
 	def openLocationBox(self, element):
 		try:
 			if element:
-				path = os.path.normpath(element.value)
+				path = normpath(element.value)
 				self.session.openWithCallback(
 					self.dirSelected,
 					LocationBox,
@@ -723,15 +724,15 @@ class EnhancedMovieCenterMenu(ConfigListScreenExt, Screen):
 		self.session.open(MessageBox, EMCAbout, MessageBox.TYPE_INFO)
 
 	def validatePath(self, element):
-		element.value = os.path.normpath(element.value)
-		if not os.path.exists(element.value):
+		element.value = normpath(element.value)
+		if not exists(element.value):
 			self.session.open(MessageBox, _("Given path %s does not exist. Please change." % str(element.value)), MessageBox.TYPE_ERROR)
 			return False
 
 	def trashCleanupSetup(self, dummy=None):
-		if not os.path.exists(config.EMC.movie_trashcan_path.value):
+		if not exists(config.EMC.movie_trashcan_path.value):
 			try:
-				os.makedirs(config.EMC.movie_trashcan_path.value)
+				makedirs(config.EMC.movie_trashcan_path.value)
 			except Exception as e:
 				self.session.open(MessageBox, _("Trashcan create failed. Check mounts and permissions."), MessageBox.TYPE_ERROR)
 				emcDebugOut("[EMCMS] trashcanCreate exception:\n" + str(e))

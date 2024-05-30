@@ -16,8 +16,8 @@
 #	For more information on the GNU General Public License see:
 #	<http://www.gnu.org/licenses/>.
 #
-from __future__ import print_function
-import os
+from os.path import basename, dirname, exists, isdir, isfile, join, realpath, splitext
+from os import mkdir, sep, walk
 import struct
 
 from Components.config import *
@@ -84,7 +84,7 @@ class MovieMenu(Screen, E2Bookmarks, EMCBookmarks):
 		if menumode == "normal":
 			self["title"] = StaticText(_("Choose operation"))
 
-			if os.path.realpath(self.currentPath) != os.path.realpath(config.EMC.movie_homepath.value):
+			if realpath(self.currentPath) != realpath(config.EMC.movie_homepath.value):
 				self.menu.append((_("Movie home"), boundFunction(self.close, "Movie home")))
 
 			if currentPath == config.EMC.movie_pathlimit.value:
@@ -94,7 +94,7 @@ class MovieMenu(Screen, E2Bookmarks, EMCBookmarks):
 
 			self.menu.append((_("Playlist Options"), boundFunction(self.close, "emcPlaylist")))
 			if service is not None:
-				ext = os.path.splitext(service.getPath())[1].lower()
+				ext = splitext(service.getPath())[1].lower()
 				if ext in extMedia:
 					self.menu.append((_("Add to current Playlist"), boundFunction(self.close, "addPlaylist")))
 
@@ -106,14 +106,14 @@ class MovieMenu(Screen, E2Bookmarks, EMCBookmarks):
 			self.menu.append((_("Cover search"), boundFunction(self.close, "imdb")))
 			if service is not None:
 				path = service.getPath()
-				if os.path.isdir(path) and not path == config.EMC.movie_trashcan_path.value and not path.endswith(os.sep + '..'):
+				if isdir(path) and not path == config.EMC.movie_trashcan_path.value and not path.endswith(sep + '..'):
 					self.menu.append((_("Directory-Cover search"), boundFunction(self.close, "imdbdirectory")))
 			if self.selections:
 				self.menu.append((_("Delete"), boundFunction(self.close, "del", self.selections)))
 			else:
 				self.menu.append((_("Delete"), boundFunction(self.close, "del")))
 
-			if config.EMC.movie_trashcan_enable.value and os.path.exists(config.EMC.movie_trashcan_path.value):
+			if config.EMC.movie_trashcan_enable.value and exists(config.EMC.movie_trashcan_path.value):
 				if service is not None:
 					if self.selections:
 						self.menu.append((_("Delete permanently"), boundFunction(self.close, "delete", self.selections)))
@@ -133,7 +133,7 @@ class MovieMenu(Screen, E2Bookmarks, EMCBookmarks):
 			self.menu.append((_("(Un-)Lock Directory"), boundFunction(self.lockDir, currentPath)))
 
 			if service is not None:
-				if os.path.isfile(service.getPath()):
+				if isfile(service.getPath()):
 					# can we use it for both ?
 					# selections comes also with one file !!! so we can it use.
 					if self.selections:
@@ -155,12 +155,12 @@ class MovieMenu(Screen, E2Bookmarks, EMCBookmarks):
 				show_plugins = True
 				if self.selections:
 					for service in self.selections:
-						ext = os.path.splitext(service.getPath())[1].lower()
+						ext = splitext(service.getPath())[1].lower()
 						if ext not in extTS:
 							show_plugins = False
 							break
 				else:
-					ext = os.path.splitext(self.service.getPath())[1].lower()
+					ext = splitext(self.service.getPath())[1].lower()
 					if ext not in extTS:
 						show_plugins = False
 				if show_plugins:
@@ -220,7 +220,7 @@ class MovieMenu(Screen, E2Bookmarks, EMCBookmarks):
 			self["title"] = StaticText(_("Playlist Options"))
 			self.menu.append((_("Show current Playlist"), boundFunction(self.close, "showPlaylist")))
 			if service is not None:
-				ext = os.path.splitext(service.getPath())[1].lower()
+				ext = splitext(service.getPath())[1].lower()
 				if ext in extMedia:
 					self.menu.append((_("Add to current Playlist"), boundFunction(self.close, "addPlaylist")))
 			if self.plist:
@@ -261,12 +261,12 @@ class MovieMenu(Screen, E2Bookmarks, EMCBookmarks):
 
 	def createDirCB(self, currentPath, name):
 		if name is not None:
-			name = os.path.join(currentPath, name.strip())
-			if os.path.exists(name):
+			name = join(currentPath, name.strip())
+			if exists(name):
 				self.session.open(MessageBox, _("Directory %s already exists!") % (name), MessageBox.TYPE_ERROR)
 			else:
 				try:
-					os.mkdir(name)
+					mkdir(name)
 					movieFileCache.delPathFromCache(currentPath)
 				except Exception as e:
 					emcDebugOut("[EMCMM] createDir exception:\n" + str(e))
@@ -276,7 +276,7 @@ class MovieMenu(Screen, E2Bookmarks, EMCBookmarks):
 
 	def lockDir(self, currentPath):
 		self.hide
-		if not os.path.exists(currentPath + '/dir.lock'):
+		if not exists(currentPath + '/dir.lock'):
 			self.session.openWithCallback(boundFunction(self.lockDirConfirmed, currentPath, False), MessageBox, _("Do you really want to lock the directory %s and all its subfolders?") % (currentPath), MessageBox.TYPE_YESNO)
 		else:
 			self.session.openWithCallback(boundFunction(self.lockDirConfirmed, currentPath, True), MessageBox, _("The directory %s is already locked. Do you want to unlock it and all its subfolders?") % (currentPath), MessageBox.TYPE_YESNO)
@@ -286,7 +286,7 @@ class MovieMenu(Screen, E2Bookmarks, EMCBookmarks):
 			if confirmed:
 				emcTasker.shellExecute('touch "' + currentPath + '/dir.lock"')
 				movieFileCache.delPathFromCache(currentPath)
-				for root, dirs, files in os.walk(currentPath):
+				for root, dirs, files in walk(currentPath):
 					for dir in dirs:
 						movieFileCache.delPathFromCache(root + '/' + dir)
 						emcTasker.shellExecute('touch "' + root + '/' + dir + '/dir.lock"')
@@ -294,7 +294,7 @@ class MovieMenu(Screen, E2Bookmarks, EMCBookmarks):
 			if confirmed:
 				emcTasker.shellExecute('rm -f "' + currentPath + '/dir.lock"')
 				movieFileCache.delPathFromCache(currentPath)
-				for root, dirs, files in os.walk(currentPath):
+				for root, dirs, files in walk(currentPath):
 					for dir in dirs:
 						movieFileCache.delPathFromCache(root + '/' + dir)
 						emcTasker.shellExecute('rm -rf "' + root + '/' + dir + '/dir.lock"')
@@ -319,8 +319,8 @@ class MovieMenu(Screen, E2Bookmarks, EMCBookmarks):
 			try:
 				movieFileCache.delPathFromCache(currentPath)
 				movieFileCache.delPathFromCache(linkPath)
-				name = os.path.basename(linkPath.rstrip('/'))
-				cmd = 'ln -s "' + linkPath + '" "' + os.path.join(currentPath, name) + '"'
+				name = basename(linkPath.rstrip('/'))
+				cmd = 'ln -s "' + linkPath + '" "' + join(currentPath, name) + '"'
 				if cmd != "":
 					association = []
 					association.append((self.mselection.reloadList))  # Force list reload after creating the link
@@ -353,7 +353,6 @@ class MovieMenu(Screen, E2Bookmarks, EMCBookmarks):
 			self["menu"].getCurrent()[1]()
 		#except:pass
 		except Exception as e:
-			import os
 			import sys
 			import traceback
 			print("exception ", str(e))
@@ -535,12 +534,12 @@ class MovieMenu(Screen, E2Bookmarks, EMCBookmarks):
 
 	def deleteCutFile(self, confirm):
 		if confirm:
-			if os.path.isdir(self.service.getPath()):
+			if isdir(self.service.getPath()):
 				emcTasker.shellExecute('find ' + '"' + self.service.getPath() + '" -name "*.cuts" -exec rm -f \'{}\' +')
 			else:
 				file = self.service.getPath() + ".cuts"
 				emcTasker.shellExecute('rm -f "' + file + '"')
-				movieFileCache.delPathFromCache(os.path.dirname(self.service.getPath()))
+				movieFileCache.delPathFromCache(dirname(self.service.getPath()))
 		self.close("reload")
 
 	def do_tageditor(self, service):

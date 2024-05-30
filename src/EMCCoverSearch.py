@@ -25,7 +25,7 @@ from random import choice
 from re import sub, findall, search, match, S, I, IGNORECASE
 from requests import session, get, exceptions
 from shutil import move
-from six import ensure_str
+from six import ensure_str  # TODO
 from urllib.parse import quote
 from urllib.request import urlopen, Request
 from time import time, process_time

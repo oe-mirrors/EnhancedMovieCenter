@@ -17,7 +17,8 @@
 #	<http://www.gnu.org/licenses/>.
 #
 import pickle
-import os
+from os.path import basename, dirname, exists, join
+from os import listdir, system
 from collections import defaultdict
 
 from Components.config import config
@@ -31,7 +32,7 @@ from .DelayedFunction import DelayedFunction
 def getRecording(filename):
 	try:
 		if filename[0] == "/":
-			filename = os.path.basename(filename)
+			filename = basename(filename)
 		if filename.lower().endswith(".ts"):
 			filename = filename[:-3]
 
@@ -40,7 +41,7 @@ def getRecording(filename):
 				timer.Filename
 			except:
 				timer.calculateFilename()
-			if filename == os.path.basename(timer.Filename):
+			if filename == basename(timer.Filename):
 				return timer.begin, timer.end, timer.service_ref.ref
 
 	except Exception as e:
@@ -60,7 +61,7 @@ class NetworkAwareness:
 		return self.ip
 
 	def ipLookup(self):
-		os.system("ifconfig | grep Bcast | sed 's;^.*addr:;;' | sed 's: .*::' >/tmp/myip")
+		system("ifconfig | grep Bcast | sed 's;^.*addr:;;' | sed 's: .*::' >/tmp/myip")
 		file = open("/tmp/myip")
 		myip = file.read()
 		file.close()
@@ -115,7 +116,7 @@ class RecordingsControl:
 			except:
 				timer.calculateFilename()
 
-			filename = os.path.basename(timer.Filename)
+			filename = basename(timer.Filename)
 			if timer.state == timer.StatePrepared:
 				pass
 			elif timer.state == timer.StateRunning:  # timer.isRunning()
@@ -165,7 +166,7 @@ class RecordingsControl:
 	def isRecording(self, filename):
 		try:
 			if filename[0] == "/":
-				filename = os.path.basename(filename)
+				filename = basename(filename)
 			if filename.lower().endswith(".ts"):
 				filename = filename[:-3]
 			return filename in self.recDict
@@ -176,7 +177,7 @@ class RecordingsControl:
 	def isRemoteRecording(self, filename):
 		try:
 			if filename[0] == "/":
-				filename = os.path.basename(filename)
+				filename = basename(filename)
 			if filename.lower().endswith(".ts"):
 				filename = filename[:-3]
 			return filename in self.recRemoteList
@@ -187,7 +188,7 @@ class RecordingsControl:
 	def stopRecording(self, filename):
 		try:
 			if filename[0] == "/":
-				filename = os.path.basename(filename)
+				filename = basename(filename)
 			if filename.lower().endswith(".ts"):
 				filename = filename[:-3]
 			if filename in self.recDict:
@@ -215,7 +216,7 @@ class RecordingsControl:
 	def isCutting(self, filename):
 		try:
 			if filename.lower().endswith("_.ts"):
-				if not os.path.exists(filename[:-2] + "eit"):
+				if not exists(filename[:-2] + "eit"):
 					return True
 			return False
 		except Exception as e:
@@ -230,7 +231,7 @@ class RecordingsControl:
 				new = new[:-3]
 			for timer in NavigationInstance.instance.RecordTimer.timer_list:
 				if timer.isRunning() and not timer.justplay and timer.Filename == old:
-					timer.dirname = os.path.dirname(new) + "/"
+					timer.dirname = dirname(new) + "/"
 					timer.fixMoveCmd = 'mv "' + timer.Filename + '."* "' + timer.dirname + '"'
 					timer.Filename = new
 					emcDebugOut("[emcRC] fixed path: " + new)
@@ -240,11 +241,11 @@ class RecordingsControl:
 
 	def remoteInit(self, ip):
 		try:
-			if not os.path.exists(config.EMC.folder.value):
+			if not exists(config.EMC.folder.value):
 				emcTasker.shellExecute("mkdir " + config.EMC.folder.value)
 			if ip is not None:
 				rec = "/db_%s.rec" % str(ip).replace(", ", ".")[1:-1]
-				self.recFile = os.path.join(config.EMC.folder.value, rec)
+				self.recFile = join(config.EMC.folder.value, rec)
 		except Exception as e:
 			emcDebugOut("[emcRC] remoteInit exception:\n" + str(e))
 
@@ -271,9 +272,9 @@ class RecordingsControl:
 		self.recRemoteList = []
 		recf = None
 		try:
-			if config.EMC.folder.value and os.path.exists(config.EMC.folder.value):
-				for x in os.listdir(config.EMC.folder.value):
-					path = os.path.join(config.EMC.folder.value, x)
+			if config.EMC.folder.value and exists(config.EMC.folder.value):
+				for x in listdir(config.EMC.folder.value):
+					path = join(config.EMC.folder.value, x)
 					if x.lower().endswith(".rec") and path != self.recFile:
 						recf = open(path, "rb")
 						self.recRemoteList += pickle.load(recf)

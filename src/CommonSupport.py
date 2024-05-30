@@ -17,7 +17,7 @@
 #	<http://www.gnu.org/licenses/>.
 #
 
-import os
+from os.path import basename, dirname, exists, isdir, isfile, join, splitext, split as os_path_split
 import re
 from .VlcPluginInterface import vlcFil
 from .EMCTasker import emcDebugOut
@@ -68,15 +68,15 @@ plyAll = plyDVB | plyM2TS | plyDVD | plyMP3 | plyVLC | extBlu
 ## getInfoFile (imported from MetaSupport.py)
 def getInfoFile(path, exts=""):
 	fpath = p1 = p2 = p3 = ""
-	name, ext = os.path.splitext(path)
+	name, ext = splitext(path)
 	ext = ext.lower()
 
-	if os.path.isfile(path) and ext in extMedia:			#files & movie structures
-		dir = os.path.dirname(path)
+	if isfile(path) and ext in extMedia:			#files & movie structures
+		dir = dirname(path)
 		p1 = name						# filename.ext
-		p2 = os.path.join(dir, os.path.basename(dir))		# folder.ext if no filename.ext
+		p2 = join(dir, basename(dir))		# folder.ext if no filename.ext
 
-	elif os.path.isdir(path):
+	elif isdir(path):
 		if path.lower().endswith("/bdmv"):			# bluray structures
 			dir = path[:-5]
 			if dir.lower().endswith("/brd"):
@@ -87,19 +87,19 @@ def getInfoFile(path, exts=""):
 				dir = dir[:-4]
 		else:							# folders
 			dir = path
-			p2 = os.path.join(dir, "folder")		# "folder.ext"
+			p2 = join(dir, "folder")		# "folder.ext"
 
-		prtdir, dirname = os.path.split(dir)
-		p1 = os.path.join(dir, dirname)				# /dir/dirname.ext
-		p3 = os.path.join(prtdir, dirname)			# /prtdir/dirname.ext, show AMS-files
+		prtdir, _dirname = os_path_split(dir)
+		p1 = join(dir, _dirname)				# /dir/dirname.ext
+		p3 = join(prtdir, _dirname)			# /prtdir/dirname.ext, show AMS-files
 
 	pathes = [p1, p2, p3]
 	for p in pathes:
 		for ext in exts:
 			fpath = p + ext
-			if os.path.exists(fpath):
+			if exists(fpath):
 				break
-		if os.path.exists(fpath):
+		if exists(fpath):
 			break
 	return (p1, fpath)
 
@@ -135,7 +135,7 @@ def readPlaylist(path):
 	if path:
 		overview = []
 		plist = open(path, "r")
-		if os.path.splitext(path)[1] == ".e2pls":
+		if splitext(path)[1] == ".e2pls":
 			while True:
 				service = plist.readline()
 				if service == "":

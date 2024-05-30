@@ -16,7 +16,8 @@
 #	For more information on the GNU General Public License see:
 #	<http://www.gnu.org/licenses/>.
 #
-import os
+from os.path import exists, isdir, isfile, realpath, splitext
+from os import stat as os_stat
 from datetime import datetime
 
 from Components.config import *
@@ -58,8 +59,8 @@ class ServiceInfo:
 		self.info = self.serviceHandler and self.serviceHandler.info(service)
 		self.event = ServiceEvent(service, self)
 		self.path = service.getPath()
-		self.isfile = os.path.isfile(self.path)
-		self.isdir = os.path.isdir(self.path)
+		self.isfile = isfile(self.path)
+		self.isdir = isdir(self.path)
 
 	def getName(self, service):
 		return self.info and self.info.getName(service) or ""
@@ -84,7 +85,7 @@ class ServiceInfo:
 	def getInfoObject(self, param1, param2=None):
 		if param2:
 			if param2 == iServiceInformation.sFileSize:
-				return self.isfile and os.stat(self.path).st_size or self.isdir and (config.EMC.directories_info.value or config.EMC.directories_size_skin.value) and self.__getFolderSize(self.path) or None
+				return self.isfile and os_stat(self.path).st_size or self.isdir and (config.EMC.directories_info.value or config.EMC.directories_size_skin.value) and self.__getFolderSize(self.path) or None
 			else:
 				return self.info and self.info.getInfoObject(param1, param2) or None
 		else:
@@ -113,8 +114,8 @@ class ServiceEvent:
 		self.serviceInfo = serviceInfo
 		self.event = self.serviceInfo.info and self.serviceInfo.info.getEvent(service)
 		self.path = service.getPath()
-		self.isfile = os.path.isfile(self.path)
-		self.ext = self.path and os.path.splitext(self.path)[1].lower()
+		self.isfile = isfile(self.path)
+		self.ext = self.path and splitext(self.path)[1].lower()
 		self.cutlist = None
 
 	def getBeginTime(self):
@@ -212,7 +213,7 @@ class ServiceEvent:
 						plistdesc += x
 					extendedDescription = plistdesc
 				else:
-					if os.path.exists(txtpath):
+					if exists(txtpath):
 						try:
 							with open(txtpath, "r", encoding="utf-8") as fd:
 								txtdescarr = fd.readlines()
@@ -229,7 +230,7 @@ class ServiceEvent:
 						extendedDescription = txtdesc
 					elif config.EMC.show_path_extdescr.value:
 						if config.EMC.movie_real_path.value:
-							extendedDescription = os.path.realpath(self.path)
+							extendedDescription = realpath(self.path)
 						else:
 							extendedDescription = self.path
 					else:

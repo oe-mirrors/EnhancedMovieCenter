@@ -3,7 +3,7 @@ from os import remove
 from re import match, sub, IGNORECASE
 from requests import get, exceptions
 from shutil import copy2
-from six import ensure_binary
+from six import ensure_binary  # TODO
 from twisted.internet.reactor import callInThread
 from enigma import ePicLoad, eTimer, getDesktop
 from Components.config import config, ConfigSubsection, ConfigSelection, ConfigYesNo, ConfigSelectionNumber
@@ -52,7 +52,7 @@ def getMovieList(moviename):
 		title = result.get("title", result.get("name", ""))
 		if media == "movie":
 			movielist.append(("%s - %s" % (title, _("Movies")), id, "movie"))
-		elif media == "tv":
+		else:
 			movielist.append(("%s - %s" % (title, _("TV Shows")), id, "tvshows"))
 	return movielist, len(movielist)
 

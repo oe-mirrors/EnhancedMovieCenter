@@ -17,7 +17,8 @@
 #	<http://www.gnu.org/licenses/>.
 #
 from math import ceil
-import os
+from os.path import basename, dirname, exists, getsize, isdir, isfile, islink, join, realpath, splitext
+from os import listdir, rename, sep, stat as os_stat, system, walk
 import random
 import re
 
@@ -94,12 +95,12 @@ def getPosterPath(searchPath):
 	ret = ""
 	paths = []
 	exts = [".jpg", ".png", "_md.jpg", "_md.png"]
-	searchname = os.path.splitext(searchPath.rstrip('/.'))[0]
+	searchname = splitext(searchPath.rstrip('/.'))[0]
 	foldercoverconfig = config.EMC.imdb.singlesearch_foldercoverpath.value
 
-	if os.path.isfile(searchPath):
+	if isfile(searchPath):
 		paths.extend([searchname])									# /dir/mediafolder/mediafile.ext
-		basedircover = os.path.dirname(searchname)							# /dir/mediafolder.ext
+		basedircover = dirname(searchname)							# /dir/mediafolder.ext
 	else:
 		basedircover = searchname									# /dir/mediafolder.ext
 
@@ -118,8 +119,8 @@ def getPosterPath(searchPath):
 	elif basedircover.lower().endswith("/dvd"):
 		basedircover = basedircover[:-4]
 
-	filedircover = basedircover + os.sep + os.path.basename(basedircover) 					# /dir/mediafolder/mediafolder.ext
-	foldercover = basedircover + os.sep + 'folder'								# /dir/mediafolder/folder.ext
+	filedircover = basedircover + sep + basename(basedircover) 					# /dir/mediafolder/mediafolder.ext
+	foldercover = basedircover + sep + 'folder'								# /dir/mediafolder/folder.ext
 
 	if foldercoverconfig == '1':
 		paths.extend([basedircover, foldercover, filedircover])
@@ -131,7 +132,7 @@ def getPosterPath(searchPath):
 	for path in paths:
 		for ext in exts:
 			ret = path + ext
-			if os.path.isfile(ret):
+			if isfile(ret):
 				break
 			ret = ""
 		if ret:
@@ -173,7 +174,7 @@ def getNoPosterPath():
 
 def readBasicCfgFile(file):
 	data = []
-	if not os.path.exists(file):
+	if not exists(file):
 		return data
 	f = None
 	try:
@@ -351,10 +352,10 @@ def toggleProgressService(service, preparePlayback, forceProgress=-1, first=Fals
 	# Should be removed anytime
 	cuts = path + ".cuts"
 	cutsr = path + ".cutsr"
-	if os.path.exists(cutsr) and not os.path.exists(cuts):
+	if exists(cutsr) and not exists(cuts):
 		# Rename file - to catch all old EMC revisions
 		try:
-			os.rename(cutsr, cuts)
+			rename(cutsr, cuts)
 		except Exception as e:
 			emcDebugOut("[CUTS] Exception in toggleProgressService: " + str(e))
 	# All calculations are done in seconds
@@ -411,14 +412,14 @@ def dirInfo(folder, bsize=False):
 
 	dirDict = set()
 
-	if os.path.exists(folder):
+	if exists(folder):
 		#for m in os.listdir(path):
-		for (path, dirs, files) in os.walk(folder):
+		for (path, dirs, files) in walk(folder):
 			if path in dirDict:
 				continue
 			for dir in dirs:
 				if isHideItem(dir):
-					dirPath = os.path.join(path, dir)
+					dirPath = join(path, dir)
 					dirDict.add(dirPath)
 					continue
 				if dir.lower() in structlist:
@@ -426,16 +427,16 @@ def dirInfo(folder, bsize=False):
 					dirs.remove(dir)			# structure's subtree won't be explored
 			#count += len(dirs)					# don't count dirs
 			for m in files:
-				if os.path.splitext(m)[1].lower() in extList:
+				if splitext(m)[1].lower() in extList:
 					if isHideItem(m):
 						continue
 					count += 1
 					if bsize:
 						# Only retrieve the file size if it is requested,
 						# because it costs a lot of time
-						filename = os.path.join(path, m)
-						if os.path.exists(filename):
-							size += os.path.getsize(filename)
+						filename = join(path, m)
+						if exists(filename):
+							size += getsize(filename)
 	if size:
 		size /= (1024.0 * 1024.0 * 1024.0)
 	if folder != cmtTrash:
@@ -444,35 +445,35 @@ def dirInfo(folder, bsize=False):
 
 
 def detectDVDStructure(checkPath):
-	if os.path.isdir(checkPath) or (os.path.islink(checkPath) and config.EMC.scan_linked.value):
-		dvdpath = os.path.join(checkPath, "VIDEO_TS.IFO")
+	if isdir(checkPath) or (islink(checkPath) and config.EMC.scan_linked.value):
+		dvdpath = join(checkPath, "VIDEO_TS.IFO")
 		if fileExists(dvdpath):
 			return dvdpath
-		dvdpath = os.path.join(checkPath, "VIDEO_TS/VIDEO_TS.IFO")
+		dvdpath = join(checkPath, "VIDEO_TS/VIDEO_TS.IFO")
 		if fileExists(dvdpath):
 			return dvdpath
-		dvdpath = os.path.join(checkPath, "DVD/VIDEO_TS/VIDEO_TS.IFO")
+		dvdpath = join(checkPath, "DVD/VIDEO_TS/VIDEO_TS.IFO")
 		if fileExists(dvdpath):
 			return dvdpath
 	return None
 
 
 def detectMOVStructure(checkPath):
-	if os.path.isdir(checkPath) or (os.path.islink(checkPath) and config.EMC.scan_linked.value):
+	if isdir(checkPath) or (islink(checkPath) and config.EMC.scan_linked.value):
 		extMovie = extVideo - extBlu
 		for ext in extMovie:
-			movpath = os.path.join(checkPath, os.path.basename(checkPath)) + ext
+			movpath = join(checkPath, basename(checkPath)) + ext
 			if fileExists(movpath):
 				return movpath
 	return None
 
 
 def detectBLUStructure(checkPath):
-	if os.path.isdir(checkPath) or (os.path.islink(checkPath) and config.EMC.scan_linked.value):
-		blupath = os.path.join(checkPath, "BDMV/index.bdmv")
+	if isdir(checkPath) or (islink(checkPath) and config.EMC.scan_linked.value):
+		blupath = join(checkPath, "BDMV/index.bdmv")
 		if fileExists(blupath):
 			return blupath
-		blupath = os.path.join(checkPath, "BRD/BDMV/index.bdmv")
+		blupath = join(checkPath, "BRD/BDMV/index.bdmv")
 		if fileExists(blupath):
 			return blupath
 	return None
@@ -481,19 +482,19 @@ def detectBLUStructure(checkPath):
 def detectBLUISO(checkPath):
 	random.seed()
 	mountdir = '/tmp/EMCISO' + str(random.getrandbits(16))
-	dir, fileext = os.path.splitext(checkPath)
+	dir, fileext = splitext(checkPath)
 	if fileext == '.iso':
-		if not os.path.exists(mountdir):
-			os.system('mkdir ' + mountdir)
+		if not exists(mountdir):
+			system('mkdir ' + mountdir)
 		else:
-			os.system('umount -d -f ' + mountdir)
-		os.system('mount -r "' + checkPath + '" ' + mountdir)
+			system('umount -d -f ' + mountdir)
+		system('mount -r "' + checkPath + '" ' + mountdir)
 		if detectBLUStructure(mountdir):
-			os.system('umount -d -f ' + mountdir)
-			os.system('rmdir ' + mountdir)
+			system('umount -d -f ' + mountdir)
+			system('rmdir ' + mountdir)
 			return True
-		os.system('umount -d -f ' + mountdir)
-		os.system('rmdir ' + mountdir)
+		system('umount -d -f ' + mountdir)
+		system('rmdir ' + mountdir)
 	return False
 
 # muss drinnen bleiben sonst crashed es bei foreColorSelected
@@ -783,9 +784,6 @@ class MovieCenterData(VlcPluginInterfaceList, PermanentSort, E2Bookmarks, EMCBoo
 
 		dappend = dirstack.append
 		fextend = filelist.extend
-		pathreal = os.path.realpath
-		pathislink = os.path.islink
-		pathsplitext = os.path.splitext
 
 		# walk through entire tree below current path. Might take a bit long on huge disks...
 		dirstack.append(path)
@@ -802,10 +800,10 @@ class MovieCenterData(VlcPluginInterfaceList, PermanentSort, E2Bookmarks, EMCBoo
 				# Found new directories to search within, use only their path
 				for d, name, ext in subdirlist:
 					# Resolve symbolic links and get the real path
-					d = pathreal(d)
+					d = realpath(d)
 
 					# Avoid duplicate directories and ignore links
-					if d not in dirstack and not pathislink(d):
+					if d not in dirstack and not islink(d):
 						dappend(d)
 
 				# Store the media files
@@ -813,9 +811,6 @@ class MovieCenterData(VlcPluginInterfaceList, PermanentSort, E2Bookmarks, EMCBoo
 
 		del dappend
 		del fextend
-		del pathreal
-		del pathislink
-		del pathsplitext
 		# We don't want any folders
 		return [], filelist
 
@@ -825,7 +820,7 @@ class MovieCenterData(VlcPluginInterfaceList, PermanentSort, E2Bookmarks, EMCBoo
 		pathname, ext = "", ""
 
 		# Improve performance and avoid dots
-		movie_trashpath = config.EMC.movie_trashcan_enable.value and os.path.realpath(config.EMC.movie_trashcan_path.value)
+		movie_trashpath = config.EMC.movie_trashcan_enable.value and realpath(config.EMC.movie_trashcan_path.value)
 		check_dvdstruct = config.EMC.check_dvdstruct.value \
 							and not (config.EMC.cfgscan_suppress.value and path in self.nostructscan)
 		check_moviestruct = config.EMC.check_moviestruct.value \
@@ -839,21 +834,19 @@ class MovieCenterData(VlcPluginInterfaceList, PermanentSort, E2Bookmarks, EMCBoo
 
 		dappend = subdirlist.append
 		fappend = filelist.append
-		splitext = os.path.splitext
-		pathjoin = os.path.join
 		OSErrorMessage = _("OSError - please reload list (EMC menu)")
 
-		if os.path.exists(path):
+		if exists(path):
 
 			# Get directory listing
 			walk_dirs = []
 			walk_files = []
 			try:
-				walk_listdir = os.listdir(path)
+				walk_listdir = listdir(path)
 			except OSError:
 				walk_listdir = [OSErrorMessage]
 			for walk_name in walk_listdir:
-				if movieFileCache.isDir(os.path.join(path, walk_name)):
+				if movieFileCache.isDir(join(path, walk_name)):
 					walk_dirs.append(walk_name)
 				else:
 					walk_files.append(walk_name)
@@ -867,7 +860,7 @@ class MovieCenterData(VlcPluginInterfaceList, PermanentSort, E2Bookmarks, EMCBoo
 					if ext not in localExtList:
 						continue
 
-					pathname = pathjoin(path, file)
+					pathname = join(path, file)
 
 					# Filter dead links
 					if movieFileCache.isFile(pathname) or (file == OSErrorMessage):
@@ -881,7 +874,7 @@ class MovieCenterData(VlcPluginInterfaceList, PermanentSort, E2Bookmarks, EMCBoo
 
 				for dir in dirs:
 
-					pathname = pathjoin(path, dir)
+					pathname = join(path, dir)
 
 					# Filter dead links
 					if movieFileCache.isDir(pathname):
@@ -889,7 +882,7 @@ class MovieCenterData(VlcPluginInterfaceList, PermanentSort, E2Bookmarks, EMCBoo
 							dvdStruct = detectDVDStructure(pathname)
 							if dvdStruct:
 								# DVD Structure found
-								pathname = os.path.dirname(dvdStruct)
+								pathname = dirname(dvdStruct)
 								ext = splitext(dvdStruct)[1].lower()
 								fappend((pathname, dir, ext))
 								continue
@@ -904,7 +897,7 @@ class MovieCenterData(VlcPluginInterfaceList, PermanentSort, E2Bookmarks, EMCBoo
 							bluStruct = detectBLUStructure(pathname)
 							if bluStruct:
 								# Bluray Structure found
-								pathname = os.path.dirname(bluStruct)
+								pathname = dirname(bluStruct)
 								ext = splitext(bluStruct)[1].lower()
 								fappend((pathname, dir, ext))
 								continue
@@ -920,8 +913,6 @@ class MovieCenterData(VlcPluginInterfaceList, PermanentSort, E2Bookmarks, EMCBoo
 
 		del dappend
 		del fappend
-		del splitext
-		del pathjoin
 		return subdirlist, filelist
 
 	def reloadDirList(self, path):
@@ -944,9 +935,6 @@ class MovieCenterData(VlcPluginInterfaceList, PermanentSort, E2Bookmarks, EMCBoo
 		dappend = dirstack.append
 		fextend = filelist.extend
 		nfextend = newfilelist.extend
-		pathreal = os.path.realpath
-		pathislink = os.path.islink
-		pathsplitext = os.path.splitext
 
 		# walk through entire tree below movie home. Might take a bit long on huge disks...
 		# think about breaking at 2nd level,
@@ -969,10 +957,10 @@ class MovieCenterData(VlcPluginInterfaceList, PermanentSort, E2Bookmarks, EMCBoo
 					# Found new directories to search within, use only their path
 					for d, name, ext in subdirlist:
 						# Resolve symbolic links and get the real path
-						d = pathreal(d)
+						d = realpath(d)
 
 						# Avoid duplicate directories and ignore links
-						if d not in dirstack and not pathislink(d):
+						if d not in dirstack and not islink(d):
 							dappend(d)
 
 					# Store the media files
@@ -989,9 +977,6 @@ class MovieCenterData(VlcPluginInterfaceList, PermanentSort, E2Bookmarks, EMCBoo
 		del dappend
 		del fextend
 		del nfextend
-		del pathreal
-		del pathislink
-		del pathsplitext
 
 		# Sorting is done through our default sorting algorithm
 		if val != -1:
@@ -1012,8 +997,8 @@ class MovieCenterData(VlcPluginInterfaceList, PermanentSort, E2Bookmarks, EMCBoo
 		date = 0
 		year, month, day, hour, min = "", "", "", "", ""
 		try:
-			if path and os.path.exists(path):
-				getdate = os.stat(path)
+			if path and exists(path):
+				getdate = os_stat(path)
 				if dirDate:
 					from time import strftime, localtime
 					year = strftime('%Y', localtime(getdate[8]))
@@ -1032,39 +1017,37 @@ class MovieCenterData(VlcPluginInterfaceList, PermanentSort, E2Bookmarks, EMCBoo
 
 	def createFileInfo(self, pathname):
 		# Create info for new record
-		p = os.path.basename(pathname)
-		ext = os.path.splitext(p)[1].lower()
+		p = basename(pathname)
+		ext = splitext(p)[1].lower()
 		return [(pathname, p, ext)]
 
 	def createCustomList(self, currentPath, trashcan=True, extend=True):
 		customlist = []
 		path, name = "", ""
 		append = customlist.append
-		pathjoin = os.path.join
-		pathreal = os.path.realpath
 
-		currentPath = pathreal(currentPath)
+		currentPath = realpath(currentPath)
 
-		if currentPath != "" and currentPath != pathreal(config.EMC.movie_pathlimit.value):
-			append((pathjoin(currentPath, ".."),
+		if currentPath != "" and currentPath != realpath(config.EMC.movie_pathlimit.value):
+			append((join(currentPath, ".."),
 								"..",
 								cmtUp))
 
 		if extend:
 			# Insert these entries always at last
-			if currentPath == pathreal(config.EMC.movie_homepath.value):
+			if currentPath == realpath(config.EMC.movie_homepath.value):
 				if trashcan and config.EMC.movie_trashcan_enable.value and config.EMC.movie_trashcan_show.value:
 					append((config.EMC.movie_trashcan_path.value,
-										_(os.path.basename(config.EMC.movie_trashcan_path.value)) or _("trashcan"),
+										_(basename(config.EMC.movie_trashcan_path.value)) or _("trashcan"),
 										cmtTrash))
 
 				if config.EMC.latest_recordings.value:
-					append((pathjoin(currentPath, "Latest Recordings"),
+					append((join(currentPath, "Latest Recordings"),
 										_("Latest Recordings"),
 										cmtLRec))
 
-				if config.EMC.vlc.value and os.path.exists("/usr/lib/enigma2/python/Plugins/Extensions/VlcPlayer"):
-					append((pathjoin(currentPath, "VLC servers"),
+				if config.EMC.vlc.value and exists("/usr/lib/enigma2/python/Plugins/Extensions/VlcPlayer"):
+					append((join(currentPath, "VLC servers"),
 										"VLC servers",
 										cmtVLC))
 
@@ -1073,7 +1056,7 @@ class MovieCenterData(VlcPluginInterfaceList, PermanentSort, E2Bookmarks, EMCBoo
 					if bookmarks:
 						for bookmark in bookmarks:
 							append((bookmark,
-												os.path.basename(bookmark) or bookmark,
+												basename(bookmark) or bookmark,
 												cmtBME2))
 
 				if config.EMC.bookmarks.value == "Both" or config.EMC.bookmarks.value == "EMC":
@@ -1081,11 +1064,10 @@ class MovieCenterData(VlcPluginInterfaceList, PermanentSort, E2Bookmarks, EMCBoo
 					if bookmarks:
 						for bookmark in bookmarks:
 							append((bookmark,
-												os.path.basename(bookmark),
+												basename(bookmark),
 												cmtBMEMC))
 
 		del append
-		del pathjoin
 		return customlist
 
 	def reloadInternal(self, currentPath, simulate=False, recursive=False):
@@ -1151,8 +1133,6 @@ class MovieCenterData(VlcPluginInterfaceList, PermanentSort, E2Bookmarks, EMCBoo
 
 		# Avoid dots
 		append = tmplist.append
-		pathexists = os.path.exists
-		pathsplitext = os.path.splitext
 		hideitemlist = config.EMC.cfghide_enable.value and self.hideitemlist
 
 		service = None
@@ -1231,12 +1211,12 @@ class MovieCenterData(VlcPluginInterfaceList, PermanentSort, E2Bookmarks, EMCBoo
 				# Remove extension
 				if not ext:
 					# Avoid splitext it is very slow compared to a slice
-					title, ext = pathsplitext(filename)
+					title, ext = splitext(filename)
 				else:
 					#TODO Should not be necessary
 					# If there is an ext filename is already the shortname without the extension
 					#title = filename[:-len(ext)]
-					title = pathsplitext(filename)[0]
+					title = splitext(filename)[0]
 
 				# Get cut number
 				if title[-4:-3] == "_" and title[-3:].isdigit():
@@ -1342,7 +1322,7 @@ class MovieCenterData(VlcPluginInterfaceList, PermanentSort, E2Bookmarks, EMCBoo
 					if date is not None:
 						date = datetime.fromtimestamp(date)
 				if not date:
-					date = pathexists(path) and datetime.fromtimestamp(self.checkDate(path)) or None
+					date = exists(path) and datetime.fromtimestamp(self.checkDate(path)) or None
 				if date is None:
 					date = datetime.fromtimestamp(0)
 
@@ -1394,8 +1374,6 @@ class MovieCenterData(VlcPluginInterfaceList, PermanentSort, E2Bookmarks, EMCBoo
 
 		# Cleanup before continue
 		del append
-		del pathexists
-		del pathsplitext
 
 		if not simulate:
 			# If we are here, there is no way back
@@ -1455,8 +1433,8 @@ class MovieCenterData(VlcPluginInterfaceList, PermanentSort, E2Bookmarks, EMCBoo
 
 	def recStateChange(self, timer):
 		if timer:
-			path = os.path.dirname(timer.Filename)
-			if os.path.realpath(path) == os.path.realpath(self.currentPath):
+			path = dirname(timer.Filename)
+			if realpath(path) == realpath(self.currentPath):
 				# EMC shows the directory which contains the recording
 				filename = timer.Filename + ".ts"
 				if timer.state == TimerEntry.StateRunning:
@@ -1506,27 +1484,27 @@ class MovieCenterData(VlcPluginInterfaceList, PermanentSort, E2Bookmarks, EMCBoo
 			#IDEA: Optionally play also the following movielist items (folders and movies)
 			path = self.list[idx][4]
 			# Don't play movies from the trash folder or ".."
-			if os.path.realpath(path) != os.path.realpath(config.EMC.movie_trashcan_path.value) and path != "..":
+			if realpath(path) != realpath(config.EMC.movie_trashcan_path.value) and path != "..":
 				#TODO Reuse the reload and createdirlist function
 					# Then the files are sorted and played in their correct order
 					# So we don't have the whole dir and file recognition handling twice
 					# Simulate reload:	tmplist = self.reload(path, True)
-				for root, dirs, files in os.walk(path):  # ,False):
+				for root, dirs, files in walk(path):  # ,False):
 					if dirs:
 						for dir in dirs:
-							pathname = os.path.join(root, dir)
+							pathname = join(root, dir)
 							dvdStruct = detectDVDStructure(pathname)
 							if dvdStruct:
-								pathname = os.path.dirname(dvdStruct)
-								ext = os.path.splitext(dvdStruct)[1].lower()
+								pathname = dirname(dvdStruct)
+								ext = splitext(dvdStruct)[1].lower()
 								service = getPlayerService(pathname, dir, ext)
 								if not self.serviceBusy(service):
 									yield service
 					if files:
 						for name in files:
-							ext = os.path.splitext(name)[1].lower()
+							ext = splitext(name)[1].lower()
 							if ext in extMedia:
-								pathname = os.path.join(root, name)
+								pathname = join(root, name)
 								#TODO get formatted Name
 								service = getPlayerService(pathname, name, ext)
 								if not self.serviceBusy(service):
@@ -1553,17 +1531,17 @@ class MovieCenterData(VlcPluginInterfaceList, PermanentSort, E2Bookmarks, EMCBoo
 			#IDEA: Optionally play also the following movielist items (folders and movies)
 			path = self.list[idx][4]
 			# Don't play movies from the trash folder or ".."
-			if os.path.realpath(path) != os.path.realpath(config.EMC.movie_trashcan_path.value) and path != "..":
+			if realpath(path) != realpath(config.EMC.movie_trashcan_path.value) and path != "..":
 				#IDEA Is there a way to reuse the reload or createdirlist function
 					#TODO Then the files are sorted and played in their correct order
 					# So we don't have the whole dir and file recognition handling twice
 					# Simulate reload:	tmplist = self.reload(path, True)
 				entries = []
-				for root, dirs, files in os.walk(path):
+				for root, dirs, files in walk(path):
 					for dir in dirs:
-						entries.append(os.path.join(root, dir))
+						entries.append(join(root, dir))
 					for file in files:
-						entries.append(os.path.join(root, file))
+						entries.append(join(root, file))
 
 				if entries:
 					length = len(entries)
@@ -1571,19 +1549,19 @@ class MovieCenterData(VlcPluginInterfaceList, PermanentSort, E2Bookmarks, EMCBoo
 					random.shuffle(shuffle)
 					for i in shuffle:
 						entry = entries[i]
-						pathname = os.path.join(root, entry)
-						ext = os.path.splitext(pathname)[1]
+						pathname = join(root, entry)
+						ext = splitext(pathname)[1]
 						if ext in plyAll:
 							# Entry is playable
 							service = getPlayerService(pathname, entry, ext)
 							if not self.serviceBusy(service):
 								yield service
 
-						elif os.path.isdir(pathname):
+						elif isdir(pathname):
 							dvdStruct = detectDVDStructure(pathname)
 							if dvdStruct:
-								path = os.path.dirname(dvdStruct)
-								ext = os.path.splitext(dvdStruct)[1].lower()
+								path = dirname(dvdStruct)
+								ext = splitext(dvdStruct)[1].lower()
 								service = getPlayerService(path, entry, ext)
 								if not self.serviceBusy(service):
 									yield service
@@ -2427,7 +2405,7 @@ class MovieCenter(GUIComponent):
 
 				elif ext == cmtDir:
 					if not isExtHDDSleeping:
-						if os.path.isfile(path + "/dir.lock"):
+						if isfile(path + "/dir.lock"):
 							pixmap = self.pic_directory_locked
 						else:
 							pixmap = self.pic_directory

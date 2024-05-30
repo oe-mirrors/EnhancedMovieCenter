@@ -17,10 +17,11 @@
 #	<http://www.gnu.org/licenses/>.
 #
 
-import os
+from os.path import exists, isdir, join, splitext
+from os import listdir
 
 from glob import glob
-from Components.config import *
+#from Components.config import *
 
 from . import _
 
@@ -49,23 +50,23 @@ class RogueFileCheck:
 	def checkPath(self, path, avoid=""):
 		from .CommonSupport import extMedia
 		#TODO check performance
-		if not os.path.exists(path) or path is avoid:
+		if not exists(path) or path is avoid:
 			return
-		for p in os.listdir(path):
-			fullpath = os.path.join(path, p)
-			if os.path.isdir(fullpath):
+		for p in listdir(path):
+			fullpath = join(path, p)
+			if isdir(fullpath):
 				try:
 					self.checkPath(fullpath)
 				except:
 					pass
 			else:
-				if os.path.exists(fullpath):
+				if exists(fullpath):
 					# Is there an alternative to avoid a for loop in a for loop
 					# Maybe we can use a dict e.x.: .ap = .ts.ap
-					filepath, ext = os.path.splitext(fullpath)
+					filepath, ext = splitext(fullpath)
 					if ext.lower() in extRogue:
 						for f in glob(filepath + '*'):
-							if os.path.splitext(f)[1].lower() in extMedia:
+							if splitext(f)[1].lower() in extMedia:
 								break
 						else:
 							# No matching media file found
@@ -83,7 +84,7 @@ class RogueFileCheck:
 
 	def getScript(self, path):
 		strg = ""
-		if path and os.path.exists(path):
+		if path and exists(path):
 			for file in self.files:
 				strg += "\nmv \"" + file + "\" \"" + path + "\""
 		else:

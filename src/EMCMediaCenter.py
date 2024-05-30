@@ -375,7 +375,7 @@ class EMCMediaCenter(CutList, Screen, HelpableScreen, InfoBarTimeshift, InfoBarS
 			if exists(path):  # TODO use ext != vlc but must be prepared first
 				# Why should the file be removed? Maybe that's the problem with "no Cutlist while recording"
 				#cutspath = path + ".cuts"
-				#if os.path.exists(cutspath):
+				#if exists(cutspath):
 					# prepare cut list
 					#try:
 					#	# Workaround for not working E2 cue.setCutListEnable not working :-(
