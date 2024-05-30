@@ -20,7 +20,7 @@ from os.path import basename, dirname, exists, isdir, isfile, join, realpath, sp
 from os import mkdir, sep, walk
 import struct
 
-from Components.config import *
+from Components.config import config
 from Components.PluginComponent import plugins
 from Components.ActionMap import ActionMap
 from Components.Sources.List import List
@@ -54,15 +54,15 @@ class MovieMenu(Screen, E2Bookmarks, EMCBookmarks):
 	if sz_w == 1920:
 		skin = """
 		<screen name="EMCMenu" position="center,center" size="840,730" title="EMC menu">
-    	<widget source="title" render="Label" position="10,10" size="820,40" font="Regular;35" />
+		<widget source="title" render="Label" position="10,10" size="820,40" font="Regular;35" />
 		<widget enableWrapAround="1" position="10,80" render="Listbox" itemHeight="45" scrollbarMode="showOnDemand" size="820,630" source="menu">
-            <convert type="StringList" />
-        </widget>
+			<convert type="StringList" />
+		</widget>
 	</screen>"""
 	else:
 		skin = """
 		<screen name="EMCMenu" position="center,120" size="620,520" title="EMC menu">
-    	<widget source="title" render="Label" position="10,10" size="600,30" font="Regular;24" />
+		<widget source="title" render="Label" position="10,10" size="600,30" font="Regular;24" />
 		<widget source="menu" render="Listbox" position="10,60" size="600,450" itemHeight="30" enableWrapAround="1" scrollbarMode="showOnDemand">
 			<convert type="StringList" />
 		</widget>
@@ -313,7 +313,7 @@ class MovieMenu(Screen, E2Bookmarks, EMCBookmarks):
 					minFree=0)
 
 	def createLinkCB(self, currentPath, linkPath):
-		if currentPath == linkPath or linkPath == None:
+		if currentPath == linkPath or linkPath is None:
 			self.close(None)
 		else:
 			try:

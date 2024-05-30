@@ -20,17 +20,18 @@
 from . import _
 from os.path import join, exists, normpath
 from os import makedirs
-from Components.config import *  # TODO
+from time import localtime
+from Components.config import getConfigListEntry, configfile
 from Components.config import config
 from Components.Button import Button
 from .configlistext import ConfigListScreenExt
-from Components.Language import *  # TODO
+from Components.Language import language
 from Components.ActionMap import ActionMap
 from Components.Sources.StaticText import StaticText
 from Screens.Screen import Screen
 from Screens.LocationBox import LocationBox
 from Screens.MessageBox import MessageBox
-from Screens.ServiceScan import *  # TODO
+#from Screens.ServiceScan import *  # TODO
 import Screens.Standby
 from Tools import Notifications
 from enigma import eServiceEvent, eTimer, getDesktop
@@ -621,7 +622,7 @@ class EnhancedMovieCenterMenu(ConfigListScreenExt, Screen):
 		emcTasker.ShowAutoRestartInfo()
 
 	def dbgChange(self, element):
-		if element.value == True:
+		if element.value is True:
 			pass
 		else:
 			emcTasker.shellExecute("rm -f " + join(config.EMC.folder.value, config.EMC.debugfile.value))

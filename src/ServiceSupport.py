@@ -20,7 +20,7 @@ from os.path import exists, isdir, isfile, realpath, splitext
 from os import stat as os_stat
 from datetime import datetime
 
-from Components.config import *
+from Components.config import config
 from enigma import eServiceCenter, iServiceInformation
 from .EMCFileCache import movieFileCache
 from .CutListSupport import CutList

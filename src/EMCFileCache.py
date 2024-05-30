@@ -83,7 +83,7 @@ class EMCFileCache():
 			if (len(subdirlist) > MinCacheLimit) or (len(filelist) > MinCacheLimit):
 				self.cacheDirectoryList[path] = subdirlist
 				for p, n, e in subdirlist:
-					if not (p in self.cacheAttributeList):
+					if p not in self.cacheAttributeList:
 						AttributeList = [None] * idx_num
 						AttributeList[idx_isLink] = islink(p)
 						AttributeList[idx_isDir] = True  # we are in subdirlist
@@ -93,7 +93,7 @@ class EMCFileCache():
 						self.cacheAttributeList[p] = AttributeList
 				self.cacheFileList[path] = filelist
 				for p, n, e in filelist:
-					if not (p in self.cacheAttributeList):
+					if p not in self.cacheAttributeList:
 						AttributeList = [None] * idx_num
 						AttributeList[idx_isLink] = islink(p)
 						AttributeList[idx_isDir] = False  # we are in filelist, no entry is a real directrory ...

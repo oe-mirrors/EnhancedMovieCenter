@@ -25,9 +25,8 @@ import re
 from time import time
 from datetime import datetime
 from threading import Thread
-from skin import parseColor
 
-from Components.config import *
+from Components.config import config
 from Components.GUIComponent import GUIComponent
 from Components.MultiContent import MultiContentEntryText, MultiContentEntryPixmapAlphaBlend
 from Components.Renderer.Picon import getPiconName
@@ -45,7 +44,7 @@ from .DelayedFunction import DelayedFunction
 from .EMCTasker import emcDebugOut
 from .VlcPluginInterface import VlcPluginInterfaceList
 from .VlcPluginInterface import DEFAULT_VIDEO_PID, DEFAULT_AUDIO_PID, ENIGMA_SERVICE_ID
-from operator import itemgetter
+#from operator import itemgetter
 from .CutListSupport import CutList
 from .PermanentSort import PermanentSort
 from .E2Bookmarks import E2Bookmarks
@@ -1596,10 +1595,10 @@ class MovieCenterData(VlcPluginInterfaceList, PermanentSort, E2Bookmarks, EMCBoo
 		return self.list
 
 	def toggleSelectionInternal(self, entry, index, overrideNum, invalidateFunction=None):
-		if self.selectionList == None:
+		if self.selectionList is None:
 			self.selectionList = []
 		newselnum = entry[5]  # init with old selection number
-		if overrideNum == None:
+		if overrideNum is None:
 			if self.serviceBusy(entry[0]):
 				return  # no toggle if file being operated on
 			# basic selection toggle
@@ -2106,7 +2105,7 @@ class MovieCenter(GUIComponent):
 				if not config.EMC.skin_able.value:
 
 					# TODO: Progress.value for blue structure
-					if not ext in extBlu and not bluiso:
+					if ext not in extBlu and not bluiso:
 						if config.EMC.movie_progress.value == "PB":
 							append(MultiContentEntryProgress(pos=(offset, self.CoolBarHPos), size=(self.CoolBarSize.width(), self.CoolBarSize.height()), percent=progress, borderWidth=1, foreColor=color, foreColorSelected=colorhighlight, backColor=self.BackColor, backColorSelected=None))
 							offset += self.CoolBarSize.width() + 10
@@ -2869,7 +2868,7 @@ class MovieCenter(GUIComponent):
 					#if not preparePlayback:
 					forceProgress = progress
 		else:
-			toggleProgressService(service, preparePlayback)
+			toggleProgressService(service, True)
 			self.invalidateService(service)
 			#DelayedFunction(1000, self.invalidateService, service)
 

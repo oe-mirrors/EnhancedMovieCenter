@@ -25,7 +25,6 @@ from random import choice
 from re import sub, findall, search, match, S, I, IGNORECASE
 from requests import session, get, exceptions
 from shutil import move
-from six import ensure_str  # TODO
 from urllib.parse import quote
 from urllib.request import urlopen, Request
 from time import time, process_time
@@ -73,12 +72,16 @@ config.EMC.imdb.thetvdb_standardcover = ConfigSelectionNumber(default=1, stepwid
 agents = [
 	'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Safari/537.36 Edg/110.0.1587.50'
 	'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/110.0'
-    'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/93.0.4577.82 Safari/537.36',
-    'Mozilla/5.0 (iPhone; CPU iPhone OS 14_4_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0.3 Mobile/15E148 Safari/604.1',
-    'Mozilla/4.0 (compatible; MSIE 9.0; Windows NT 6.1)',
-    'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.141 Safari/537.36 Edg/87.0.664.75',
-    'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.102 Safari/537.36 Edge/18.18363',
+	'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/93.0.4577.82 Safari/537.36',
+	'Mozilla/5.0 (iPhone; CPU iPhone OS 14_4_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0.3 Mobile/15E148 Safari/604.1',
+	'Mozilla/4.0 (compatible; MSIE 9.0; Windows NT 6.1)',
+	'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.141 Safari/537.36 Edg/87.0.664.75',
+	'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.102 Safari/537.36 Edge/18.18363',
     ]
+
+
+def ensure_str(data):
+	return data.decode() if data and isinstance(data, bytes) else data
 
 
 def urlExist(url):
@@ -145,10 +148,10 @@ class EMCImdbScan(Screen):
 				<widget backgroundColor="#1f771f" font="Regular;30" halign="center" name="ButtonGreenText" position="310,5" foregroundColor="white" shadowColor="black" shadowOffset="-2,-2" size="300,70" transparent="1" valign="center" zPosition="1" />
 				<widget backgroundColor="#a08500" font="Regular;30" halign="center" name="Manage Cover" position="610,5" foregroundColor="white" shadowColor="black" shadowOffset="-2,-2" size="300,70" transparent="1" valign="center" zPosition="1" />
 				<widget font="Regular;34" halign="right" position="1650,25" render="Label" size="120,40" source="global.CurrentTime">
-				    <convert type="ClockToText">Default</convert>
+					<convert type="ClockToText">Default</convert>
 				</widget>
 				<widget font="Regular;34" halign="right" position="1240,25" render="Label" size="400,40" source="global.CurrentTime" >
-				    <convert type="ClockToText">Date</convert>
+					<convert type="ClockToText">Date</convert>
 				</widget>
 				<eLabel backgroundColor="#818181" position="10,80" size="1780,1" />
 				<widget name="info" position="10,90" size="400,32" halign="center" font="Regular;28"/>
@@ -166,7 +169,7 @@ class EMCImdbScan(Screen):
 			</screen>"""
 	else:
 		skin = """
-	    		<screen position="center,80" size="1200,610" title="EMC Cover search">
+			<screen position="center,80" size="1200,610" title="EMC Cover search">
 				<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/EnhancedMovieCenter/img/red.png" position="10,5" size="200,40" alphatest="blend"/>
 				<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/EnhancedMovieCenter/img/green.png" position="210,5" size="200,40" alphatest="blend"/>
 				<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/EnhancedMovieCenter/img/yellow.png" position="410,5" size="200,40" alphatest="blend"/>
@@ -289,7 +292,7 @@ class EMCImdbScan(Screen):
 
 	def showInfo(self):
 		check = self["menulist"].getCurrent()
-		if check == None:
+		if check is None:
 			return
 		if self.check:
 			m_title = self["menulist"].getCurrent()[0][0]
@@ -550,7 +553,7 @@ class EMCImdbScan(Screen):
 			result = self.picload.startDecode(poster_path, 0, 0, False)
 			if result == 0:
 				ptr = self.picload.getData()
-				if ptr != None:
+				if ptr is not None:
 					self["poster"].instance.setPixmap(ptr)
 					self["poster"].show()
 
@@ -611,20 +614,20 @@ class getCover(Screen):
 	if sz_w == 1920:
 		skin = """
 		<screen position="center,110" size="1800,930" title="EMC Cover Selecter">
-		<widget name="m_info" position="10,10" size="1780,40" font="Regular;35" halign="center" foregroundColor="yellow"/>
-		<eLabel backgroundColor="#818181" position="10,60" size="1780,1" />
-		<widget name="poster" position="10,80" size="400,600" alphatest="blend"/>
-		<widget name="menulist" position="440,80" size="1350,810" itemHeight="45" scrollbarMode="showOnDemand" enableWrapAround="1"/>
-		<widget name="info" position="10,700" size="400,140" font="Regular;30" halign="center" valign="center" foregroundColor="yellow"/>
+			<widget name="m_info" position="10,10" size="1780,40" font="Regular;35" halign="center" foregroundColor="yellow"/>
+			<eLabel backgroundColor="#818181" position="10,60" size="1780,1" />
+			<widget name="poster" position="10,80" size="400,600" alphatest="blend"/>
+			<widget name="menulist" position="440,80" size="1350,810" itemHeight="45" scrollbarMode="showOnDemand" enableWrapAround="1"/>
+			<widget name="info" position="10,700" size="400,140" font="Regular;30" halign="center" valign="center" foregroundColor="yellow"/>
 		</screen>"""
 	else:
 		skin = """
-   		<screen position="center,80" size="1200,610" title="EMC Cover Selecter">
-		<widget name="m_info" position="10,5" size="1180,30" font="Regular;24" halign="center" valign="center" foregroundColor="yellow"/>
-		<eLabel backgroundColor="#818181" position="10,40" size="1180,1" />
-		<widget name="poster" position="20,50" size="220,330" alphatest="blend"/>
-		<widget name="menulist" position="270,50" size="920,540" itemHeight="30" scrollbarMode="showOnDemand" enableWrapAround="1"/>
-		<widget name="info" position="10,400" size="220,80" font="Regular;20" halign="center" valign="center" foregroundColor="yellow"/>
+		<screen position="center,80" size="1200,610" title="EMC Cover Selecter">
+			<widget name="m_info" position="10,5" size="1180,30" font="Regular;24" halign="center" valign="center" foregroundColor="yellow"/>
+			<eLabel backgroundColor="#818181" position="10,40" size="1180,1" />
+			<widget name="poster" position="20,50" size="220,330" alphatest="blend"/>
+			<widget name="menulist" position="270,50" size="920,540" itemHeight="30" scrollbarMode="showOnDemand" enableWrapAround="1"/>
+			<widget name="info" position="10,400" size="220,80" font="Regular;20" halign="center" valign="center" foregroundColor="yellow"/>
 		</screen>"""
 
 	def __init__(self, session, data):
@@ -858,7 +861,7 @@ class getCover(Screen):
 			result = self.picload.startDecode(poster_path, 0, 0, False)
 			if result == 0:
 				ptr = self.picload.getData()
-				if ptr != None:
+				if ptr is not None:
 					print("EMC iMDB: Load Poster - %s" % self.m_title)
 					self["poster"].instance.setPixmap(ptr)
 					self["poster"].show()

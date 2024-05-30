@@ -17,14 +17,15 @@
 #	<http://www.gnu.org/licenses/>.
 #
 
-from Components.config import *
+from Components.config import config
 from Components.ActionMap import HelpableActionMap
 from Components.ServiceEventTracker import ServiceEventTracker, InfoBarBase
 from enigma import iPlayableService, eServiceReference
-from Screens.InfoBarGenerics import *
+from Screens.InfoBarGenerics import InfoBarNotifications, InfoBarSeek, InfoBarShowHide, InfoBarMenu, InfoBarShowMovies, InfoBarAudioSelection, InfoBarSimpleEventView, InfoBarServiceNotifications, InfoBarPVRState, InfoBarCueSheetSupport, InfoBarSubtitleSupport, InfoBarServiceErrorPopupSupport, InfoBarTeletextPlugin, InfoBarExtensions, InfoBarPlugins, InfoBarNumberZap, InfoBarPiP, InfoBarEPG
 from Screens.MessageBox import MessageBox
 from Tools.BoundFunction import boundFunction
 from Tools.Directories import fileExists, resolveFilename, SCOPE_PLUGINS
+from Tools import Notifications
 
 from . import _
 from .EMCTasker import emcDebugOut
@@ -51,7 +52,7 @@ def EMCkeyOK(self):
 			self.exit()
 	elif sel == self.minuteInput:
 		pts = self.minuteInput.value * 60 * 90000
-		if self.fwd == False:
+		if self.fwd is False:
 			pts = -1 * pts
 		from .EMCMediaCenter import EMCMediaCenter
 		EMCMediaCenter.doSeekRelative(self.infobarInstance, pts)
@@ -124,7 +125,7 @@ class InfoBarSupport(InfoBarBase,
 		self.downloadCuesheet()
 
 		# From Merlin2 InfoBarCueSheetSupport __serviceStarted
-		if config.usage.on_movie_start.value == "beginning" and config.EMC.movie_jump_first_mark.value == True:
+		if config.usage.on_movie_start.value == "beginning" and config.EMC.movie_jump_first_mark.value is True:
 			self.jumpToFirstMark()
 			return
 
@@ -145,16 +146,16 @@ class InfoBarSupport(InfoBarBase,
 					Notifications.AddNotificationWithCallback(self.playLastCB, MessageBox, _("Do you want to resume this playback?") + "\n" + (_("Resume position at %s") % ("%d:%02d:%02d" % (l / 3600, l % 3600 / 60, l % 60))), timeout=10, default=False)
 				elif val == "resume":
 					Notifications.AddNotificationWithCallback(self.playLastCB, MessageBox, _("Resuming playback"), timeout=2, type=MessageBox.TYPE_INFO)
-			elif config.EMC.movie_jump_first_mark.value == True:
+			elif config.EMC.movie_jump_first_mark.value is True:
 				self.jumpToFirstMark()
-		elif config.EMC.movie_jump_first_mark.value == True:
+		elif config.EMC.movie_jump_first_mark.value is True:
 			self.jumpToFirstMark()
 
 	def playLastCB(self, answer):
-		if answer == True:
+		if answer is True:
 			self.doSeek(self.resume_point)
 		# From Merlin2
-		elif config.EMC.movie_jump_first_mark.value == True:
+		elif config.EMC.movie_jump_first_mark.value is True:
 			self.jumpToFirstMark()
 		elif self.service and self.service.type == eServiceReference.idServiceDVD:
 			DelayedFunction(50, boundFunction(self.dvdPlayerWorkaround))
@@ -182,8 +183,8 @@ class InfoBarSupport(InfoBarBase,
 
 		for (pts, what) in self.cut_list:
 			if what == self.CUT_TYPE_MARK:
-				if pts != None and (current_pos < pts and pts < margin and pts < middle):
-					if firstMark == None or pts < firstMark:
+				if pts is not None and (current_pos < pts and pts < margin and pts < middle):
+					if firstMark is None or pts < firstMark:
 						firstMark = pts
 		if firstMark is not None:
 			self.start_point = firstMark

@@ -26,7 +26,7 @@ from Components.ActionMap import ActionMap, HelpableActionMap
 from Components.Label import Label
 from Components.Pixmap import Pixmap
 from Components.ServiceEventTracker import ServiceEventTracker
-from enigma import iPlayableService, iServiceInformation, iServiceKeys, getDesktop, eServiceReference
+from enigma import ePicLoad, iPlayableService, iServiceInformation, iServiceKeys, getDesktop, eServiceReference
 from Screens.Screen import Screen
 from Screens.InfoBarGenerics import *
 from Screens.InfoBar import InfoBar
@@ -38,7 +38,6 @@ from Components.Language import language
 
 
 # Zap to Live TV of record
-from Screens.MessageBox import MessageBox
 from Tools.Notifications import AddPopup
 
 # Plugin internal
@@ -52,8 +51,6 @@ from .ServiceSupport import ServiceCenter
 
 # Cover
 from Components.AVSwitch import AVSwitch
-from Components.Pixmap import Pixmap
-from enigma import ePicLoad
 
 from .MovieCenter import toggleProgressService, getPosterPath
 
@@ -280,7 +277,7 @@ class EMCMediaCenter(CutList, Screen, HelpableScreen, InfoBarTimeshift, InfoBarS
 	def showCoverCallback(self, picInfo=None):
 		if self.picload and picInfo:
 			ptr = self.picload.getData()
-			if ptr != None:
+			if ptr is not None:
 				self["Cover"].instance.setPixmap(ptr)
 				self["Cover"].show()
 

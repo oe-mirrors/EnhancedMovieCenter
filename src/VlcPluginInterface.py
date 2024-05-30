@@ -17,6 +17,7 @@
 #	<http://www.gnu.org/licenses/>.
 #
 from os.path import join, splitext
+from urllib.error import URLError
 
 from enigma import eServiceReference, eServiceCenter
 from .EMCTasker import emcDebugOut

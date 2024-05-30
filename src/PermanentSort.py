@@ -19,13 +19,12 @@
 #
 from os.path import dirname, exists, normpath
 import pickle
-from six import ensure_text  # TODO
 
 from collections import defaultdict
 
 from .EMCTasker import emcDebugOut
 
-from Components.config import *
+from Components.config import config
 
 from Tools.XMLTools import stringToXML
 import xml.etree.cElementTree
@@ -35,9 +34,12 @@ CFG_FILE = "/etc/enigma2/emc-permsort.cfg"
 global XML_FILE
 XML_FILE = "/etc/enigma2/emc-permsort.xml"
 
+
+def ensure_text(data):
+	return data.decode() if isinstance(data, bytes) else data
+
+
 # PermanentSort class
-
-
 class PermanentSort():
 
 	def __init__(self, path=None):

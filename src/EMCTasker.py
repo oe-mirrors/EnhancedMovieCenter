@@ -19,7 +19,7 @@
 from itertools import zip_longest
 from os.path import exists, join
 from random import randint
-from time import localtime
+from time import localtime, time
 
 from enigma import eTimer, eConsoleAppContainer
 from Components.config import config

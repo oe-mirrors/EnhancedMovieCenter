@@ -21,7 +21,6 @@ from os.path import exists, isdir, join, splitext
 from os import listdir
 
 from glob import glob
-#from Components.config import *
 
 from . import _
 
