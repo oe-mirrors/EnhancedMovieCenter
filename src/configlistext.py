@@ -83,15 +83,15 @@ class ConfigListExt(GUIComponent):
 		instance.selectionChanged.get().remove(self.selectionChanged)
 		instance.setContent(None)
 
-	def setList(self, l):
+	def setList(self, newlist):
 		self.timer.stop()
-		self.__list = l
+		self.__list = newlist
 		self.l.setList(self.__list)
 		self._headers = []
 		self._fake = []
-		if l is not None:
+		if newlist is not None:
 			index = 0
-			for x in l:
+			for x in newlist:
 				if len(x) < 2:
 						self._headers.append(index)
 				elif len(x[0]) < 1:
@@ -205,7 +205,7 @@ class ConfigListScreenExt:
 		else:
 			self.__changed = lambda: None
 
-		if not self.handleInputHelpers in self["config"].onSelectionChanged:
+		if self.handleInputHelpers not in self["config"].onSelectionChanged:
 			self["config"].onSelectionChanged.append(self.handleInputHelpers)
 
 	def handleInputHelpers(self):

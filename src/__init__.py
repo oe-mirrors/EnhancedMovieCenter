@@ -16,7 +16,9 @@ def localeInit():
 	bindtextdomain("EnhancedMovieCenter", resolveFilename(SCOPE_PLUGINS, "Extensions/EnhancedMovieCenter/locale"))
 
 
-_ = lambda txt: dgettext("EnhancedMovieCenter", txt) if txt else ""
+def _(txt):
+	return dgettext("EnhancedMovieCenter", txt) if txt else ""
+
 
 localeInit()
 language.addCallback(localeInit)

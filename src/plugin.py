@@ -18,7 +18,7 @@
 #
 from copy import copy
 from Components.ActionMap import ActionMap
-from Components.config import config, ConfigText, ConfigYesNo, ConfigSubsection, ConfigNothing, ConfigSelection, ConfigSelectionNumber, NoSave, ConfigClock
+from Components.config import KEY_LEFT, KEY_RIGHT, KEY_HOME, KEY_END, config, ConfigText, ConfigYesNo, ConfigSubsection, ConfigNothing, ConfigSelection, ConfigSelectionNumber, NoSave, ConfigClock
 from Components.Language import language
 from Screens.MessageBox import MessageBox
 from Plugins.Plugin import PluginDescriptor

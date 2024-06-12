@@ -3,7 +3,6 @@ from os import remove
 from re import match, sub, IGNORECASE
 from requests import get, exceptions
 from shutil import copy2
-from six import ensure_binary
 from twisted.internet.reactor import callInThread
 from enigma import ePicLoad, eTimer, getDesktop
 from Components.config import config, ConfigSubsection, ConfigSelection, ConfigYesNo, ConfigSelectionNumber
@@ -52,7 +51,7 @@ def getMovieList(moviename):
 		title = result.get("title", result.get("name", ""))
 		if media == "movie":
 			movielist.append(("%s - %s" % (title, _("Movies")), id, "movie"))
-		elif media == "tv":
+		else:
 			movielist.append(("%s - %s" % (title, _("TV Shows")), id, "tvshows"))
 	return movielist, len(movielist)
 
@@ -171,7 +170,7 @@ def getTempCover(posterUrl):
 def DownloadPage(link, file, success, fail=None):
 	link = link.encode('ascii', 'xmlcharrefreplace').decode().replace(' ', '%20').replace('\n', '')
 	try:
-		response = get(ensure_binary(link), timeout=(3.05, 6))
+		response = get(link, timeout=(3.05, 6))
 		response.raise_for_status()
 		with open(file, "wb") as f:
 			f.write(response.content)
@@ -498,7 +497,7 @@ class MovieInfoTMDb(Screen):
 
 	def showPreviewCoverCB(self, picInfo=None):
 		ptr = self.picload.getData()
-		if ptr != None:
+		if ptr:
 			self["previewcover"].instance.setPixmap(ptr)
 			if self.page == 0:
 				self["previewcover"].show()

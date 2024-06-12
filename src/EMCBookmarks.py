@@ -16,9 +16,7 @@
 #	For more information on the GNU General Public License see:
 #	<http://www.gnu.org/licenses/>.
 #
-import os
-
-from Components.config import *
+from os import access, R_OK
 
 from .EMCTasker import emcDebugOut
 
@@ -41,7 +39,7 @@ class EMCBookmarks():
 	# Returns the EMC bookmarks as a list
 	def getEMCBookmarks(self):
 		bm = []
-		if os.access(CFG_FILE, os.R_OK):
+		if access(CFG_FILE, R_OK):
 			f = None
 			try:
 				f = open(CFG_FILE, "r")

@@ -16,7 +16,7 @@
 #	For more information on the GNU General Public License see:
 #	<http://www.gnu.org/licenses/>.
 #
-import os
+from os.path import dirname, ismount, realpath
 from enigma import eTimer
 from Components.config import config
 from .EMCTasker import emcTasker
@@ -34,10 +34,10 @@ class EMCMountPoints:
 
 	def mountpoint(self, path, first=True):
 		if first:
-			path = os.path.realpath(path)
-		if os.path.ismount(path) or len(path) == 0:
+			path = realpath(path)
+		if ismount(path) or len(path) == 0:
 			return path
-		return self.mountpoint(os.path.dirname(path), False)
+		return self.mountpoint(dirname(path), False)
 
 	def getMountPointDevice(self, path):
 		from Components.Harddisk import getProcMounts

@@ -1,4 +1,4 @@
-﻿import os
+﻿from os.path import splitext
 
 from enigma import eListboxPythonMultiContent, RT_VALIGN_CENTER, RT_HALIGN_RIGHT, eListbox, getDesktop, eServiceCenter, iServiceInformation
 
@@ -18,6 +18,7 @@ from Tools.Directories import fileExists
 from skin import parseColor, parseFont
 from .CommonSupport import getMetaTitleFromDescription, plyDVB
 from . import _
+from .EMCTasker import emcDebugOut
 
 
 sz_w = getDesktop(0).size().width()
@@ -52,10 +53,7 @@ class EMCPlaylist():
 		return self.currentPlaylist
 
 	def isCurrentPlaylistEmpty(self):
-		if self.currentPlaylist != {}:
-			return False
-		else:
-			return True
+		return not self.currentPlaylist
 
 	def delCurrentPlaylistEntry(self, path):
 		if path in self.currentPlaylist:
@@ -165,7 +163,7 @@ class EMCPlaylistScreen(Screen):
 			plist = open(path, "r")
 			from .MovieCenter import getPlayerService, getMovieNameWithoutExt, getMovieNameWithoutPhrases
 			emcplaylist.delCurrentPlaylist()
-			if os.path.splitext(path)[1] == ".e2pls":
+			if splitext(path)[1] == ".e2pls":
 				while True:
 					service = plist.readline()
 					if service == "":
@@ -174,7 +172,7 @@ class EMCPlaylistScreen(Screen):
 					spos = service.find('/')
 					servicepath = service[spos:]
 					service = servicepath.split('/')[-1]
-					ext = os.path.splitext(servicepath)[1]
+					ext = splitext(servicepath)[1]
 					name = getMovieNameWithoutExt(service)
 					name = getMovieNameWithoutPhrases(name)
 					service = getPlayerService(servicepath, service, ext)
@@ -348,7 +346,7 @@ class PlayList(GUIComponent):
 		movie_metaload = config.EMC.movie_metaload.value
 		if movie_metaload:
 			path = service.getPath()
-			ext = os.path.splitext(path)[1].lower()
+			ext = splitext(path)[1].lower()
 			if ext in plyDVB and service:
 				info = self.serviceHandler.info(service)
 				if info:
@@ -415,7 +413,7 @@ class EMCFileBrowser(Screen, HelpableScreen):
 	if sz_w == 1920:
 		skin = """
 		<screen name="EMCFilebrowser" position="center,170" size="1200,820" title="EMC Filebrowser">
-    		<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/EnhancedMovieCenter/img_fhd/red.png" position="10,5" size="300,70" alphatest="blend"/>
+			<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/EnhancedMovieCenter/img_fhd/red.png" position="10,5" size="300,70" alphatest="blend"/>
 		<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/EnhancedMovieCenter/img_fhd/green.png" position="310,5" size="300,70" alphatest="blend"/>
 		<widget backgroundColor="#9f1313" font="Regular;30" halign="center" name="cancel" position="10,5" foregroundColor="white" shadowColor="black" shadowOffset="-2,-2" size="300,70" transparent="1" valign="center" zPosition="1" />
 		<widget backgroundColor="#1f771f" font="Regular;30" halign="center" name="open" position="310,5" foregroundColor="white" shadowColor="black" shadowOffset="-2,-2" size="300,70" transparent="1" valign="center" zPosition="1" />
@@ -474,8 +472,8 @@ class EMCFileBrowser(Screen, HelpableScreen):
 		path = ""
 		if self["filelist"].getFilename() is not None:
 			fname = self["filelist"].getFilename()
-			dirname = self["filelist"].getCurrentDirectory()
-			path = dirname + fname
+			_dirname = self["filelist"].getCurrentDirectory()
+			path = _dirname + fname
 			self.close(path)
 
 	def exit(self):
