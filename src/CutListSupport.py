@@ -22,7 +22,7 @@ import os
 import struct
 from bisect import insort
 
-from Components.config import *
+from Components.config import config
 from Screens.InfoBarGenerics import InfoBarCueSheetSupport, InfoBarSeek
 
 from .EMCTasker import emcDebugOut

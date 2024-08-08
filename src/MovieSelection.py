@@ -20,12 +20,12 @@ from __future__ import print_function
 import os
 from time import localtime
 #from thread import start_new_thread
-from threading import Thread
+#from threading import Thread
 from random import shuffle
 
 from Components.ActionMap import ActionMap, HelpableActionMap
 from Components.Button import Button
-from Components.config import *
+from Components.config import config
 from Components.Label import Label
 from Components.Sources.StaticText import StaticText
 from Screens.Screen import Screen
@@ -124,7 +124,7 @@ def purgeExpired(currentPath=None, postFileOp=None, emptyTrash=False):
 									#Workaround: Avoids trashcan failure if trashcan contains *.m2ts or *.iso files
 									if ext == '.m2ts' or ext == '.iso':
 										result = True
-									if result == False:
+									if result is False:
 										AddPopup(
 											_("EMC Trashcan Cleanup failed!"),
 											MessageBox.TYPE_ERROR,
@@ -416,7 +416,7 @@ class SelectionEventInfo:
 				self.picload.setPara((size.width(), size.height(), sc[0], sc[1], False, 1, config.EMC.movie_cover_background.value))
 				if self.picload.startDecode(jpgpath, 0, 0, False) == 0:
 					ptr = self.picload.getData()
-					if ptr != None:
+					if ptr is not None:
 						self['Cover'].instance.setPixmap(ptr)
 						if config.EMC.movie_cover.value:
 							if self.cover:
@@ -473,7 +473,7 @@ class SelectionEventInfo:
 					# Search first mark
 					for (pts, what) in cue.getCutList():
 						if what == 3:  # CUT_TYPE_LAST:
-							if pts != None:
+							if pts is not None:
 								# Start preview x seconds before last position
 								jumpto = int(pts) - (int(config.EMC.movie_preview_offset.value) * 90000)
 								break
@@ -684,7 +684,7 @@ class EMCSelection(Screen, HelpableScreen, SelectionEventInfo, VlcPluginInterfac
 
 		HelpableScreen.__init__(self)
 
-		if self.currentPath == None:
+		if self.currentPath is None:
 			self.currentPath = config.EMC.movie_homepath.value
 		self.lastCurrentPath = None
 		self.tmpSelList = None		# Used for file operations
@@ -1068,14 +1068,14 @@ class EMCSelection(Screen, HelpableScreen, SelectionEventInfo, VlcPluginInterfac
 	def moveSkipUp(self):
 		self.coverAfterPreview()
 		self.cursorDir = -1
-		for _ in range(int(config.EMC.list_skip_size.value)):
+		for A in range(int(config.EMC.list_skip_size.value)):
 			self["list"].moveUp()
 		self.updateAfterKeyPress()
 
 	def moveSkipDown(self):
 		self.cursorDir = 1
 		self.coverAfterPreview()
-		for _ in range(int(config.EMC.list_skip_size.value)):
+		for A in range(int(config.EMC.list_skip_size.value)):
 			self["list"].moveDown()
 		self.updateAfterKeyPress()
 
@@ -1512,7 +1512,7 @@ class EMCSelection(Screen, HelpableScreen, SelectionEventInfo, VlcPluginInterfac
 
 		# Display a permanent sort marker if it is set
 		perm = self["list"].isEqualPermanentSort()
-		if perm == True:
+		if perm is True:
 			title += " <P>"
 
 		title = "EMC " + EMCVersion + " - " + title
@@ -1537,7 +1537,7 @@ class EMCSelection(Screen, HelpableScreen, SelectionEventInfo, VlcPluginInterfac
 		if self.browsingVLC():
 			return
 		#WORKAROUND E2 doesn't send dedicated short or long pressed key events
-		if self.toggle == False:
+		if self.toggle is False:
 			self.toggle = True
 			return
 		service = self.getNextSelectedService(self.getCurrent())
@@ -1563,7 +1563,7 @@ class EMCSelection(Screen, HelpableScreen, SelectionEventInfo, VlcPluginInterfac
 		if self["list"].currentSelIsDirectory():
 			self.moveDirectory()
 		else:
-			if self.toggle == False:
+			if self.toggle is False:
 				self.toggle = True
 				return
 			if self["list"].currentSelIsPlayable():
@@ -2280,7 +2280,7 @@ class EMCSelection(Screen, HelpableScreen, SelectionEventInfo, VlcPluginInterfac
 		for e in self.recsToStop:
 			stoppedResult = self["list"].recControl.stopRecording(e[0])
 			stoppedAll = stoppedAll and stoppedResult
-			if stoppedResult == False:
+			if stoppedResult is False:
 				filenames += "\n" + e[0].split("/")[-1][:-3]
 				del self.deleteList[e[1] - i]
 				i += 1
@@ -2781,7 +2781,7 @@ class EMCSelection(Screen, HelpableScreen, SelectionEventInfo, VlcPluginInterfac
 								# really delete!
 								if not offline.deleteFromDisk(0):
 									result = True
-								if result == False:
+								if result is False:
 									self.checkHideMiniTV_beforeFullscreen()
 									self.session.open(MessageBox, _("Delete failed!"), MessageBox.TYPE_ERROR)
 									return
@@ -2864,7 +2864,7 @@ class EMCSelection(Screen, HelpableScreen, SelectionEventInfo, VlcPluginInterfac
 							# really delete!
 							if not offline.deleteFromDisk(0):
 								result = True
-							if result == False:
+							if result is False:
 								self.checkHideMiniTV_beforeFullscreen()
 								self.session.open(MessageBox, _("Delete failed!"), MessageBox.TYPE_ERROR)
 								return
@@ -3014,7 +3014,7 @@ class EMCSelection(Screen, HelpableScreen, SelectionEventInfo, VlcPluginInterfac
 	def moveMovie(self, selection=None):
 		# Avoid starting move and copy at the same time
 		#WORKAROUND E2 doesn't send dedicated short or long pressed key events
-		if self.move == False:
+		if self.move is False:
 			self.move = True
 			return
 		if self.multiSelectIdx:

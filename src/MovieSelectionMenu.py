@@ -20,7 +20,7 @@ from __future__ import print_function
 import os
 import struct
 
-from Components.config import *
+from Components.config import config
 from Components.PluginComponent import plugins
 from Components.ActionMap import ActionMap
 from Components.Sources.List import List
@@ -313,7 +313,7 @@ class MovieMenu(Screen, E2Bookmarks, EMCBookmarks):
 					minFree=0)
 
 	def createLinkCB(self, currentPath, linkPath):
-		if currentPath == linkPath or linkPath == None:
+		if currentPath == linkPath or linkPath is None:
 			self.close(None)
 		else:
 			try:
@@ -353,7 +353,6 @@ class MovieMenu(Screen, E2Bookmarks, EMCBookmarks):
 			self["menu"].getCurrent()[1]()
 		#except:pass
 		except Exception as e:
-			import os
 			import sys
 			import traceback
 			print("exception ", str(e))

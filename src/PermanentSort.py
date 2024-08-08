@@ -25,7 +25,7 @@ from collections import defaultdict
 
 from .EMCTasker import emcDebugOut
 
-from Components.config import *
+from Components.config import config
 
 from Tools.XMLTools import stringToXML
 import xml.etree.cElementTree

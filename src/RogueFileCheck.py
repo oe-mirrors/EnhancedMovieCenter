@@ -20,7 +20,6 @@
 import os
 
 from glob import glob
-from Components.config import *
 
 from . import _
 

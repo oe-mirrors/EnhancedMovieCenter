@@ -19,17 +19,15 @@
 
 from __future__ import print_function
 from enigma import eTimer, eConsoleAppContainer
-from Components.config import *
-from Screens.Standby import *
+from Components.config import config
+from Screens.Standby import Standby, TryQuitMainloop
+from Screens.MessageBox import MessageBox
 import Screens.Standby
 import os
 import sys
 import traceback
-try:
-	#Python >= 3.10
-	from collections.abc import Callable
-except ImportError:
-	from collections import Callable
+from time import localtime, time
+from collections.abc import Callable
 from collections import deque
 from pipes import quote
 

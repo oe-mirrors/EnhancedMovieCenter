@@ -19,7 +19,7 @@
 import os
 from datetime import datetime
 
-from Components.config import *
+from Components.config import config
 from enigma import eServiceCenter, iServiceInformation
 from .EMCFileCache import movieFileCache
 from .CutListSupport import CutList

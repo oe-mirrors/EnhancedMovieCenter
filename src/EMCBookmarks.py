@@ -18,8 +18,6 @@
 #
 import os
 
-from Components.config import *
-
 from .EMCTasker import emcDebugOut
 
 global CFG_FILE
