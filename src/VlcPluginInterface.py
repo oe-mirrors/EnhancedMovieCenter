@@ -17,6 +17,7 @@
 #	<http://www.gnu.org/licenses/>.
 #
 from os.path import join, splitext
+from urllib.error import URLError
 
 from enigma import eServiceReference, eServiceCenter
 from .EMCTasker import emcDebugOut
@@ -99,7 +100,7 @@ class VlcPluginInterfaceSel():
 				#TODO Open EMC after playback ends if configured
 				try:  # v2.5
 					self["list"].vlcServer.play(self, entry[4], entry[3], VlcFileListWrapper())
-				except:  # v2.6
+				except Exception:  # v2.6
 					self["list"].vlcServer.play(self.session, entry[4], entry[3], VlcFileListWrapper())
 				self.close()
 		except Exception as e:

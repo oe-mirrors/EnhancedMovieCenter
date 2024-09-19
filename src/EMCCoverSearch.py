@@ -289,7 +289,7 @@ class EMCImdbScan(Screen):
 
 	def showInfo(self):
 		check = self["menulist"].getCurrent()
-		if check == None:
+		if check is None:
 			return
 		if self.check:
 			m_title = self["menulist"].getCurrent()[0][0]
@@ -550,7 +550,7 @@ class EMCImdbScan(Screen):
 			result = self.picload.startDecode(poster_path, 0, 0, False)
 			if result == 0:
 				ptr = self.picload.getData()
-				if ptr != None:
+				if ptr is not None:
 					self["poster"].instance.setPixmap(ptr)
 					self["poster"].show()
 
@@ -674,7 +674,7 @@ class getCover(Screen):
 			self.searchtmdb(self.m_title)
 			self.searchtvdb(self.m_title)
 
-	@ defer.inlineCallbacks
+	@defer.inlineCallbacks
 	def searchtmdb(self, title):
 		print("EMC TMDB: Cover Select - %s" % title)
 		templist = []
@@ -713,7 +713,7 @@ class getCover(Screen):
 			print("EMC TMDB: keine infos gefunden - %s" % title)
 		self.search_done()
 
-	@ defer.inlineCallbacks
+	@defer.inlineCallbacks
 	def searchtvdb(self, title):
 		print("EMC TVDB: Cover Select - %s" % title)
 		templist = []
@@ -769,7 +769,7 @@ class getCover(Screen):
 			print("EMC TVDB: keine infos gefunden - %s" % title)
 		self.search_done()
 
-	@ defer.inlineCallbacks
+	@defer.inlineCallbacks
 	def searchimdb(self, title):
 		print("EMC IMDB: Cover Select - %s" % title)
 		templist = []
@@ -858,7 +858,7 @@ class getCover(Screen):
 			result = self.picload.startDecode(poster_path, 0, 0, False)
 			if result == 0:
 				ptr = self.picload.getData()
-				if ptr != None:
+				if ptr is not None:
 					print("EMC iMDB: Load Poster - %s" % self.m_title)
 					self["poster"].instance.setPixmap(ptr)
 					self["poster"].show()

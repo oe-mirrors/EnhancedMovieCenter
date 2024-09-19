@@ -127,7 +127,7 @@ class RecordingsControl:
 					from .EMCFileCache import movieFileCache
 					if movieFileCache.IsPathInCache(realpath):
 						movieFileCache.addRecToCacheFileList(realpath, recname)
-				if not filename in self.recDict:
+				if filename not in self.recDict:
 					begin = timer.begin
 					if timer.autoincrease:
 						end = begin

@@ -217,7 +217,7 @@ class ConfigListScreenExt:
 						try:
 							helpwindowpos = self["HelpWindow"].getPosition()
 							self["config"].getCurrent()[1].help_window.instance.move(ePoint(helpwindowpos[0], helpwindowpos[1]))
-						except:
+						except Exception:
 							pass
 			else:
 				self["VirtualKB"].setEnabled(False)

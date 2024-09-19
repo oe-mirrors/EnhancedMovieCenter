@@ -2126,7 +2126,7 @@ class MovieCenter(GUIComponent):
 				if not config.EMC.skin_able.value:
 
 					# TODO: Progress.value for blue structure
-					if not ext in extBlu and not bluiso:
+					if ext not in extBlu and not bluiso:
 						if config.EMC.movie_progress.value == "PB":
 							append(MultiContentEntryProgress(pos=(offset, self.CoolBarHPos), size=(self.CoolBarSize.width(), self.CoolBarSize.height()), percent=progress, borderWidth=1, foreColor=color, foreColorSelected=colorhighlight, backColor=self.BackColor, backColorSelected=None))
 							offset += self.CoolBarSize.width() + 10

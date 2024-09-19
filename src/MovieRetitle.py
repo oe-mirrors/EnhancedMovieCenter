@@ -6,7 +6,7 @@ from glob import glob
 from . import _
 
 from Screens.Screen import Screen
-from Components.config import config, ConfigText, getConfigListEntry
+from Components.config import config, ConfigText, getConfigListEntry, ConfigPassword
 from Components.ActionMap import ActionMap
 from .configlistext import ConfigListScreenExt
 from Components.Sources.StaticText import StaticText

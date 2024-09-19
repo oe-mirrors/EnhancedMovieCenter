@@ -37,7 +37,7 @@ from Screens.EventView import EventViewSimple
 from Tools.Notifications import AddPopup
 from Tools.BoundFunction import boundFunction
 from Tools.Directories import fileExists
-from enigma import getDesktop, eTimer, eServiceCenter, gPixmapPtr, eSize, eDVBVolumecontrol
+from enigma import getDesktop, eTimer, eServiceCenter, ePicLoad, gPixmapPtr, eSize, eDVBVolumecontrol
 
 # Movie preview
 from Components.VideoWindow import VideoWindow
@@ -45,7 +45,6 @@ from Components.VideoWindow import VideoWindow
 # Cover
 from Components.AVSwitch import AVSwitch
 from Components.Pixmap import Pixmap
-from enigma import ePicLoad, getDesktop
 #from Tools.LoadPixmap import LoadPixmap
 
 # EMC internal
