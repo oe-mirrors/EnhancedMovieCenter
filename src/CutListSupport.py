@@ -17,9 +17,9 @@
 #	<http://www.gnu.org/licenses/>.
 #
 
-from __future__ import print_function
-import os
-import struct
+from os import remove
+from os.path import exists, getmtime, isdir
+from struct import pack, unpack
 from bisect import insort
 
 from Components.config import config
@@ -99,7 +99,7 @@ class CutList():
 				name = self.iso and self.iso.getIsoName()
 				if name and len(name):
 					path = "/home/root/dvd-" + name
-			elif os.path.isdir(path):
+			elif isdir(path):
 				path += "/dvd"
 			path += ".cuts"
 			if self.cut_file != path:
@@ -193,7 +193,7 @@ class CutList():
 			savefileexists = False
 			if DO_CUTLIST_WORKAROUND:
 				cutspath = self.cut_file + ".save"
-				if os.path.exists(cutspath):
+				if exists(cutspath):
 					emcDebugOut("[Cutlist.Workaround] Reading from Backup-File")
 					savefileexists = True
 					self.__readCutFileWithPath(cutspath, True)
@@ -204,7 +204,7 @@ class CutList():
 			self.__writeCutFile()
 			if savefileexists:
 				emcDebugOut("[Cutlist.Workaround] Delete Backup-File ")
-				os.remove(cutspath + '.save')
+				remove(cutspath + '.save')
 		except Exception as e:
 			emcDebugOut("[CUTS] updateCuesheet exception:" + str(e))
 
@@ -383,8 +383,8 @@ class CutList():
 
 	def __readCutFileWithPath(self, path, update=False):
 		data = b""
-		if path and os.path.exists(path):
-			mtime = os.path.getmtime(path)
+		if path and exists(path):
+			mtime = getmtime(path)
 			if self.cut_mtime == mtime:
 				# File has not changed
 				pass
@@ -415,7 +415,7 @@ class CutList():
 					pos = 0
 					while pos + 12 <= len(data):
 						# Unpack
-						(pts, what) = struct.unpack(b'>QI', data[pos:pos + 12])
+						(pts, what) = unpack(b'>QI', data[pos:pos + 12])
 						self.__insort(int(pts), what)
 						# Next cut_list entry
 						pos += 12
@@ -431,7 +431,7 @@ class CutList():
 			# Generate and pack data
 			if self.cut_list:
 				for (pts, what) in self.cut_list:
-					data += struct.pack(b'>QI', pts, what)
+					data += pack(b'>QI', pts, what)
 
 			# Write data to file
 			# OE1.6 with Pyton 2.6
@@ -467,5 +467,5 @@ class CutList():
 							fsave.close()
 
 			# Save file timestamp
-			if path and os.path.exists(path):
-				self.cut_mtime = os.path.getmtime(path)
+			if path and exists(path):
+				self.cut_mtime = getmtime(path)

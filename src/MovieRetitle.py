@@ -1,5 +1,5 @@
-﻿from __future__ import print_function
-import os
+﻿from os import rename
+from os.path import basename, dirname, exists, isfile, join, splitext
 from glob import glob
 
 # for localized messages
@@ -27,7 +27,7 @@ class MovieRetitle(Screen, ConfigListScreenExt):
 		self.list = []
 		ConfigListScreenExt.__init__(self, self.list, session)
 
-		self["Path"] = Label(_("Location:"))  # + ' ' + os.path.dirname(os.path.splitext(path)[0]))
+		self["Path"] = Label(_("Location:"))  # + ' ' + dirname(splitext(path)[0]))
 		self["HelpWindow"] = Pixmap()
 		self.onLayoutFinish.append(self.setCustomTitle)
 
@@ -63,13 +63,13 @@ class MovieRetitle(Screen, ConfigListScreenExt):
 		self.is_dir = service.flags & eServiceReference.mustDescent
 		info = self.serviceHandler.info(service)
 		path = service.getPath()
-		self["Path"] = Label(_("Location:") + ' ' + os.path.dirname(os.path.splitext(path)[0]))
+		self["Path"] = Label(_("Location:") + ' ' + dirname(splitext(path)[0]))
 		if self.is_dir:
 			self.original_file = service.getName()
 		else:
-			self.original_file = os.path.basename(os.path.splitext(path)[0])
+			self.original_file = basename(splitext(path)[0])
 		if config.EMC.movie_show_format.value:
-			ext = os.path.splitext(service.getPath())[1]
+			ext = splitext(service.getPath())[1]
 			self.original_name = info.getName(service)[:-(len(ext) + 2)]
 		else:
 			self.original_name = info.getName(service)
@@ -141,9 +141,9 @@ class MovieRetitle(Screen, ConfigListScreenExt):
 			meta_file = service.getPath() + ".ts.meta"
 
 		# Create new meta for ts files
-		if not os.path.exists(meta_file):
-			if os.path.isfile(service.getPath()):
-				_title = os.path.basename(os.path.splitext(service.getPath())[0])
+		if not exists(meta_file):
+			if isfile(service.getPath()):
+				_title = basename(splitext(service.getPath())[0])
 			else:
 				_title = service.getName()
 			_sid = ""
@@ -154,7 +154,7 @@ class MovieRetitle(Screen, ConfigListScreenExt):
 			metafile.write("%s\n%s\n%s\n%s\n%s" % (_sid, _title, _descr, _time, _tags))
 			metafile.close()
 
-		if os.path.exists(meta_file):
+		if exists(meta_file):
 			metafile = open(meta_file, "r")
 			sid = metafile.readline()
 			oldtitle = metafile.readline().rstrip()
@@ -171,21 +171,21 @@ class MovieRetitle(Screen, ConfigListScreenExt):
 
 	def renameDirectory(self, service, new_name):
 		try:
-			dir = os.path.dirname(self.service.getPath()[0:-1])
-			os.rename(self.service.getPath(), os.path.join(dir, self.input_file.getText() + "/"))
+			dir = dirname(self.service.getPath()[0:-1])
+			rename(self.service.getPath(), join(dir, self.input_file.getText() + "/"))
 			self.original_file = self.input_file.getText()
 		except Exception as e:
 			print(e)
 
 	def renameFile(self, service, new_name):
 		try:
-			path = os.path.dirname(service.getPath())
-			file_name = os.path.basename(os.path.splitext(service.getPath())[0])
-			src = os.path.join(path, file_name)
+			path = dirname(service.getPath())
+			file_name = basename(splitext(service.getPath())[0])
+			src = join(path, file_name)
 			if isinstance(new_name, bytes):
 				new_name = new_name.decode()
-			dst = os.path.join(path, new_name)
-			for f in glob(os.path.join(path, src + "*")):
-				os.rename(f, f.replace(src, dst))
+			dst = join(path, new_name)
+			for f in glob(join(path, src + "*")):
+				rename(f, f.replace(src, dst))
 		except Exception as e:
 			print(e)

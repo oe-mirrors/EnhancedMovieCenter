@@ -16,7 +16,6 @@
 #	For more information on the GNU General Public License see:
 #	<http://www.gnu.org/licenses/>.
 #
-from __future__ import print_function
 import os
 import struct
 

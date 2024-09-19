@@ -17,7 +17,6 @@
 #	<http://www.gnu.org/licenses/>.
 #
 
-from __future__ import print_function
 from . import _
 from Components.config import config, configfile, getConfigListEntry
 from Components.Button import Button

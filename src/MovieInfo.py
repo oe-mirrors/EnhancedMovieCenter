@@ -52,7 +52,7 @@ def getMovieList(moviename):
 		title = result.get("title", result.get("name", ""))
 		if media == "movie":
 			movielist.append(("%s - %s" % (title, _("Movies")), id, "movie"))
-		elif media == "tv":
+		else:
 			movielist.append(("%s - %s" % (title, _("TV Shows")), id, "tvshows"))
 	return movielist, len(movielist)
 
