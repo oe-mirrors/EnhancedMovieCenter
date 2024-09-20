@@ -773,8 +773,8 @@ msgstr "HELP_Bouquet buton"
 msgid "HELP_Check for dead links"
 msgstr "HELP_Cover întârziere în ms"
 
-msgid "HELP_Configure in etc\\enigma2\\emc-topdir.cfg"
-msgstr "Help etc\\enigma2\\emc-topdir.cfg"
+msgid "HELP_Configure in etc/enigma2/emc-topdir.cfg"
+msgstr "Help etc/enigma2/emc-topdir.cfg"
 
 msgid "HELP_Cover background"
 msgstr "HELP_Cover fundal"

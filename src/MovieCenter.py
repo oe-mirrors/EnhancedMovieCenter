@@ -556,7 +556,7 @@ class CountSizeWorker(Thread):
 			try:
 				result = dirInfo(item, bsize=True)
 			except Exception as e:
-				print(('[EMC] CountSizeWorker result exception: %s' % str(e)))
+				print(f'[EMC] CountSizeWorker result exception: {str(e)}')
 
 				# Exception finish job with error
 				result = str(e)
@@ -2571,9 +2571,9 @@ class MovieCenter(GUIComponent):
 					if self.startWorker:
 						self.addCountsizeworker(path)
 					if size >= 100:
-						datetext = "( %.2f TB )" % (size / 1024.0)
+						datetext = f"( {size / 1024.0:.2f} TB )"
 					else:
-						datetext = "( %.2f GB )" % (size)
+						datetext = f"( {size:.2f} GB )"
 				else:
 					self.addCountsizeworker(path)
 					datetext = ""

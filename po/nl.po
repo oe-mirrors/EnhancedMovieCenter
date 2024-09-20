@@ -805,8 +805,8 @@ msgstr "Functie van de Bouquet knop"
 msgid "HELP_Check for dead links"
 msgstr "Controleer op niet werkende links"
 
-msgid "HELP_Configure in etc\\enigma2\\emc-topdir.cfg"
-msgstr "Dit kan worden ingesteld in etc\\enigma2\\emc-topdir.cfg"
+msgid "HELP_Configure in etc/enigma2/emc-topdir.cfg"
+msgstr "Dit kan worden ingesteld in etc/enigma2/emc-topdir.cfg"
 
 msgid "HELP_Cover background"
 msgstr "Cover achtergrond"

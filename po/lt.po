@@ -812,7 +812,7 @@ msgstr ""
 "Kadangi daugelis nuorodų būna į nešiojamas/atjungiamas/tinklines laikmenas, kurios bet kada gali būti atjungtos, tokios nuorodos dažnai keičiasi.\n"
 "Ši funkcija ir skirta patikrinti, ar jos dar galioja."
 
-msgid "HELP_Configure in etc\\enigma2\\emc-topdir.cfg"
+msgid "HELP_Configure in etc/enigma2/emc-topdir.cfg"
 msgstr "Kelias į /etc/enigma2/emc-topdir.cfg konfigūravimo failą."
 
 msgid "HELP_Cover background"

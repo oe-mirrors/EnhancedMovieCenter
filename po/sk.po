@@ -834,7 +834,7 @@ msgstr ""
 "pohotovostnom režime, ale budú sa naďalej zobrazovať aj súbory z odpojených "
 "jednotiek."
 
-msgid "HELP_Configure in etc\\enigma2\\emc-topdir.cfg"
+msgid "HELP_Configure in etc/enigma2/emc-topdir.cfg"
 msgstr ""
 "Ak je aktivované, zobrazia sa priečinky uvedené v súbore '/etc/enigma2/emc-"
 "topdir.cfg' na začiatku zoznamu filmov."

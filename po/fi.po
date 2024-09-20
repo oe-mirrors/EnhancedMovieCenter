@@ -797,7 +797,7 @@ msgstr "Määrittää, mitä kanavanäppäimien (+/-) painallus tekee."
 msgid "HELP_Check for dead links"
 msgstr "Näytä symlinkit"
 
-msgid "HELP_Configure in etc\\enigma2\\emc-topdir.cfg"
+msgid "HELP_Configure in etc/enigma2/emc-topdir.cfg"
 msgstr ""
 
 msgid "HELP_Cover background"

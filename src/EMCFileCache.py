@@ -1,5 +1,4 @@
-﻿#
-# In case of reuse of this source code please do not remove this copyright.
+﻿# In case of reuse of this source code please do not remove this copyright.
 #
 #	This program is free software: you can redistribute it and/or modify
 #	it under the terms of the GNU General Public License as published by
@@ -55,7 +54,7 @@ class EMCFileCache():
 
 	def delcacheCountSizeList(self):
 		self.cacheCountSizeList = {}
-		print("EMC delete cacheCountSizeList %s" % self.cacheCountSizeList)
+		print(f"EMC delete cacheCountSizeList {self.cacheCountSizeList}")
 
 	def delcacheCountSizeListEntriesOnFileOp(self, path):
 		#print "EMC delcacheCountSizeListEntriesOnFileOp",path
@@ -79,7 +78,7 @@ class EMCFileCache():
 
 	def addPathToCache(self, path, subdirlist, filelist, MovieCenterInst):
 		if config.EMC.files_cache.value:
-			print("EMC addPathToCache %s" % path)
+			print(f"EMC addPathToCache {path}")
 			if (len(subdirlist) > MinCacheLimit) or (len(filelist) > MinCacheLimit):
 				self.cacheDirectoryList[path] = subdirlist
 				for p, n, e in subdirlist:
@@ -121,7 +120,7 @@ class EMCFileCache():
 				self.cacheFileList[path] = filelist
 
 	def getCacheForPath(self, path):
-		print("EMC getCacheForPath %s" % path)
+		print(f"EMC getCacheForPath {path}")
 		if config.EMC.files_cache.value and path in self.cacheDirectoryList and path in self.cacheFileList:
 			subdirlist = self.cacheDirectoryList[path]
 			filelist = self.cacheFileList[path]
@@ -205,7 +204,7 @@ class EMCFileCache():
 	def delPathFromCache(self, path):
 		if len(path) > 1 and path[-1] == "/":
 			path = path[:-1]
-		print("EMC delPathFromCache %s" % path)
+		print(f"EMC delPathFromCache {path}")
 		if path in self.cacheDirectoryList:
 			self.deleteAssociatedListEntries(self.cacheDirectoryList[path])
 			del self.cacheDirectoryList[path]
@@ -233,19 +232,19 @@ class EMCFileCache():
 	def debugPrintFileCache(self):
 		print("cacheFileList:")
 		for p in self.cacheFileList:
-			print("%s %s" % (p, self.cacheFileList[p]))
+			print(f"{p} {self.cacheFileList[p]}")
 		print("")
 
 	def debugPrintDirCache(self):
 		print("cacheDirectoryList:")
 		for p in self.cacheDirectoryList:
-			print("%s %s" % (p, self.cacheDirectoryList[p]))
+			print(f"{p} {self.cacheDirectoryList[p]}")
 		print("")
 
 	def debugPrintFileAttributeCache(self):
 		print("cacheAttributeList:")
 		for p in self.cacheAttributeList:
-			print("%s %s" % (p, self.cacheAttributeList[p]))
+			print(f"{p} {self.cacheAttributeList[p]}")
 		print("")
 
 	def deleteAssociatedListEntries(self, list):

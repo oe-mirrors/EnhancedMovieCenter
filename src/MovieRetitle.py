@@ -1,4 +1,4 @@
-﻿from os import rename
+from os import rename
 from os.path import basename, dirname, exists, isfile, join, splitext
 from glob import glob
 
@@ -151,7 +151,7 @@ class MovieRetitle(Screen, ConfigListScreenExt):
 			_time = ""
 			_tags = ""
 			metafile = open(meta_file, "w")
-			metafile.write("%s\n%s\n%s\n%s\n%s" % (_sid, _title, _descr, _time, _tags))
+			metafile.write(f"{_sid}\n{_title}\n{_descr}\n{_time}\n{_tags}")
 			metafile.close()
 
 		if exists(meta_file):
@@ -166,7 +166,7 @@ class MovieRetitle(Screen, ConfigListScreenExt):
 			if not descr and descr != "":
 				descr = olddescr
 			metafile = open(meta_file, "w")
-			metafile.write("%s%s\n%s\n%s" % (sid, title, descr, rest))
+			metafile.write(f"{sid}{title}\n{descr}\n{rest}")
 			metafile.close()
 
 	def renameDirectory(self, service, new_name):

@@ -221,7 +221,7 @@ class ServiceEvent:
 								with open(txtpath, "r", encoding="latin-1") as fd:
 									txtdescarr = fd.readlines()
 							except Exception as ex:
-								emcDebugOut("[EMCService] __getExtendedDescription read latin-1 (%s): %s" % (txtpath, str(ex)))
+								emcDebugOut(f"[EMCService] __getExtendedDescription read latin-1 ({txtpath}): {str(ex)}")
 								txtdescarr = ""
 						txtdesc = ""
 						for line in txtdescarr:

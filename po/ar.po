@@ -809,8 +809,8 @@ msgstr "المساعدة _ وظائف سلوك الباقات"
 msgid "HELP_Check for dead links"
 msgstr "المساعدة _ في التحقق من الروابط المعطوبة"
 
-msgid "HELP_Configure in etc\\enigma2\\emc-topdir.cfg"
-msgstr "المساعدة _ تهئية مسار etc\\enigma2\\emc-topdir.cfg"
+msgid "HELP_Configure in etc/enigma2/emc-topdir.cfg"
+msgstr "المساعدة _ تهئية مسار etc/enigma2/emc-topdir.cfg"
 
 msgid "HELP_Cover background"
 msgstr "المساعدة _ خلفية الغلاف"

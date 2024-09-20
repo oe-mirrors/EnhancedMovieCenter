@@ -811,7 +811,7 @@ msgstr "Переход к началу/концу списка или пропу
 msgid "HELP_Check for dead links"
 msgstr "'Только в первый раз' поможет сохранять внешний диск в режиме ожидания, однако файлы с отключенных томов могут отображаться."
 
-msgid "HELP_Configure in etc\\enigma2\\emc-topdir.cfg"
+msgid "HELP_Configure in etc/enigma2/emc-topdir.cfg"
 msgstr "Каталоги, перечисленные в emc-topdir.cfg, отображаются вверху списка."
 
 msgid "HELP_Cover background"

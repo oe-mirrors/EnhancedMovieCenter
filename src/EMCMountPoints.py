@@ -1,5 +1,4 @@
-﻿#
-# Copyright (C) 2011 by Coolman & Swiss-MAD
+﻿# Copyright (C) 2011 by Coolman & Swiss-MAD
 #
 # In case of reuse of this source code please do not remove this copyright.
 #

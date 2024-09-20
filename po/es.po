@@ -810,7 +810,7 @@ msgstr "Saltar al principio o al final de la lista o saltar sólo un cierto núm
 msgid "HELP_Check for dead links"
 msgstr "Retardo de la carátula en ms"
 
-msgid "HELP_Configure in etc\\enigma2\\emc-topdir.cfg"
+msgid "HELP_Configure in etc/enigma2/emc-topdir.cfg"
 msgstr "Configure en etc/enigma2/emc-topdir.cfg"
 
 msgid "HELP_Cover background"

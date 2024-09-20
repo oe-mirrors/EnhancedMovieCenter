@@ -807,7 +807,7 @@ msgstr "Selezionare il comportamento del tasto Bouquet"
 msgid "HELP_Check for dead links"
 msgstr "Verificare i collegamenti inesistenti"
 
-msgid "HELP_Configure in etc\\enigma2\\emc-topdir.cfg"
+msgid "HELP_Configure in etc/enigma2/emc-topdir.cfg"
 msgstr "Visualizzare in cima all'elenco film le directory elencate in /etc/enigma2/emc-topdir.cfg"
 
 msgid "HELP_Cover background"

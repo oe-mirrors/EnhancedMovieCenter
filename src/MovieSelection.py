@@ -1,4 +1,4 @@
-﻿#
+#
 # Copyright (C) 2011 by Coolman & Swiss-MAD
 #
 # In case of reuse of this source code please do not remove this copyright.
@@ -359,8 +359,8 @@ class SelectionEventInfo:
 			self["runtimeATtxt"].setText(length)	  	 # runtime-text
 			StaticText.setText(self["runtime_disp"], length)
 			self["date"].setText(date)
-			self["size"].setText("%.0f MB" % size)
-			StaticText.setText(self["size_disp"], "%.0f MB" % size)
+			self["size"].setText(f"{size:.0f} MB")
+			StaticText.setText(self["size_disp"], f"{size:.0f} MB")
 			self["Service"].newService(None)		 # kill normal view
 		else:
 			self.hideAudioLabels()
@@ -1495,7 +1495,7 @@ class EMCSelection(Screen, HelpableScreen, SelectionEventInfo, VlcPluginInterfac
 				else:
 					spacefree = " [%s%d MB]" % (_("Free: "), free)
 			except OSError:
-				spacefree = " [%s? GB]" % _("Free: ")
+				spacefree = f" [{_('Free: ')}? GB]"
 
 		title += spacefree
 		StaticText.setText(self["spacefree"], spacefree.strip())
@@ -2141,9 +2141,9 @@ class EMCSelection(Screen, HelpableScreen, SelectionEventInfo, VlcPluginInterfac
 				added = emcplaylist.addToCurrentPlaylist(path, name, service)
 				if len(selectedlist) >= 1:
 					if added:
-						add += "%s\n" % name
+						add += f"{name}\n"
 					else:
-						exist += "%s\n" % name
+						exist += f"{name}\n"
 				self["list"].unselectService(service)
 			if config.EMC.playlist_message.value:
 				if len(selectedlist) == 1:
@@ -2155,7 +2155,7 @@ class EMCSelection(Screen, HelpableScreen, SelectionEventInfo, VlcPluginInterfac
 					if exist == "":
 						mes = _("Files added to current Playlist.")
 					elif exist != "" and add != "":
-						mes = _("Files added to current Playlist:\n%(add)s\n\nFiles exists in current Playlist:\n%(exist)s" % {'add': add, 'exist': exist})
+						mes = _(f"Files added to current Playlist:\n{add}\n\nFiles exists in current Playlist:\n{exist}")
 					elif exist != "" and add == "":
 						mes = _("Files exists in current Playlist:\n%s") % exist
 				self.checkHideMiniTV_beforeFullscreen()
@@ -2541,7 +2541,7 @@ class EMCSelection(Screen, HelpableScreen, SelectionEventInfo, VlcPluginInterfac
 						for x in extsOther:
 							f = path + str(x)
 							if fileExists(f):
-								other += "%s\n" % f
+								other += f"{f}\n"
 								otherFiles = True
 						if otherFiles:
 							otherMes = _("The following files are used for other entrys in List !\n\nAlso delete these files?\n\n%s") % other
@@ -2582,9 +2582,9 @@ class EMCSelection(Screen, HelpableScreen, SelectionEventInfo, VlcPluginInterfac
 								if fileExists(f):
 									otherCount += 1
 									if otherCount <= 9:
-										other += "%s\n" % f
+										other += f"{f}\n"
 									if otherCount == 10:
-										other += "%s\n...." % f
+										other += f"{f}\n...."
 									otherFiles = True
 
 						if otherFiles:
@@ -2705,20 +2705,20 @@ class EMCSelection(Screen, HelpableScreen, SelectionEventInfo, VlcPluginInterfac
 		if result is None:
 			return
 
-		env = "export EMC_OUTDIR=%s" % config.EMC.folder.value
-		env += " EMC_HOME=%s" % config.EMC.movie_homepath.value
-		env += " EMC_PATH_LIMIT=%s" % config.EMC.movie_pathlimit.value
-		env += " EMC_TRASH=%s" % config.EMC.movie_trashcan_path.value
-		env += " EMC_TRASH_DAYS=%s" % int(config.EMC.movie_trashcan_limit.value)
+		env = f"export EMC_OUTDIR={config.EMC.folder.value}"
+		env += f" EMC_HOME={config.EMC.movie_homepath.value}"
+		env += f" EMC_PATH_LIMIT={config.EMC.movie_pathlimit.value}"
+		env += f" EMC_TRASH={config.EMC.movie_trashcan_path.value}"
+		env += f" EMC_TRASH_DAYS={int(config.EMC.movie_trashcan_limit.value)}"
 
 		if self["list"].currentSelIsPlayable() or self["list"].currentSelIsDirectory():
 			current = self["list"].getCurrentSelDir() + (self["list"].currentSelIsDirectory()) * "/"
-			current = current.replace(" ", "\ ")
+			current = current.replace(" ", r"\ ")
 			if os.path.exists(result[1]):
 				if result[1].endswith(".sh"):
-					emcTasker.shellExecute("%s; sh %s %s %s" % (env, result[1], self.currentPath, current))
+					emcTasker.shellExecute(f"{env}; sh {result[1]} {self.currentPath} {current}")
 				elif result[1].endswith(".py") or result[1].endswith(".pyc"):
-					emcTasker.shellExecute("%s; python %s %s %s" % (env, result[1], self.currentPath, current))
+					emcTasker.shellExecute(f"{env}; python {result[1]} {self.currentPath} {current}")
 
 	def moveCB(self, service):
 		self["list"].highlightService(False, "move", service)  # remove the highlight
@@ -2937,7 +2937,7 @@ class EMCSelection(Screen, HelpableScreen, SelectionEventInfo, VlcPluginInterfac
 						tfile = "\"" + targetPath + "/owner_test" + "\""
 						path = path.replace("'", "\'")
 						sfile = "\"" + path + ".\"*"
-						c.append("touch %s;ls -l %s | while read flags i owner group crap;do chown $owner:$group %s;done;rm %s" % (tfile, tfile, sfile, tfile))
+						c.append(f"touch {tfile};ls -l {tfile} | while read flags i owner group crap;do chown $owner:$group {sfile};done;rm {tfile}")
 					c.append('mv "' + path + '."* "' + targetPath + '/"')
 					source_path = path
 					dest_path = targetPath
@@ -2960,7 +2960,7 @@ class EMCSelection(Screen, HelpableScreen, SelectionEventInfo, VlcPluginInterfac
 						tfile = "\"" + targetPath + "/owner_test" + "\""
 						path = path.replace("'", "\'")
 						sfile = "\"" + path + ".\"*"
-						c.append("touch %s;ls -l %s | while read flags i owner group crap;do chown $owner:$group %s;done;rm %s" % (tfile, tfile, sfile, tfile))
+						c.append(f"touch {tfile};ls -l {tfile} | while read flags i owner group crap;do chown $owner:$group {sfile};done;rm {tfile}")
 					c.append('cp "' + path + '."* "' + targetPath + '/"')
 					dest_path = targetPath
 					cmd.append(c)

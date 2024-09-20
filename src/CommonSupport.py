@@ -1,5 +1,4 @@
-﻿#
-#   Copyright (C) 2011-2023
+﻿#   Copyright (C) 2011-2023
 #
 #   In case of reuse of this source code please do not remove this copyright.
 #
@@ -113,7 +112,7 @@ def getMetaTitleFromDescription(desc):
 		x2 = x1 - 1
 		title = desc.replace(desc.split(',', -1)[x1], '').replace(desc.split(',', -1)[x2], '').replace(',,', '')
 		if title == ",":
-			if re.match('(\w+(?:/\w+|)(?:/\w+|)(?:/\w+|)(?:/\w+|)\s\d{4})', desc.rsplit(',', 1)[1].strip(), re.S):
+			if re.match(r'(\w+(?:/\w+|)(?:/\w+|)(?:/\w+|)(?:/\w+|)\s\d{4})', desc.rsplit(',', 1)[1].strip(), re.S):
 				title = ''
 			else:
 				if len(desc) > 50:

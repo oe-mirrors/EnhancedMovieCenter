@@ -1,5 +1,4 @@
-﻿#
-# Copyright (C) 2011 by betonme
+﻿# Copyright (C) 2011 by betonme
 #
 # In case of reuse of this source code please do not remove this copyright.
 #
@@ -30,7 +29,7 @@ from . import _
 from .EMCTasker import emcDebugOut
 from .DelayedFunction import DelayedFunction
 
-SeekbarPlg = "%s%s" % (resolveFilename(SCOPE_PLUGINS), "Extensions/Seekbar/plugin.py")
+SeekbarPlg = f"{resolveFilename(SCOPE_PLUGINS)}Extensions/Seekbar/plugin.py"
 
 # Overwrite Seekbar
 
@@ -202,7 +201,7 @@ class InfoBarSupport(InfoBarBase,
 	# InfoBarSeek
 	# Seekbar workaround
 	def seekFwdManual(self):
-		if fileExists(SeekbarPlg) or fileExists("%sc" % SeekbarPlg):
+		if fileExists(SeekbarPlg) or fileExists(f"{SeekbarPlg}c"):
 			from Plugins.Extensions.Seekbar.plugin import Seekbar, seekbar
 			Seekbar.keyOK = EMCkeyOK
 			seekbar(self)
@@ -213,7 +212,7 @@ class InfoBarSupport(InfoBarBase,
 
 	# Seekbar workaround
 	def seekBackManual(self):
-		if fileExists(SeekbarPlg) or fileExists("%sc" % SeekbarPlg):
+		if fileExists(SeekbarPlg) or fileExists(f"{SeekbarPlg}c"):
 			from Plugins.Extensions.Seekbar.plugin import Seekbar, seekbarBack
 			Seekbar.keyOK = EMCkeyOK
 			seekbarBack(self)

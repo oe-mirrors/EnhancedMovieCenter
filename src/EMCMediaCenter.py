@@ -1,5 +1,4 @@
-﻿#
-# Copyright (C) 2011 by Coolman & Swiss-MAD
+﻿# Copyright (C) 2011 by Coolman & Swiss-MAD
 #
 # In case of reuse of this source code please do not remove this copyright.
 #
@@ -59,7 +58,7 @@ from .RecordingsControl import getRecording
 import NavigationInstance
 
 
-dvdPlayerPlg = "%s%s" % (resolveFilename(SCOPE_PLUGINS), "Extensions/DVDPlayer/plugin.py")
+dvdPlayerPlg = f"{resolveFilename(SCOPE_PLUGINS)}Extensions/DVDPlayer/plugin.py"
 
 
 class EMCMoviePlayerSummary(Screen):
@@ -395,7 +394,7 @@ class EMCMediaCenter(CutList, Screen, HelpableScreen, InfoBarTimeshift, InfoBarS
 
 				if service and service.type == eServiceReference.idServiceDVD:
 					# Only import DVDPlayer, if we want to play a DVDPlayer format
-					if fileExists(dvdPlayerPlg) or fileExists("%sc" % dvdPlayerPlg):
+					if fileExists(dvdPlayerPlg) or fileExists(f"{dvdPlayerPlg}c"):
 						try:
 							from Plugins.Extensions.DVDPlayer import servicedvd  # load c++ part of dvd player plugin
 						except:
@@ -876,7 +875,7 @@ class EMCMediaCenter(CutList, Screen, HelpableScreen, InfoBarTimeshift, InfoBarS
 		info = self.getServiceInterface("info")
 		audioTuple = info and info.getInfoObject(iServiceInformation.sUser + 6)
 		if audioTuple:
-			audioString = "%d: %s (%s)" % (audioTuple[0], audioTuple[1], audioTuple[2])
+			audioString = f"{audioTuple[0]}: {audioTuple[1]} ({audioTuple[2]})"
 			self["audioLabel"].setText(audioString)
 			#if audioTuple != self.last_audioTuple: # and not self.in_menu:
 			#	self.doShow()
@@ -888,7 +887,7 @@ class EMCMediaCenter(CutList, Screen, HelpableScreen, InfoBarTimeshift, InfoBarS
 		if subtitleTuple:
 			subtitleString = ""
 			if subtitleTuple[0] != 0:
-				subtitleString = "%d: %s" % (subtitleTuple[0], subtitleTuple[1])
+				subtitleString = f"{subtitleTuple[0]}: {subtitleTuple[1]}"
 			self["subtitleLabel"].setText(subtitleString)
 			#if subtitleTuple != self.last_subtitleTuple: # and not self.in_menu:
 			#	self.doShow()
@@ -900,7 +899,7 @@ class EMCMediaCenter(CutList, Screen, HelpableScreen, InfoBarTimeshift, InfoBarS
 		if angleTuple:
 			angleString = ""
 			if angleTuple[1] > 1:
-				angleString = "%d / %d" % (angleTuple[0], angleTuple[1])
+				angleString = f"{angleTuple[0]} / {angleTuple[1]}"
 				self["anglePix"].show()
 			else:
 				self["anglePix"].hide()
@@ -956,7 +955,7 @@ class EMCMediaCenter(CutList, Screen, HelpableScreen, InfoBarTimeshift, InfoBarS
 			self["SeekActions"].setEnabled(True)
 
 	def createSummary(self):
-		if self.service and self.service.type == eServiceReference.idServiceDVD and (fileExists(dvdPlayerPlg) or fileExists("%sc" % dvdPlayerPlg)):
+		if self.service and self.service.type == eServiceReference.idServiceDVD and (fileExists(dvdPlayerPlg) or fileExists(f"{dvdPlayerPlg}c")):
 			from Plugins.Extensions.DVDPlayer.plugin import DVDSummary
 			return DVDSummary
 		else:
@@ -1014,7 +1013,7 @@ class EMCMediaCenter(CutList, Screen, HelpableScreen, InfoBarTimeshift, InfoBarS
 	# InfoBarNumberZap
 	def keyNumberGlobal(self, number):
 		if self.service and self.service.type == eServiceReference.idServiceDVD:
-			if fileExists(dvdPlayerPlg) or fileExists("%sc" % dvdPlayerPlg):
+			if fileExists(dvdPlayerPlg) or fileExists(f"{dvdPlayerPlg}c"):
 				if fileExists('/usr/lib/enigma2/python/Screens/DVD.py') or fileExists('/usr/lib/enigma2/python/Screens/DVD.pyc'):
 					from Screens.DVD import ChapterZap
 					self.session.openWithCallback(self.numberEntered, ChapterZap, "0")

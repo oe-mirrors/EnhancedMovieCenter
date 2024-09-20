@@ -1,5 +1,4 @@
-﻿#
-# Copyright (C) 2011 by Coolman & Swiss-MAD
+﻿# Copyright (C) 2011 by Coolman & Swiss-MAD
 #
 # In case of reuse of this source code please do not remove this copyright.
 #
@@ -136,7 +135,7 @@ class VlcPluginInterfaceList():
 		vlcPath = loadPath[loadPath.find("VLC servers/") + 12:]
 		serverName = vlcPath.split("/")[0]
 		vlcPath = vlcPath[len(serverName) + 1:]
-		emcDebugOut("[EMC_VLC] path on %s = %s" % (serverName, vlcPath))
+		emcDebugOut(f"[EMC_VLC] path on {serverName} = {vlcPath}")
 		server = None
 		self.vlcServer = None
 		if self.vlcServers:

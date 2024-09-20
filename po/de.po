@@ -813,7 +813,7 @@ msgstr "Springen an den Anfang oder das Ende der Liste oder überspringe nur ein
 msgid "HELP_Check for dead links"
 msgstr "Nur erstmalig auf tote Links zu prüfen, hilft, externe Datenträger im Standby zu belassen, jedoch werden Dateien von entfernten Datenträgern ggf. weiterhin angezeigt."
 
-msgid "HELP_Configure in etc\\enigma2\\emc-topdir.cfg"
+msgid "HELP_Configure in etc/enigma2/emc-topdir.cfg"
 msgstr "Wenn aktiviert, werden die in '/etc/enigma2/emc-topdir.cfg' aufgelisteten Verzeichnisse am Beginn der Filmliste angezeigt."
 
 msgid "HELP_Cover background"

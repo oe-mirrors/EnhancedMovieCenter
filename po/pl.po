@@ -805,7 +805,7 @@ msgstr "Zachowanie przycisków bukietu"
 msgid "HELP_Check for dead links"
 msgstr "Sprawdź martwe linki"
 
-msgid "HELP_Configure in etc\\enigma2\\emc-topdir.cfg"
+msgid "HELP_Configure in etc/enigma2/emc-topdir.cfg"
 msgstr ""
 
 #, fuzzy

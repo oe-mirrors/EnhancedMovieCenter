@@ -58,7 +58,7 @@ class EMCPlaylist():
 	def delCurrentPlaylistEntry(self, path):
 		if path in self.currentPlaylist:
 			del self.currentPlaylist[path]
-		print("EMC delete currentPlaylistEntry: %s" % path)
+		print(f"EMC delete currentPlaylistEntry: {path}")
 
 	def delCurrentPlaylist(self):
 		self.currentPlaylist = {}
@@ -226,10 +226,10 @@ class EMCPlaylistScreen(Screen):
 			try:
 				with open(filename + ".e2pls", "w") as fd:
 					for x in tmplist:
-						fd.write(str(x[2].toString()).replace(":%s" % x[1], "") + "\n")
+						fd.write(str(x[2].toString()).replace(f":{x[1]}", "") + "\n")
 				self.session.open(MessageBox, (_("Current Playlist saved successfully!")), MessageBox.TYPE_INFO, 5)
 			except OSError as e:
-				print(('[EMCPlayList] savePlaylist get failed: %s' % str(e)))
+				print(f'[EMCPlayList] savePlaylist get failed: {str(e)}')
 				self.session.open(MessageBox, (_("Can not save current Playlist!")), MessageBox.TYPE_ERROR, 10)
 
 	def keyYellow(self):
@@ -281,7 +281,7 @@ class PlayList(GUIComponent):
 			try:
 				f()
 			except Exception as e:
-				emcDebugOut("[EMCPlayList] External observer exception: \n%s" % str(e))
+				emcDebugOut(f"[EMCPlayList] External observer exception: \n{str(e)}")
 
 	def applySkin(self, desktop, parent):
 		attribs = []
@@ -398,7 +398,7 @@ class EMCPlaylistSetup(Setup):
 						inhibitDirs=["/bin", "/boot", "/dev", "/etc", "/home", "/lib", "/proc", "/run", "/sbin", "/sys", "/usr", "/var"],
 						minFree=15)
 			except Exception as e:
-				print(('[EMCPlayList] openDirectoryBrowser get failed: %s' % str(e)))
+				print(f'[EMCPlayList] openDirectoryBrowser get failed: {str(e)}')
 		else:
 			Setup.keySelect(self)
 

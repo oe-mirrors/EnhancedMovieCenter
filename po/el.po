@@ -812,8 +812,8 @@ msgstr "ΒΟΗΘΕΙΑ_Συμπεριφορά πλήκτρου Μπουκέτω�
 msgid "HELP_Check for dead links"
 msgstr "ΒΟΗΘΕΙΑ_Έλεγχος για ανενεργούς συνδέσμους"
 
-msgid "HELP_Configure in etc\\enigma2\\emc-topdir.cfg"
-msgstr "ΒΟΗΘΕΙΑ_Ρυθμίσεις στο etc\\enigma2\\emc-topdir.cfg"
+msgid "HELP_Configure in etc/enigma2/emc-topdir.cfg"
+msgstr "ΒΟΗΘΕΙΑ_Ρυθμίσεις στο etc/enigma2/emc-topdir.cfg"
 
 msgid "HELP_Cover background"
 msgstr "ΒΟΗΘΕΙΑ_Φόντο εξωφύλλου"

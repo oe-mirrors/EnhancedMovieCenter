@@ -1,4 +1,4 @@
-﻿#
+#
 # Copyright (C) 2011 by Coolman & Swiss-MAD
 #
 # In case of reuse of this source code please do not remove this copyright.
@@ -243,7 +243,7 @@ class RecordingsControl:
 			if not os.path.exists(config.EMC.folder.value):
 				emcTasker.shellExecute("mkdir " + config.EMC.folder.value)
 			if ip is not None:
-				rec = "/db_%s.rec" % str(ip).replace(", ", ".")[1:-1]
+				rec = f"/db_{str(ip).replace(', ', '.')[1:-1]}.rec"
 				self.recFile = os.path.join(config.EMC.folder.value, rec)
 		except Exception as e:
 			emcDebugOut("[emcRC] remoteInit exception:\n" + str(e))

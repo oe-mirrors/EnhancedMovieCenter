@@ -1,4 +1,3 @@
-﻿#
 # IsoSupport
 # Copyright (C) 2011 betonme
 #

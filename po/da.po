@@ -811,8 +811,8 @@ msgstr "Buket knapopførsel"
 msgid "HELP_Check for dead links"
 msgstr "Se efter døde lænker"
 
-msgid "HELP_Configure in etc\\enigma2\\emc-topdir.cfg"
-msgstr "Konfigurer i etc\\enigma2\\emc-topdir.cfg"
+msgid "HELP_Configure in etc/enigma2/emc-topdir.cfg"
+msgstr "Konfigurer i etc/enigma2/emc-topdir.cfg"
 
 msgid "HELP_Cover background"
 msgstr "Omslagsbaggrund"

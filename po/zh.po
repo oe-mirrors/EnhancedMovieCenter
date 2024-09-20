@@ -805,7 +805,7 @@ msgstr "帮助_花束按钮行为"
 msgid "HELP_Check for dead links"
 msgstr "帮助_检查死链接"
 
-msgid "HELP_Configure in etc\\enigma2\\emc-topdir.cfg"
+msgid "HELP_Configure in etc/enigma2/emc-topdir.cfg"
 msgstr "帮助_在enigma2配置etcemc-topdir.cfg"
 
 msgid "HELP_Cover background"

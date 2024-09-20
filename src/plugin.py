@@ -1,4 +1,4 @@
-﻿#
+#
 # Copyright (C) 2011 by Coolman & Swiss-MAD
 #
 # In case of reuse of this source code please do not remove this copyright.
@@ -404,7 +404,7 @@ try:
 	ngettext("%d second", "%d seconds", 30)
 	nget = True
 except Exception as e:
-	print("[EMC] ngettext failed: %s" % e)
+	print(f"[EMC] ngettext failed: {e}")
 limitreclist = []
 if nget:
 	for i in range(86400, 604800, 86400):

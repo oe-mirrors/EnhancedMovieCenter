@@ -806,7 +806,7 @@ msgstr "A csatornacsomag gombok viselkedésének beállítása"
 msgid "HELP_Check for dead links"
 msgstr "Halott linkek ellenőrzése"
 
-msgid "HELP_Configure in etc\\enigma2\\emc-topdir.cfg"
+msgid "HELP_Configure in etc/enigma2/emc-topdir.cfg"
 msgstr "Konfigurált könyvtárak a felvételi lista tetején"
 
 msgid "HELP_Cover background"

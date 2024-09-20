@@ -1,5 +1,4 @@
-﻿#
-# Copyright (C) 2011 by Coolman & Swiss-MAD
+﻿# Copyright (C) 2011 by Coolman & Swiss-MAD
 #
 # In case of reuse of this source code please do not remove this copyright.
 #
@@ -36,7 +35,7 @@ class DelayedFunction:
 				self.timer.timeout.get().append(self.timerLaunch)
 				self.timer.start(delay, False)
 		except Exception as e:
-			emcDebugOut("[spDF] __init__ exception:\n%s:%s" % (str(self.function), str(e)))
+			emcDebugOut(f"[spDF] __init__ exception:\n{str(self.function)}:{str(e)}")
 
 	def cancel(self):
 		try:
@@ -46,7 +45,7 @@ class DelayedFunction:
 			self.timer.timeout.get().remove(self.timerLaunch)
 			self.timer = None
 		except Exception as e:
-			emcDebugOut("[spDF] timer cancel exception:\n%s:%s" % (str(self.function), str(e)))
+			emcDebugOut(f"[spDF] timer cancel exception:\n{str(self.function)}:{str(e)}")
 
 	def timerLaunch(self):
 		try:
@@ -57,7 +56,7 @@ class DelayedFunction:
 			self.timer = None
 			self.function(*self.params)
 		except Exception as e:
-			emcDebugOut("[spDF] timerLaunch exception:\n%s:%s" % (str(self.function), str(e)))
+			emcDebugOut(f"[spDF] timerLaunch exception:\n{str(self.function)}:{str(e)}")
 
 	def exists(self):
 		global instanceTab

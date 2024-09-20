@@ -786,8 +786,8 @@ msgstr "Nápověda - chování tlačítka Bouquet - skok na začátek/konec sezn
 msgid "HELP_Check for dead links"
 msgstr "Nápověda - zpoždění zobrazení \"obalu\" v ms"
 
-msgid "HELP_Configure in etc\\enigma2\\emc-topdir.cfg"
-msgstr "Nápověda - konfigurace v etc\\enigma2\\emc-topdir.cfg"
+msgid "HELP_Configure in etc/enigma2/emc-topdir.cfg"
+msgstr "Nápověda - konfigurace v etc/enigma2/emc-topdir.cfg"
 
 msgid "HELP_Cover background"
 msgstr "Nápověda - změna pozadí, které je pod obaly"

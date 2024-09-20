@@ -1,4 +1,4 @@
-﻿from . import _, defaultlang
+from . import _, defaultlang
 from os import remove
 from re import match, sub, IGNORECASE
 from requests import get, exceptions
@@ -51,9 +51,9 @@ def getMovieList(moviename):
 		id = result.get("id", "")
 		title = result.get("title", result.get("name", ""))
 		if media == "movie":
-			movielist.append(("%s - %s" % (title, _("Movies")), id, "movie"))
+			movielist.append((f"{title} - {_('Movies')}", id, "movie"))
 		else:
-			movielist.append(("%s - %s" % (title, _("TV Shows")), id, "tvshows"))
+			movielist.append((f"{title} - {_('TV Shows')}", id, "tvshows"))
 	return movielist, len(movielist)
 
 
@@ -64,9 +64,9 @@ def getMovieInfo(movieID, cat, getAll=True, onlyPoster=False):
 	try:
 		movie = tmdb.Movies(int(movieID)) if cat == "movie" else tmdb.TV(int(movieID))
 		MI = movie.info(language=lang)
-		print('[EMC] MovieInfo MI:\n%s\n' % str(MI))
+		print(f'[EMC] MovieInfo MI:\n{str(MI)}\n')
 	except Exception as e:
-		print(('[EMC] MovieInfo getMovieInfo exception failure: %s' % str(e)))
+		print(f'[EMC] MovieInfo getMovieInfo exception failure: {str(e)}')
 		return None
 	if not MI:
 		return None
@@ -94,7 +94,7 @@ def getMovieInfo(movieID, cat, getAll=True, onlyPoster=False):
 			genrelist = MI["genres"]
 			genres = ""
 			for i in genrelist:
-				genres = i["name"] if genres == "" else "%s, %s" % (genres, i["name"])
+				genres = i["name"] if genres == "" else f"{genres}, {i['name']}"
 		else:
 			genres = ""
 
@@ -131,7 +131,7 @@ def getMovieInfo(movieID, cat, getAll=True, onlyPoster=False):
 			genrelist = MI["genres"]
 			genres = ""
 			for i in genrelist:
-				genres = i["name"] if genres == "" else "%s, %s" % (genres, i["name"])
+				genres = i["name"] if genres == "" else f"{genres}, {i['name']}"
 		else:
 			genres = ""
 
@@ -139,7 +139,7 @@ def getMovieInfo(movieID, cat, getAll=True, onlyPoster=False):
 			countrylist = MI["origin_country"]
 			countries = ""
 			for i in countrylist:
-				countries = i if countries == "" else "%s, %s" % (countries, i)
+				countries = i if countries == "" else f"{countries}, {i}"
 		else:
 			countries = ""
 
@@ -158,7 +158,7 @@ def getTempTxt(txt):
 			txtpath = "/tmp/previewTxt.txt"
 			open(txtpath, 'w').write(txt)
 		except Exception as e:
-			print(('[EMC] MovieInfo getTempTxt exception failure: %s' % str(e)))
+			print(f'[EMC] MovieInfo getTempTxt exception failure: {str(e)}')
 
 
 def getTempCover(posterUrl):
@@ -167,10 +167,10 @@ def getTempCover(posterUrl):
 			if fileExists("/tmp/previewCover.jpg"):
 				remove("/tmp/previewCover.jpg")
 			coverpath = "/tmp/previewCover.jpg"
-			url = "https://image.tmdb.org/t/p/%s%s" % (config.EMC.movieinfo.coversize.value, posterUrl)
+			url = f"https://image.tmdb.org/t/p/{config.EMC.movieinfo.coversize.value}{posterUrl}"
 			callInThread(DownloadPage, url, coverpath, None, fail=dataError)
 		except Exception as e:
-			print(('[EMC] MovieInfo getTempCover exception failure: %s' % str(e)))
+			print(f'[EMC] MovieInfo getTempCover exception failure: {str(e)}')
 
 
 def DownloadPage(link, file, success, fail=None):
@@ -188,7 +188,7 @@ def DownloadPage(link, file, success, fail=None):
 
 
 def dataError(error):
-	print("[EMC] MovieInfo ERROR: %s" % error)
+	print(f"[EMC] MovieInfo ERROR: {error}")
 
 
 class MovieInfoTMDb(Screen):
@@ -387,7 +387,7 @@ class MovieInfoTMDb(Screen):
 				self["ratingtxt"].show()
 				self["contenttxt"].setText(content)
 				if runtime != "":
-					self["runtimetxt"].setText("%s %s" % (runtime, _("Minutes")))
+					self["runtimetxt"].setText(f"{runtime} {_('Minutes')}")
 				else:
 					self["runtimetxt"].setText(runtime)
 				self["genretxt"].setText(genres)
@@ -410,8 +410,8 @@ class MovieInfoTMDb(Screen):
 				self.previewTimer.start(int(config.EMC.movieinfo.cover_delay.value), True)
 
 	def showMsg(self, askNo=False):
-		txtpath = "%s.txt" % self.mpath
-		coverpath = "%s.jpg" % self.mpath
+		txtpath = f"{self.mpath}.txt"
+		coverpath = f"{self.mpath}.jpg"
 		msg = ""
 		if self.txtsaved and self.jpgsaved:
 			msg = (_('Movie Information and Cover downloaded successfully!'))
@@ -433,12 +433,12 @@ class MovieInfoTMDb(Screen):
 			self.txtsaved = False
 			self.mpath = sub(self.file_format + "$", '.jpg', self.spath, flags=IGNORECASE)
 			try:
-				txtpath = "%s.txt" % self.mpath
+				txtpath = f"{self.mpath}.txt"
 				if fileExists("/tmp/previewTxt.txt"):
 					copy2("/tmp/previewTxt.txt", txtpath)
 					self.txtsaved = True
 			except Exception as e:
-				print(('[EMC] MovieInfo saveTxt exception failure: %s' % str(e)))
+				print(f'[EMC] MovieInfo saveTxt exception failure: {str(e)}')
 
 			if config.EMC.movieinfo.coversave.value:
 				self.getPoster()
@@ -446,7 +446,7 @@ class MovieInfoTMDb(Screen):
 				self.showMsg()
 
 	def getPoster(self):
-		coverpath = "%s.jpg" % self.mpath
+		coverpath = f"{self.mpath}.jpg"
 		if fileExists(coverpath):
 			self.session.openWithCallback(self.posterCallback, MessageBox, _("Cover %s exists!\n\nDo you want to replace the existing cover?") % coverpath, MessageBox.TYPE_YESNO)
 		else:
@@ -454,12 +454,12 @@ class MovieInfoTMDb(Screen):
 
 	def posterCallback(self, result):
 		if result:
-			coverpath = "%s.jpg" % self.mpath
+			coverpath = f"{self.mpath}.jpg"
 			try:
 				if fileExists(coverpath):
 					remove(coverpath)
 			except Exception as e:
-				print(('[EMC] MovieInfo posterCallback exception failure: %s' % str(e)))
+				print(f'[EMC] MovieInfo posterCallback exception failure: {str(e)}')
 			self.savePoster()
 		else:
 			self.showMsg(True)
@@ -467,12 +467,12 @@ class MovieInfoTMDb(Screen):
 	def savePoster(self):
 		self.jpgsaved = False
 		try:
-			coverpath = "%s.jpg" % self.mpath
+			coverpath = f"{self.mpath}.jpg"
 			if fileExists("/tmp/previewCover.jpg"):
 				copy2("/tmp/previewCover.jpg", coverpath)
 				self.jpgsaved = True
 		except Exception as e:
-			print(('[EMC] MovieInfo savePoster exception failure: %s' % str(e)))
+			print(f'[EMC] MovieInfo savePoster exception failure: {str(e)}')
 
 		self.showMsg()
 

@@ -809,8 +809,8 @@ msgstr "Поведінка кнопки Фаворити"
 msgid "HELP_Check for dead links"
 msgstr "Перевірка відсутніх посилань"
 
-msgid "HELP_Configure in etc\\enigma2\\emc-topdir.cfg"
-msgstr "Збереження конфігурації в etc\\enigma2\\emc-topdir.cfg"
+msgid "HELP_Configure in etc/enigma2/emc-topdir.cfg"
+msgstr "Збереження конфігурації в etc/enigma2/emc-topdir.cfg"
 
 msgid "HELP_Cover background"
 msgstr "Фон обкладинки"

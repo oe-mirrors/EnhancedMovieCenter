@@ -809,8 +809,8 @@ msgstr "Comportamento de teclas de AJUDA_Bouquet"
 msgid "HELP_Check for dead links"
 msgstr "AJUDA_Cover atraso em ms"
 
-msgid "HELP_Configure in etc\\enigma2\\emc-topdir.cfg"
-msgstr "AJUDA_Definir em etc\\enigma2\\emc-topdir.cfg"
+msgid "HELP_Configure in etc/enigma2/emc-topdir.cfg"
+msgstr "AJUDA_Definir em etc/enigma2/emc-topdir.cfg"
 
 msgid "HELP_Cover background"
 msgstr "AJUDA_Cover fundo"

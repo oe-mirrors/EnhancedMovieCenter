@@ -813,7 +813,7 @@ msgstr "AIDE_Comportement des boutons du bouquet"
 msgid "HELP_Check for dead links"
 msgstr "AIDE_Délai des affiches en ms"
 
-msgid "HELP_Configure in etc\\enigma2\\emc-topdir.cfg"
+msgid "HELP_Configure in etc/enigma2/emc-topdir.cfg"
 msgstr "AIDE_Configurer le répertoire au sommet de la liste des films"
 
 msgid "HELP_Cover background"

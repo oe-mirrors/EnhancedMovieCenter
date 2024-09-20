@@ -1,5 +1,4 @@
-﻿#
-# Copyright (C) 2011 by betonme
+﻿# Copyright (C) 2011 by betonme
 #
 # In case of reuse of this source code please do not remove this copyright.
 #

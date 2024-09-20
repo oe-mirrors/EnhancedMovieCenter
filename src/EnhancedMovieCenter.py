@@ -1,5 +1,4 @@
-﻿#
-# Copyright (C) 2011 by Coolman & Swiss-MAD
+﻿# Copyright (C) 2011 by Coolman & Swiss-MAD
 #
 # In case of reuse of this source code please do not remove this copyright.
 #
@@ -346,7 +345,7 @@ class EnhancedMovieCenterMenu(ConfigListScreenExt, Screen):
 			(_("Show symlinks"), config.EMC.symlinks_show, None, None, 0, [], _("HELP_Show symlinks"), None, True),
 			(_("Show directories"), config.EMC.directories_show, None, None, 0, [], _("HELP_Show directories"), None, True),
 			(_("Show directories within movielist"), config.EMC.directories_ontop, None, None, 0, [-1], _("HELP_Show directories within movielist"), False, True),
-			(_("Configured directories at the top of movielist"), config.EMC.cfgtopdir_enable, None, None, 0, [-2, -1], _("HELP_Configure in etc\enigma2\emc-topdir.cfg"), False, True),
+			(_("Configured directories at the top of movielist"), config.EMC.cfgtopdir_enable, None, None, 0, [-2, -1], _("HELP_Configure in etc/enigma2/emc-topdir.cfg"), False, True),
 			(_("Show directories information"), config.EMC.directories_info, None, None, 0, [-3], _("HELP_Show directories information"), "", "CS"),
 			(_("Text shown for initially unknown file count"), config.EMC.count_default_text, None, None, 0, [-4, -1], _("HELP_Text shown for initially unknown file count"), None, None),
 			(_("Text shown for initially unknown count and size"), config.EMC.count_size_default_text, None, None, 0, [-5, -2], _("HELP_Text shown for initially unknown count and size"), None, None),
@@ -723,7 +722,7 @@ class EnhancedMovieCenterMenu(ConfigListScreenExt, Screen):
 	def validatePath(self, element):
 		element.value = os.path.normpath(element.value)
 		if not os.path.exists(element.value):
-			self.session.open(MessageBox, _("Given path %s does not exist. Please change." % str(element.value)), MessageBox.TYPE_ERROR)
+			self.session.open(MessageBox, _(f"Given path {str(element.value)} does not exist. Please change."), MessageBox.TYPE_ERROR)
 			return False
 
 	def trashCleanupSetup(self, dummy=None):

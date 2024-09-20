@@ -1,5 +1,4 @@
-﻿#
-# Copyright (C) 2011 by Coolman & Swiss-MAD
+﻿# Copyright (C) 2011 by Coolman & Swiss-MAD
 #
 # In case of reuse of this source code please do not remove this copyright.
 #
@@ -45,7 +44,7 @@ def emcDebugOut(outtxt, outfile=None, fmode="a", forced=False):
 				outtxt = headerstr + outtxt
 			deb = open(outfile, fmode)
 			deb.write(outtxt + "\n")
-		print("EMC: %s" % (outtxt))
+		print(f"EMC: {outtxt}")
 		# Print detailed informationon error
 		if sys.exc_info()[0]:
 			print("Unexpected error:", sys.exc_info()[0])
@@ -117,7 +116,7 @@ class EMCExecutioner:
 	def runFinished(self, retval=None):
 		try:
 			associated = self.associated.popleft()
-			emcDebugOut("[emcTasker] sh exec %s finished, return status = %s %s" % (self.executing, str(retval), self.returnData))
+			emcDebugOut(f"[emcTasker] sh exec {self.executing} finished, return status = {str(retval)} {self.returnData}")
 			if associated:
 				#P3 for foo, bar, *other in tuple:
 				for fargs in associated:
@@ -254,7 +253,7 @@ class EMCTasker:
 
 			if ytimem > ztimem:
 				ztimem += 12 * 60
-			emcDebugOut("+++ Local time is " + str(lotime[3:5]) + ", auto-start window is %s - %s" % (str(wbegin), str(wend)))
+			emcDebugOut("+++ Local time is " + str(lotime[3:5]) + f", auto-start window is {str(wbegin)} - {str(wend)}")
 
 			if postponeDelay > 0:
 				self.restartTimer.start(postponeDelay * 60000, False)
