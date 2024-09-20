@@ -60,9 +60,14 @@ def getMovieList(moviename):
 def getMovieInfo(movieID, cat, getAll=True, onlyPoster=False):
 	lang = config.EMC.movieinfo.language.value
 	posterUrl = None
-	movie = tmdb.Movies(int(movieID)) if cat == "movie" else tmdb.TV(int(movieID))
-	MI = movie.info(language=lang)
-	print(MI)
+	MI = {}
+	try:
+		movie = tmdb.Movies(int(movieID)) if cat == "movie" else tmdb.TV(int(movieID))
+		MI = movie.info(language=lang)
+		print('[EMC] MovieInfo MI:\n%s\n' % str(MI))
+	except Exception as e:
+		print(('[EMC] MovieInfo getMovieInfo exception failure: %s' % str(e)))
+		return None
 	if not MI:
 		return None
 	posterUrl = MI["poster_path"]
