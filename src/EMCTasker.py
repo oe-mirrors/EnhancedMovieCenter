@@ -29,7 +29,7 @@ import sys
 from traceback import print_exc
 from collections.abc import Callable
 from collections import deque
-from pipes import quote
+from shlex import quote
 
 
 def emcDebugOut(outtxt, outfile=None, fmode="a", forced=False):
