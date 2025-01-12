@@ -15,6 +15,9 @@ class EMCPositionGauge(PositionGauge):
 			# E2 Bug: Use a list copy instead of a reference
 			self.__cutlist = cutlist[:]
 			if self.instance is not None:
-				self.instance.setInOutList(cutlist)
+				try:
+					self.instance.setInOutList(cutlist)
+				except Exception as err:
+					print(f"EMCPositionGauge error setInOutList value: {cutlist} / Error:{err}")
 
 	cutlist = property(getCutlist, setCutlist)
