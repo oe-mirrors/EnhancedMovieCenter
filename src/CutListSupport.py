@@ -424,6 +424,9 @@ class CutList():
 			self.cut_list = []
 
 	def __writeCutFile(self):
+		if self.iso:  # Don't write cuts for DVD because this will be done in enigma core code
+			return
+
 		data = b""
 		path = self.cut_file
 		if path:

@@ -34,6 +34,7 @@ from Screens.HelpMenu import HelpableScreen
 from Tools.Directories import fileExists, resolveFilename, SCOPE_PLUGINS
 from .ISO639 import LanguageCodes as langC
 from Components.Language import language
+from Screens.DVD import DVDOverlay, DVDSummary, ChapterZap
 
 
 # Zap to Live TV of record
@@ -56,9 +57,6 @@ from .MovieCenter import toggleProgressService, getPosterPath
 
 from .RecordingsControl import getRecording
 import NavigationInstance
-
-
-dvdPlayerPlg = f"{resolveFilename(SCOPE_PLUGINS)}Extensions/DVDPlayer/plugin.py"
 
 
 class EMCMoviePlayerSummary(Screen):
@@ -393,19 +391,8 @@ class EMCMediaCenter(CutList, Screen, HelpableScreen, InfoBarTimeshift, InfoBarS
 				self.service = service
 
 				if service and service.type == eServiceReference.idServiceDVD:
-					# Only import DVDPlayer, if we want to play a DVDPlayer format
-					if fileExists(dvdPlayerPlg) or fileExists(f"{dvdPlayerPlg}c"):
-						try:
-							from Plugins.Extensions.DVDPlayer import servicedvd  # load c++ part of dvd player plugin
-						except:
-							pass
-						from Plugins.Extensions.DVDPlayer.plugin import DVDOverlay
-						if not self.dvdScreen:
-							self.dvdScreen = self.session.instantiateDialog(DVDOverlay)
-					else:
-						self.session.open(MessageBox, _("No DVD-Player found!"), MessageBox.TYPE_ERROR, 10)
-						self.leavePlayer(True)
-						return
+					if not self.dvdScreen:
+						self.dvdScreen = self.session.instantiateDialog(DVDOverlay)
 					if "TeletextActions" in self:
 						self["TeletextActions"].setEnabled(False)
 					self["DVDPlayerPlaybackActions"].setEnabled(True)
@@ -955,8 +942,7 @@ class EMCMediaCenter(CutList, Screen, HelpableScreen, InfoBarTimeshift, InfoBarS
 			self["SeekActions"].setEnabled(True)
 
 	def createSummary(self):
-		if self.service and self.service.type == eServiceReference.idServiceDVD and (fileExists(dvdPlayerPlg) or fileExists(f"{dvdPlayerPlg}c")):
-			from Plugins.Extensions.DVDPlayer.plugin import DVDSummary
+		if self.service and self.service.type == eServiceReference.idServiceDVD:
 			return DVDSummary
 		else:
 			return EMCMoviePlayerSummary
@@ -1013,19 +999,14 @@ class EMCMediaCenter(CutList, Screen, HelpableScreen, InfoBarTimeshift, InfoBarS
 	# InfoBarNumberZap
 	def keyNumberGlobal(self, number):
 		if self.service and self.service.type == eServiceReference.idServiceDVD:
-			if fileExists(dvdPlayerPlg) or fileExists(f"{dvdPlayerPlg}c"):
-				if fileExists('/usr/lib/enigma2/python/Screens/DVD.py') or fileExists('/usr/lib/enigma2/python/Screens/DVD.pyc'):
-					from Screens.DVD import ChapterZap
-					self.session.openWithCallback(self.numberEntered, ChapterZap, "0")
-				else:
-					from Plugins.Extensions.DVDPlayer.plugin import ChapterZap
-					self.session.openWithCallback(self.numberEntered, ChapterZap, "0")
+			self.session.openWithCallback(self.numberEntered, ChapterZap)
 
 	# InfoBarMenu Key_Menu
 	#def mainMenu(self):
 	#	self.enterDVDMenu()
 
 	# InfoBarShowHide Key_Ok
+
 	def toggleShow(self):
 		### Cover anzeige
 		self.LongButtonPressed = False
