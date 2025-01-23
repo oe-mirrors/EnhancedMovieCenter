@@ -20,7 +20,6 @@ from . import _
 from Components.config import config, configfile, getConfigListEntry
 from Components.Button import Button
 from .configlistext import ConfigListScreenExt
-from Components.Language import language
 from Components.ActionMap import ActionMap
 from Components.Sources.StaticText import StaticText
 from Screens.Screen import Screen
@@ -28,7 +27,7 @@ from Screens.LocationBox import LocationBox
 from Screens.MessageBox import MessageBox
 import Screens.Standby
 from Tools import Notifications
-from enigma import eServiceEvent, eTimer, getDesktop
+from enigma import eTimer, getDesktop
 import os
 import struct
 from time import localtime
@@ -51,16 +50,6 @@ sz_w = getDesktop(0).size().width()
 
 EMCVersion = "git20210126"
 EMCAbout = "Enhanced Movie Center " + EMCVersion + "\n\n(c) 2012-2021 by\nCoolman, betonme, Swiss-MAD & the many other volunteers."
-
-
-def setEPGLanguage(dummyself=None, dummy=None):
-	if config.EMC.epglang.value:
-		emcDebugOut("Setting EPG language: " + str(config.EMC.epglang.value))
-		eServiceEvent.setEPGLanguage(config.EMC.epglang.value)
-
-
-language.addCallback(setEPGLanguage)
-DelayedFunction(5000, setEPGLanguage)
 
 
 def setupKeyResponseValues(dummyself=None, dummy=None):
@@ -115,9 +104,6 @@ def cleanupSetup(dummy=None):
 
 def EMCStartup(session):
 	emcDebugOut("+++ EMC " + EMCVersion + " startup")
-
-	if config.EMC.epglang.value:
-		eServiceEvent.setEPGLanguage(config.EMC.epglang.value)
 
 	setupKeyResponseValues()
 	DelayedFunction(5000, cleanupSetup)
@@ -433,7 +419,6 @@ class EnhancedMovieCenterMenu(ConfigListScreenExt, Screen):
 			(_("Automatic timers list cleaning"), config.EMC.timer_autocln, None, None, 1, [], _("HELP_Automatic timers list cleaning"), None, None),
 
 			(self.section, _("LANGUAGE"), None, None, 1, [], "", None, None),
-			(_("Preferred EPG language"), config.EMC.epglang, setEPGLanguage, None, 1, [], _("HELP_Preferred EPG language"), None, None),
 			(_("Enable playback auto-subtitling"), config.EMC.autosubs, None, None, 1, [], _("HELP_Enable playback auto-subtitling"), None, None),
 			(_("Primary playback subtitle language"), config.EMC.sublang1, None, None, 1, [-1], _("HELP_Primary playback subtitle language"), None, None),
 			(_("Secondary playback subtitle language"), config.EMC.sublang2, None, None, 1, [-2], _("HELP_Secondary playback subtitle language"), None, None),

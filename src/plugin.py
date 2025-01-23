@@ -131,20 +131,6 @@ def langList():
 	return newlist
 
 
-try:
-	from Components.International import international
-
-	def langListEPG():
-		langs = international.getLocaleList()
-		newlist = []
-		for item in langs:
-			newlist.append((item, international.getLanguageNative(item)))
-		return newlist
-except ImportError:
-	print("International module is missing / use the old langList")
-	langListEPG = langList
-
-
 launch_choices = [("None", _("No override")),
 			("showMovies", _("Video-button")),
 			("showTv", _("TV-button")),
@@ -290,7 +276,6 @@ config.EMC.needsreload = ConfigYesNo(default=False)
 config.EMC.extmenu_plugin = ConfigYesNo(default=False)
 config.EMC.mainmenu_list = ConfigYesNo(default=False)
 config.EMC.extmenu_list = ConfigYesNo(default=False)
-config.EMC.epglang = ConfigSelection(default=language.getActiveLanguage(), choices=langListEPG())
 config.EMC.sublang1 = ConfigSelection(default=language.lang[language.getActiveLanguage()][1], choices=langList())
 config.EMC.sublang2 = ConfigSelection(default=language.lang[language.getActiveLanguage()][1], choices=langList())
 config.EMC.sublang3 = ConfigSelection(default=language.lang[language.getActiveLanguage()][1], choices=langList())
@@ -478,7 +463,6 @@ def checkList(cfg):
 	cfg.value = cfg.choices.choices[0][0]
 
 
-checkList(config.EMC.epglang)
 checkList(config.EMC.sublang1)
 checkList(config.EMC.sublang2)
 checkList(config.EMC.sublang3)
