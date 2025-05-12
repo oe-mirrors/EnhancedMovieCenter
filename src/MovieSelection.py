@@ -800,7 +800,7 @@ class EMCSelection(Screen, HelpableScreen, SelectionEventInfo, VlcPluginInterfac
 			self.IMDbSearch()
 
 	def callHelpAction(self, *args):
-		HelpableScreen.callHelpAction(self, *args)
+		Screen.callHelpAction(self, *args)
 		self.checkHideMiniTV_beforeFullscreen()
 
 	def abortAndPowerDown(self):
