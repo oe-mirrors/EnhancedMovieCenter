@@ -32,7 +32,7 @@ from .RecordingsControl import getRecording
 
 try:
 	from enigma import getE2Flags
-	E2_NATIVE_CUTFILE = getE2Flags() & 4
+	E2_NATIVE_CUTFILE = bool(getE2Flags() & 4)
 except ImportError:
 	E2_NATIVE_CUTFILE = False
 
@@ -72,8 +72,8 @@ class CutList:
 	CUT_TOGGLE_FOR_PLAY = 4
 
 	# Additional cut_list information
-	#		cut_list[x][0] = pts   = long long
-	#		cut_list[x][1] = what  = long
+	# cut_list[x][0] = pts   = long long
+	# cut_list[x][1] = what  = long
 
 	# Constants
 	ENABLE_RESUME_SUPPORT = True
@@ -169,17 +169,16 @@ class CutList:
 	# InfoBarCueSheetSupport
 	def uploadCuesheet(self):
 		try:
-			# Always check for saving the last marker
-			if config.EMC.movie_save_lastplayed.value is True:
-				self.__saveOldLast()
-
 			if E2_NATIVE_CUTFILE:
-				# E2 handles .cuts file writing natively via C++
+				# C++ handles LAST, SAVEDLAST, LENGTH and file writing
 				cue = InfoBarCueSheetSupport._InfoBarCueSheetSupport__getCuesheet(self)
 				if cue:
 					cue.setCutList(self.cut_list)
 			else:
-				# Legacy: E2 without native .cuts support
+				if config.EMC.movie_save_lastplayed.value is True:
+					self.__saveOldLast()
+
+				# Legacy: EMC handles all cut types and file writing
 				cue = InfoBarCueSheetSupport._InfoBarCueSheetSupport__getCuesheet(self)
 
 				if cue is None or (cue and not cue.getCutList()):
@@ -282,16 +281,18 @@ class CutList:
 			self.__writeCutFile()
 
 	def updateCutList(self, play, length):
-		# Always check for saving the last marker
 		# print "CUTSTEST1 ", self.cut_list
 		if config.EMC.movie_save_lastplayed.value is True:
 			self.__saveOldLast()
-		# print "CUTSTEST2 ", self.cut_list
-		self.__removeSavedLast(self.__getCutListSavedLast())
-		# print "CUTSTEST3 ", self.cut_list
-		self.__replaceLast(play)
-		# print "CUTSTEST4 ", self.cut_list
-		self.__replaceLength(length)
+
+		if not E2_NATIVE_CUTFILE:  # C++ handles LAST, SAVEDLAST and LENGTH natively
+			# Legacy: EMC handles all cut types
+			# print "CUTSTEST2 ", self.cut_list
+			self.__removeSavedLast(self.__getCutListSavedLast())
+			# print "CUTSTEST3 ", self.cut_list
+			self.__replaceLast(play)
+			# print "CUTSTEST4 ", self.cut_list
+			self.__replaceLength(length)
 		# print "CUTSTEST5 ", self.cut_list
 		self.uploadCuesheet()
 
@@ -331,22 +332,26 @@ class CutList:
 		newLast = 0
 		newSaved = 0
 
-		#if savedLast == oldLast:
-		#	print "Cutlist if savedLast == oldLast: " + str(savedLast) + " toggle: " + str(toggle) + " " + str(self.cut_file)
+		"""
+		if savedLast == oldLast:
+			print "Cutlist if savedLast == oldLast: " + str(savedLast) + " toggle: " + str(toggle) + " " + str(self.cut_file)
+		"""
 
 		if toggle == self.CUT_TOGGLE_START:
 			newLast = 0
 		elif toggle == self.CUT_TOGGLE_RESUME:
-			#if savedLast == oldLast: # 0:
-			#	newLast = self.MOVIE_FINISHED
-			#else:
+			"""
+			if savedLast == oldLast: # 0:
+				newLast = self.MOVIE_FINISHED
+			else:
+			"""
 			newLast = savedLast or self.MOVIE_FINISHED
 		elif toggle == self.CUT_TOGGLE_FINISHED:
 			newLast = self.MOVIE_FINISHED
 		elif toggle == self.CUT_TOGGLE_START_FOR_PLAY:
 			newLast = 0
 			savedLast = 0
-			#oldLast = oldLast
+			# oldLast = oldLast
 		elif toggle == self.CUT_TOGGLE_FOR_PLAY:
 			newLast = oldLast
 			savedLast = 0
@@ -397,7 +402,7 @@ class CutList:
 
 	##############################################################################
 	# [Cutlist.Workaround] add Param path in __readCutFile to merge with backup-File
-	## File IO Functions
+	# File IO Functions
 	def __readCutFile(self, update=False):
 		self.__readCutFileWithPath(self.cut_file, update)
 
@@ -418,17 +423,11 @@ class CutList:
 					self.cut_list = []
 
 				# Read data from file
-				# OE1.6 with Pyton 2.6
-				#with open(path, 'rb') as f: data = f.read()
-				f = None
 				try:
-					f = open(path, 'rb')
-					data = f.read()
+					with open(path, 'rb') as f:
+						data = f.read()
 				except Exception as e:
 					emcDebugOut("[CUTS] Exception in __readCutFile: " + str(e))
-				finally:
-					if f is not None:
-						f.close()
 
 				# Parse and unpack data
 				if data:
@@ -459,18 +458,12 @@ class CutList:
 					data += pack(b'>QI', pts, what)
 
 			# Write data to file
-			# OE1.6 with Pyton 2.6
-			#with open(path, 'wb') as f: f.write(data)
-			f = None
-			try:
-				f = open(path, 'wb')
-				if data:
-					f.write(data)
-			except Exception as e:
-				emcDebugOut("[CUTS] Exception in __writeCutFile: " + str(e))
-			finally:
-				if f is not None:
-					f.close()
+			if data:
+				try:
+					with open(path, 'wb') as f:
+						f.write(data)
+				except Exception as e:
+					emcDebugOut("[CUTS] Exception in __writeCutFile: " + str(e))
 
 			# [Cutlist.Workaround]
 			# Always make a backup-copy when recording, it will be merged with enigma-cutfile after recording
