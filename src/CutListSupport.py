@@ -3,18 +3,18 @@
 #
 # In case of reuse of this source code please do not remove this copyright.
 #
-#	This program is free software: you can redistribute it and/or modify
-#	it under the terms of the GNU General Public License as published by
-#	the Free Software Foundation, either version 3 of the License, or
-#	(at your option) any later version.
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
 #
-#	This program is distributed in the hope that it will be useful,
-#	but WITHOUT ANY WARRANTY; without even the implied warranty of
-#	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#	GNU General Public License for more details.
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
 #
-#	For more information on the GNU General Public License see:
-#	<http://www.gnu.org/licenses/>.
+# For more information on the GNU General Public License see:
+# <http://www.gnu.org/licenses/>.
 #
 
 from os import remove
@@ -29,6 +29,12 @@ from .EMCTasker import emcDebugOut
 from .IsoFileSupport import IsoSupport
 
 from .RecordingsControl import getRecording
+
+try:
+	from enigma import getE2Flags
+	E2_NATIVE_CUTFILE = getE2Flags() & 4
+except ImportError:
+	E2_NATIVE_CUTFILE = False
 
 try:
 	from Plugins.Extensions.CutlistDownloader.plugin import bestCutlist
@@ -46,7 +52,7 @@ DO_CUTLIST_WORKAROUND = True
 # http://git.opendreambox.org/?p=enigma2.git;a=blob;f=doc/FILEFORMAT
 
 
-class CutList():
+class CutList:
 
 	# InfoBarCueSheetSupport types
 	CUT_TYPE_IN = 0
@@ -77,9 +83,9 @@ class CutList():
 
 	def __init__(self, path=None):
 		# Is already initialized in InfoBar and EMCMediaCenter
-		#InfoBarCueSheetSupport.__init__(self)
-		#InfoBarSeek.__init__(self)
-		#self.service = None
+		# InfoBarCueSheetSupport.__init__(self)
+		# InfoBarSeek.__init__(self)
+		# self.service = None
 		self.cut_file = None
 		self.cut_mtime = 0
 		self.cut_list = []
@@ -92,7 +98,7 @@ class CutList():
 	def __newPath(self, path):
 		name = None
 		if path:
-			#TODO very slow
+			# TODO very slow
 			if path.lower().endswith(".iso"):
 				if not self.iso:
 					self.iso = IsoSupport(path)
@@ -121,7 +127,7 @@ class CutList():
 		return service.cueSheet()
 
 	##############################################################################
-	## Overwrite Functions
+	# Overwrite Functions
 
 	# InfoBarCueSheetSupport
 	def downloadCuesheet(self):
@@ -140,7 +146,7 @@ class CutList():
 				# Native cuesheet support
 				self.cut_list = cue.getCutList()
 
-			#print "CUTSTEST0 ", self.cut_list
+			# print "CUTSTEST0 ", self.cut_list
 			if config.EMC.cutlist_at_download.value:
 				if service and hasCutlistDownloader:
 					try:
@@ -148,7 +154,7 @@ class CutList():
 					except Exception as e:
 						emcDebugOut("[EMC] Plugin CutlistDownloader exception:" + str(e))
 
-			#MAYBE: If the cutlist is empty we can check the EPG NowNext Events
+			# MAYBE: If the cutlist is empty we can check the EPG NowNext Events
 		except Exception as e:
 			emcDebugOut("[CUTS] downloadCutList exception:" + str(e))
 
@@ -167,26 +173,31 @@ class CutList():
 			if config.EMC.movie_save_lastplayed.value is True:
 				self.__saveOldLast()
 
-			# Is there native cuesheet support
-			cue = InfoBarCueSheetSupport._InfoBarCueSheetSupport__getCuesheet(self)
-
-			if cue is None or (cue and not cue.getCutList()):
-				# No native cuesheet support
-				# Update local cut list, maybe there is a newer one
-				#TODO to be tested
-				#self.__readCutFile(True)
-				if hasattr(self, "service") and self.service:
-					path = self.service.getPath()
-					self.__newPath(path)
-					self.__writeCutFile()
+			if E2_NATIVE_CUTFILE:
+				# E2 handles .cuts file writing natively via C++
+				cue = InfoBarCueSheetSupport._InfoBarCueSheetSupport__getCuesheet(self)
+				if cue:
+					cue.setCutList(self.cut_list)
 			else:
-				# Native cuesheet support
-				cue.setCutList(self.cut_list)
+				# Legacy: E2 without native .cuts support
+				cue = InfoBarCueSheetSupport._InfoBarCueSheetSupport__getCuesheet(self)
+
+				if cue is None or (cue and not cue.getCutList()):
+					# No native cuesheet support
+					if hasattr(self, "service") and self.service:
+						path = self.service.getPath()
+						self.__newPath(path)
+						self.__writeCutFile()
+				else:
+					# Native cuesheet support
+					cue.setCutList(self.cut_list)
 		except Exception as e:
 			emcDebugOut("[CUTS] uploadCuesheet exception:" + str(e))
 
 	def updateFromCuesheet(self):
 		print("Cutlist updateCuesheet")
+		if E2_NATIVE_CUTFILE:
+			return
 		try:
 			# Use non native cuesheet support
 			# [Cutlist.Workaround] merge with Backup-File if exists
@@ -210,10 +221,13 @@ class CutList():
 
 	def setCutList(self, cut_list):
 		self.cut_list = cut_list
-		self.__writeCutFile()
+		if E2_NATIVE_CUTFILE:
+			self.uploadCuesheet()
+		else:
+			self.__writeCutFile()
 
 	##############################################################################
-	## Get Functions
+	# Get Functions
 	def getCutList(self):
 		return self.cut_list
 
@@ -253,29 +267,32 @@ class CutList():
 		return 0
 
 	##############################################################################
-	## Modify Functions
-	## Use remove and insort to guarantee the cut list is sorted
+	# Modify Functions
+	# Use remove and insort to guarantee the cut list is sorted
 
 	# API modification functions
 	# Calculate in seconds
 	# A modification will always be written immediately
 	def toggleLastCutList(self, toggle=0):
 		self.__toggleLast(toggle)
-		#print "toggleLastCutList " + str(toggle) + " cutlist " + str(self.cut_list)
-		self.__writeCutFile()
+		# print "toggleLastCutList " + str(toggle) + " cutlist " + str(self.cut_list)
+		if E2_NATIVE_CUTFILE:
+			self.uploadCuesheet()
+		else:
+			self.__writeCutFile()
 
 	def updateCutList(self, play, length):
 		# Always check for saving the last marker
-		#print "CUTSTEST1 ", self.cut_list
+		# print "CUTSTEST1 ", self.cut_list
 		if config.EMC.movie_save_lastplayed.value is True:
 			self.__saveOldLast()
-		#print "CUTSTEST2 ", self.cut_list
+		# print "CUTSTEST2 ", self.cut_list
 		self.__removeSavedLast(self.__getCutListSavedLast())
-		#print "CUTSTEST3 ", self.cut_list
+		# print "CUTSTEST3 ", self.cut_list
 		self.__replaceLast(play)
-		#print "CUTSTEST4 ", self.cut_list
+		# print "CUTSTEST4 ", self.cut_list
 		self.__replaceLength(length)
-		#print "CUTSTEST5 ", self.cut_list
+		# print "CUTSTEST5 ", self.cut_list
 		self.uploadCuesheet()
 
 	def removeMarksCutList(self):
@@ -285,7 +302,10 @@ class CutList():
 			for cp in self.cut_list[:]:
 				if cp[1] == self.CUT_TYPE_MARK:
 					self.cut_list.remove(cp)
-		self.__writeCutFile()
+		if E2_NATIVE_CUTFILE:
+			self.uploadCuesheet()
+		else:
+			self.__writeCutFile()
 
 	# Internal modification functions
 	# Calculate in pts
@@ -424,6 +444,8 @@ class CutList():
 			self.cut_list = []
 
 	def __writeCutFile(self):
+		if E2_NATIVE_CUTFILE:
+			return
 		if self.iso:  # Don't write cuts for DVD because this will be done in enigma core code
 			return
 

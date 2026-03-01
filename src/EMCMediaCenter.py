@@ -44,7 +44,7 @@ from Tools.Notifications import AddPopup
 from .EnhancedMovieCenter import _
 from .EMCTasker import emcDebugOut
 from .DelayedFunction import DelayedFunction
-from .CutListSupport import CutList
+from .CutListSupport import CutList, E2_NATIVE_CUTFILE
 from .InfoBarSupport import InfoBarSupport
 from Components.Sources.EMCCurrentService import EMCCurrentService
 from .ServiceSupport import ServiceCenter
@@ -502,7 +502,7 @@ class EMCMediaCenter(CutList, Screen, HelpableScreen, InfoBarTimeshift, InfoBarS
 		self.session.nav.stopService()
 		# [Cutlist.Workaround] - part 2
 		# Always make a backup-copy when recording is running and we stopped the playback
-		if self.stopped:
+		if self.stopped and not E2_NATIVE_CUTFILE:
 			if self.service and self.service.type == eServiceReference.idDVB:
 				recFileName = self.service.getPath()
 				record = getRecording(recFileName)
