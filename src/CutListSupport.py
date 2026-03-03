@@ -169,15 +169,15 @@ class CutList:
 	# InfoBarCueSheetSupport
 	def uploadCuesheet(self):
 		try:
+			if config.EMC.movie_save_lastplayed.value:
+				self.__saveOldLast()
+
 			if E2_NATIVE_CUTFILE:
 				# C++ handles LAST, SAVEDLAST, LENGTH and file writing
 				cue = InfoBarCueSheetSupport._InfoBarCueSheetSupport__getCuesheet(self)
 				if cue:
 					cue.setCutList(self.cut_list)
 			else:
-				if config.EMC.movie_save_lastplayed.value is True:
-					self.__saveOldLast()
-
 				# Legacy: EMC handles all cut types and file writing
 				cue = InfoBarCueSheetSupport._InfoBarCueSheetSupport__getCuesheet(self)
 
@@ -282,9 +282,6 @@ class CutList:
 
 	def updateCutList(self, play, length):
 		# print "CUTSTEST1 ", self.cut_list
-		if config.EMC.movie_save_lastplayed.value is True:
-			self.__saveOldLast()
-
 		if not E2_NATIVE_CUTFILE:  # C++ handles LAST, SAVEDLAST and LENGTH natively
 			# Legacy: EMC handles all cut types
 			# print "CUTSTEST2 ", self.cut_list
