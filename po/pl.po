@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: enigma2-plugins EMC GIT20181227\n"
+"Project-Id-Version: EMC\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-03-12 09:04+0100\n"
 "PO-Revision-Date: 2019-11-12 20:23+0000\n"
@@ -723,7 +723,7 @@ msgid ""
 "Found rogue files:\n"
 "\n"
 msgstr ""
-Znaleziono nieuczciwe pliki:\n
+"Znaleziono nieuczciwe pliki:\n"
 "\n"
 
 msgid "Free: "
