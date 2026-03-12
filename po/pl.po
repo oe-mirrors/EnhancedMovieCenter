@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: enigma2-plugins EMC GIT20181227\n"
+"Project-Id-Version: EMC\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-03-12 09:04+0100\n"
 "PO-Revision-Date: 2019-11-12 20:23+0000\n"
@@ -55,10 +55,10 @@ msgid "( GB )"
 msgstr ""
 
 msgid "(Un-)Lock Directory"
-msgstr "Oblokuj / Zablokuj Katalogi"
+msgstr "(Od)blokuj katalog"
 
 msgid "(show optional DVD audio menu)"
-msgstr ""
+msgstr "(pokaż opcjonalne menu audio DVD)"
 
 msgid "*** Multiselection active ***"
 msgstr "*** Multi wybór aktywny***"
@@ -81,9 +81,8 @@ msgid ""
 "Confirm this with the blue key followed by the green key."
 msgstr ""
 
-#, fuzzy
 msgid "AUDIO METADATA"
-msgstr "po czuwaniu"
+msgstr "AUDIO METADATA"
 
 msgid "AUTOSTART"
 msgstr "AUTOMATYCZNY START"
@@ -91,9 +90,8 @@ msgstr "AUTOMATYCZNY START"
 msgid "About"
 msgstr "O wtyczce"
 
-#, fuzzy
 msgid "Add directory to E2 Bookmarks"
-msgstr "Dodaj katalog do zakładek EMC"
+msgstr "Dodaj katalog do zakładek E2"
 
 msgid "Add directory to EMC Bookmarks"
 msgstr "Dodaj katalog do zakładek EMC"
@@ -107,9 +105,8 @@ msgstr "Dodaj do bieżącej listy odtwarzania"
 msgid "After file OPs only re-scan affected dirs"
 msgstr "Po operacjach na plikach ponownie skanuj tylko katalogi, których dotyczy problem"
 
-#, fuzzy
 msgid "Age of finished movies in movie folder (days)"
-msgstr "Ustaw, ile dni zakończonych (oglądanych) nagrań może pozostać w \"Domu filmowym\"."
+msgstr "Wiek ukończonych filmów w folderze filmowym (dni)"
 
 msgid "Album:"
 msgstr ""
@@ -171,9 +168,8 @@ msgstr "Czarny"
 msgid "Blue button function"
 msgstr "Niebieski przycisk funkcyjny"
 
-#, fuzzy
 msgid "Bookmark"
-msgstr "E2 Zakładki"
+msgstr "Zakładki"
 
 msgid "Both"
 msgstr "Oba urządzenia"
@@ -199,9 +195,8 @@ msgstr "Nie można zapisać "
 msgid "Can not save Cover in "
 msgstr "Nie można zapisać okładki"
 
-#, fuzzy
 msgid "Can not save current Playlist!"
-msgstr "Zawsze zapisuj aktualną listę odtwarzania"
+msgstr "Nie można zapisać bieżącej playlisty!"
 
 #, python-format
 msgid ""
@@ -213,7 +208,7 @@ msgstr ""
 "\n"
 "%s"
 
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "Can not write Movie Information and Cover File\n"
 "\n"
@@ -222,8 +217,8 @@ msgid ""
 msgstr ""
 "Nie można zapisać informacji o filmie i pliku okładki\n"
 "\n"
-"% (informacje)s\n"
-"%(plik)s"
+"%(informacje)\n"
+"%(plik)"
 
 msgid "Cancel"
 msgstr "Anuluj"
@@ -237,30 +232,26 @@ msgstr "Zmień plik / nazwę pliku  / lub opis"
 msgid "Change Folder"
 msgstr "Zmień Folder"
 
-#, fuzzy
 msgid "Change Foldername"
-msgstr "Zmień Folder"
+msgstr "Zmień nazwę folderu"
 
-#, fuzzy
 msgid "Change the filename to save current Playlist:"
-msgstr "Plik dodany do bieżącej listy odtwarzania."
+msgstr "Zmień nazwę pliku, aby zapisać bieżącą listę odtwarzania:"
 
 msgid "Chap."
-msgstr ""
+msgstr "Rozdział"
 
 msgid "Chapter"
-msgstr ""
+msgstr "Rozdział"
 
 msgid "Check for dead links"
 msgstr "Sprawdź martwe linki"
 
-#, fuzzy
 msgid "Choose Directory:"
-msgstr "Wybierz katalog"
+msgstr "Wybierz katalog:"
 
-#, fuzzy
 msgid "Choose bookmark"
-msgstr "Zakładki EMC"
+msgstr "Wybierz zakładkę"
 
 msgid "Choose directory"
 msgstr "Wybierz katalog"
@@ -271,18 +262,17 @@ msgstr "Wybierz działanie"
 msgid "Choose plugin"
 msgstr "Wybierz wtyczkę"
 
-#, fuzzy
 msgid "Choose script"
-msgstr "Wybierz katalog"
+msgstr "Wybierz skrypt"
 
 msgid "Close EMC"
 msgstr "Zamknij EMC"
 
 msgid "Close EMC and do power button action"
-msgstr ""
+msgstr "Zamknij EMC i wykonaj czynność przycisku zasilania"
 
 msgid "Collection"
-msgstr ""
+msgstr "Kolekcja"
 
 msgid "Configured directories at the top of movielist"
 msgstr "Skonfigurowane katalogi u góry listy odtwarzania"
@@ -296,9 +286,8 @@ msgstr "Kopiuj plik"
 msgid "Copy Files"
 msgstr "Kopiuj pliki..."
 
-#, fuzzy
 msgid "Copy file(s):"
-msgstr "Kopiuj pliki..."
+msgstr "Kopiuj pliki:"
 
 #, python-format
 msgid ""
@@ -424,14 +413,14 @@ msgstr "Głęboki tryb czuwania"
 msgid "Default"
 msgstr ""
 
-#, fuzzy
 msgid ""
 "Default Playlist is not empty!\n"
 "\n"
 "Save default Playlist?"
 msgstr ""
-"Domyślna lista odtwarzania nie jest pusta! \n"
-" Zapisać domyślną listę odtwarzania?"
+"Domyślna lista odtwarzania nie jest pusta!\n"
+"\n"
+"Zapisać domyślną listę odtwarzania?"
 
 msgid "Default Playlist name"
 msgstr "Domyślna nazwa listy odtwarzania"
@@ -478,9 +467,8 @@ msgstr "Błąd Usunięcia:\n"
 msgid "Delete failed because the trashcan directory does not exist. Attempt to create it now?"
 msgstr "Usuwanie nie powiodło się, ponieważ katalog dla kosza nie istnieje. Utworzyć go teraz?"
 
-#, fuzzy
 msgid "Delete failed!"
-msgstr "Usuń wycięte pliki"
+msgstr "Usunięcie nie powiodło się!"
 
 msgid "Delete permanently"
 msgstr "Usuń trwale"
@@ -500,9 +488,9 @@ msgstr "Opis:"
 msgid "Directory"
 msgstr "Katalog"
 
-#, fuzzy, python-format
+#, python-format
 msgid "Directory %s already exists!"
-msgstr "Wyświetla katalog czytania tekstu"
+msgstr "Katalog %s już istnieje!"
 
 msgid "Directory back"
 msgstr "Cofnij Katalog"
@@ -511,12 +499,11 @@ msgid "Directory forward"
 msgstr "Przewiń Katalog"
 
 msgid "Directory is not empty! Do you really want to delete it?"
-msgstr ""
+msgstr "Katalog nie jest pusty! Czy na pewno chcesz go usunąć?"
 
 msgid "Directory up"
 msgstr "Katalog w górę"
 
-#, fuzzy
 msgid "Directory-Cover search"
 msgstr "Wyszukiwanie okładki"
 
@@ -553,14 +540,11 @@ msgid ""
 "%s?"
 msgstr ""
 
-#, fuzzy
 msgid "Do you want to resume this playback?"
-msgstr ""
-"Czy chcesz wznowić to odtwarzanie?\n"
-"Wznów pozycję w %s:%s:%s"
+msgstr "Czy chcesz wznowić to odtwarzanie?"
 
 msgid "Does not contain any scripts."
-msgstr ""
+msgstr "Nie zawiera żadnych skryptów."
 
 msgid "Don't auto scan size of dirs from emc-noscan.cfg"
 msgstr "Nie skanuj automatycznie rozmiarów katalogów z emc-noscan.cfg"
@@ -578,7 +562,6 @@ msgstr ""
 msgid "Download: %s"
 msgstr "Pobrano: %s"
 
-#, fuzzy
 msgid "E2 Bookmark"
 msgstr "E2 Zakładki"
 
@@ -608,16 +591,14 @@ msgstr "EMC ustawienia wyszukiwania okładek"
 msgid "EMC Filebrowser"
 msgstr "Przeglądarka plików EMC"
 
-#, fuzzy
 msgid "EMC Help"
-msgstr "Konfiguracja EMC"
+msgstr "EMC Pomoc"
 
 msgid "EMC Playlist - current playlist"
 msgstr "EMC Playlist - aktualna lista odtwarzania"
 
-#, fuzzy
 msgid "EMC Playlist Menu"
-msgstr "EMC Playlist Ustawienia"
+msgstr "Menu Playlist EMC"
 
 msgid "EMC Playlist Setup"
 msgstr "EMC Playlist Ustawienia"
@@ -625,9 +606,8 @@ msgstr "EMC Playlist Ustawienia"
 msgid "EMC Setup"
 msgstr "Konfiguracja EMC"
 
-#, fuzzy
 msgid "EMC Trashcan Cleanup failed!"
-msgstr "Włączanie kosza"
+msgstr "Czyszczenie kosza EMC nie powiodło się!"
 
 msgid "EMC always reload after open"
 msgstr "Zawsze przeładować po otwarciu"
@@ -653,10 +633,10 @@ msgid ""
 msgstr ""
 
 msgid "Edit Tags"
-msgstr ""
+msgstr "Edytuj tagi"
 
 msgid "Empty trashcan"
-msgstr "Opróżnij Kosz"
+msgstr "Opróżnij kosz"
 
 msgid "Enable EMC debug output"
 msgstr "Włącz debugowanie EMC"
@@ -679,9 +659,8 @@ msgstr "Włącz zdalne nagrania"
 msgid "English"
 msgstr "Angielski"
 
-#, fuzzy
 msgid "Enter Name for Playlist"
-msgstr "Wpisz nazwę nowego katalogu:"
+msgstr "Wpisz nazwę playlisty"
 
 msgid "Enter name for new directory:"
 msgstr "Wpisz nazwę nowego katalogu:"
@@ -691,11 +670,10 @@ msgstr "Istnieje"
 
 #, python-format
 msgid "Exist: %s"
-msgstr "Znaleziono: %s"
+msgstr "Istnieje: %s"
 
-#, fuzzy
 msgid "F1-button"
-msgstr "Przycisk TV"
+msgstr "Przycisk F1"
 
 msgid "File added to current Playlist."
 msgstr "Plik dodany do bieżącej listy odtwarzania."
@@ -709,7 +687,6 @@ msgstr "Plik nie jest dostępny."
 msgid "Filename:"
 msgstr "Nazwa pliku:"
 
-#, fuzzy
 msgid "Files added to current Playlist."
 msgstr "Plik dodany do bieżącej listy odtwarzania."
 
@@ -722,18 +699,19 @@ msgid ""
 "%(exist)s"
 msgstr ""
 
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "Files exists in current Playlist:\n"
 "%s"
-msgstr "Plik istnieje na bieżącej liście odtwarzania."
+msgstr "" 
+"Plik istnieje na bieżącej liście odtwarzania:\n"
+"%s"
 
 msgid "Finished watching percent"
 msgstr "Koniec oglądania w procentach"
 
-#, fuzzy
 msgid "Foldername:"
-msgstr "Nazwa pliku:"
+msgstr "Nazwa folderu:"
 
 msgid "Force standby after auto-restart"
 msgstr "Przejdź w tryb Standby po auto restarcie"
@@ -741,15 +719,15 @@ msgstr "Przejdź w tryb Standby po auto restarcie"
 msgid "Format AVSwitch"
 msgstr ""
 
-#, fuzzy
 msgid ""
 "Found rogue files:\n"
 "\n"
-msgstr "Usuń niechciane pliki"
+msgstr ""
+"Znaleziono nieuczciwe pliki:\n"
+"\n"
 
-#, fuzzy
 msgid "Free: "
-msgstr "Wolne: %s %s"
+msgstr "Wolne: "
 
 msgid "French"
 msgstr "Francuski"
@@ -777,14 +755,13 @@ msgid "Grey"
 msgstr "Szary"
 
 msgid "HELP_About"
-msgstr "Opens the About dialog box."
+msgstr ""
 
-#, fuzzy
 msgid "HELP_After file OPs only re-scan affected dirs"
-msgstr "Po operacjach na plikach ponownie skanuj tylko katalogi, których dotyczy problem"
+msgstr "POMOC_Po ponownym przeskanowaniu plików OP tylko dotknięte katalogi"
 
 msgid "HELP_Age of finished movies in movie folder (days)"
-msgstr "Ustaw, ile dni zakończonych (oglądanych) nagrań może pozostać w \"Domu filmowym\"."
+msgstr ""
 
 msgid "HELP_Always save last played progress as marker"
 msgstr ""
@@ -1322,9 +1299,8 @@ msgstr ""
 "Wyłącz parsowanie dla struktur DVD w dowiązaniach symbolicznych odnoszących się do podkatalogów.\n"
 "Pozwala to uniknąć niechcianego wznawiania dysków (sieciowych)."
 
-#, fuzzy
 msgid "Hide Cover"
-msgstr "Zapisz Okładkę:"
+msgstr "Ukryjokładkę"
 
 msgid "Hide MiniTV"
 msgstr "Ukryj MiniTV"
@@ -1366,9 +1342,8 @@ msgstr ""
 msgid "IMDBSearch / EMC-TMDBInfo / TMDBInfo / TMBDInfo / CSFDInfo"
 msgstr ""
 
-#, fuzzy
 msgid "IMDb"
-msgstr "IMDb Skanowanie"
+msgstr "IMDb"
 
 msgid "IMDb Search"
 msgstr "IMDb Szukaj"
@@ -1404,7 +1379,7 @@ msgid "Last played movie/playlist not available..."
 msgstr "Ostatnio odtwarzany film/lista odtwarzania nie jest dostępna..."
 
 msgid "Latest"
-msgstr ""
+msgstr "Najnowszy"
 
 msgid "Latest Recordings"
 msgstr "Najnowsze nagrania"
@@ -1463,9 +1438,8 @@ msgstr ""
 msgid "Locate rogue files and remove them? (permanently if no trashcan available, may take a minute or so)"
 msgstr "Znaleść fałszywe pliki i usunąć je? (Na stałe, jeśli katalog kosza nie jest dostępny, trwa około kilka minut)"
 
-#, fuzzy
 msgid "Location:"
-msgstr "Informacje"
+msgstr "Lokalizacja:"
 
 msgid "Long Blue button function"
 msgstr "Funkcja długiego niebieskiego przycisku"
@@ -1497,9 +1471,8 @@ msgstr "Metoda ukrywania MiniTV"
 msgid "Minimum file cache limit (0=cache everything)"
 msgstr "Minimalny limit pamięci podręcznej plików (0 = wszystko buforuj)"
 
-#, fuzzy
 msgid "Minutes"
-msgstr "Brak minut"
+msgstr "Minut"
 
 msgid "Month"
 msgstr "Miesiąc"
@@ -1507,13 +1480,11 @@ msgstr "Miesiąc"
 msgid "Months"
 msgstr "Miesiące"
 
-#, fuzzy
 msgid "Move Cover to:"
-msgstr "Zapisz Okładkę:"
+msgstr "Przenieś okładkę do:"
 
-#, fuzzy
 msgid "Move Directory:"
-msgstr "Katalog"
+msgstr "Przenieś katalog:"
 
 msgid "Move File"
 msgstr "Przenieś plik"
@@ -1539,9 +1510,8 @@ msgstr ""
 msgid "Move cursor up"
 msgstr "Ruch kursorem pozycję w górę"
 
-#, fuzzy
 msgid "Move file(s):"
-msgstr "Przenieś pliki"
+msgstr "Przenieś pliki:"
 
 msgid "Move finished movies in trashcan"
 msgstr "Przenieś gotowe filmy do kosza"
@@ -1575,9 +1545,8 @@ msgstr "Informacje o filmie TMDb"
 msgid "Movie Information and Cover downloaded successfully!"
 msgstr "Informacje o filmie i okładce pobrane pomyślnie!"
 
-#, fuzzy
 msgid "Movie Information downloaded successfully!"
-msgstr "Informacje o filmie i okładce pobrane pomyślnie!"
+msgstr "Informacje o filmie zostały pomyślnie pobrane!"
 
 #, python-format
 msgid ""
@@ -1605,16 +1574,14 @@ msgstr "Główny katalog przy starcie"
 msgid "Movie home home path"
 msgstr "Ścieżka Głównego katalogu"
 
-#, fuzzy
 msgid "Movie information"
-msgstr "Informacje o filmie TMDb"
+msgstr "Informacje o filmie"
 
 msgid "Movie preview delay in ms"
 msgstr "Opóźnienie podglądu filmu w ms"
 
-#, fuzzy
 msgid "Movies"
-msgstr "film"
+msgstr "Filmy"
 
 msgid "Movietitle:"
 msgstr "Tytuł filmu:"
@@ -1622,9 +1589,8 @@ msgstr "Tytuł filmu:"
 msgid "N/A"
 msgstr "Niedostępne"
 
-#, fuzzy
 msgid "Next auto-start in "
-msgstr "zakończy"
+msgstr "Następny autostart za "
 
 msgid "No"
 msgstr "Nie"
@@ -1636,9 +1602,8 @@ msgstr "Nie Znaleziono: %s"
 msgid "No DVD-Player found!"
 msgstr "Nie znaleziono odtwarzacza DVD!"
 
-#, fuzzy
 msgid "No Movies found!"
-msgstr "Nieznaleziono fałszywych plików."
+msgstr "Nie znaleziono filmów!"
 
 msgid "No functionality set..."
 msgstr "Nieustawiony..."
@@ -1658,9 +1623,8 @@ msgstr "Nieznaleziono fałszywych plików."
 msgid "No script operation for VLC streams."
 msgstr ""
 
-#, fuzzy
 msgid "Not all timers have been stopped. Modify them with the timer editor."
-msgstr "Nie zatrzymano żadnych powtarzających się Timerów. Zmień je za pomocą edytora timera."
+msgstr "Nie wszystkie timery zostały zatrzymane. Zmodyfikuj je za pomocą edytora timerów."
 
 msgid "Nothing was found !"
 msgstr "Nic nie znaleziono!"
