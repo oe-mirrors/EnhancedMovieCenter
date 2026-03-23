@@ -30,6 +30,8 @@ from .IsoFileSupport import IsoSupport
 
 from .RecordingsControl import getRecording
 
+import NavigationInstance
+
 try:
 	from enigma import getE2Flags
 	E2_NATIVE_CUTFILE = bool(getE2Flags() & 4)
@@ -147,12 +149,11 @@ class CutList:
 				self.cut_list = cue.getCutList()
 
 			# print "CUTSTEST0 ", self.cut_list
-			if config.EMC.cutlist_at_download.value:
-				if service and hasCutlistDownloader:
-					try:
-						bestCutlist(service, self.cutlistDownloaded)
-					except Exception as e:
-						emcDebugOut("[EMC] Plugin CutlistDownloader exception:" + str(e))
+			if config.EMC.cutlist_at_download.value and service and hasCutlistDownloader:
+				try:
+					bestCutlist(service, self.cutlistDownloaded)
+				except Exception as e:
+					emcDebugOut("[EMC] Plugin CutlistDownloader exception:" + str(e))
 
 			# MAYBE: If the cutlist is empty we can check the EPG NowNext Events
 		except Exception as e:
@@ -174,7 +175,8 @@ class CutList:
 
 			if E2_NATIVE_CUTFILE:
 				# C++ handles LAST, SAVEDLAST, LENGTH and file writing
-				cue = InfoBarCueSheetSupport._InfoBarCueSheetSupport__getCuesheet(self)
+				service = NavigationInstance.instance.getCurrentService()
+				cue = service and service.cueSheet()
 				if cue:
 					cue.setCutList(self.cut_list)
 			else:
