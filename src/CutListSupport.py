@@ -79,7 +79,7 @@ class CutList:
 
 	# Constants
 	ENABLE_RESUME_SUPPORT = True
-	MOVIE_FINISHED = 0xFFFFFFFFFFFFFFFF
+	MOVIE_FINISHED = 0xFFFFFFFFFFFFFF
 
 	INSORT_SCOPE = 45000  # 0.5 seconds * 90 * 1000
 
@@ -274,13 +274,13 @@ class CutList:
 	# API modification functions
 	# Calculate in seconds
 	# A modification will always be written immediately
-	def toggleLastCutList(self, toggle=0):
+	def toggleLastCutList(self, toggle=0, force=False):
 		self.__toggleLast(toggle)
 		# print "toggleLastCutList " + str(toggle) + " cutlist " + str(self.cut_list)
-		if E2_NATIVE_CUTFILE:
+		if E2_NATIVE_CUTFILE and not force:
 			self.uploadCuesheet()
 		else:
-			self.__writeCutFile()
+			self.__writeCutFile(force)
 
 	def updateCutList(self, play, length):
 		# print "CUTSTEST1 ", self.cut_list
@@ -330,6 +330,7 @@ class CutList:
 		self.__removeSavedLast(savedLast)
 		newLast = 0
 		newSaved = 0
+		length = self.__getCutListLength()
 
 		"""
 		if savedLast == oldLast:
@@ -357,6 +358,15 @@ class CutList:
 			oldLast = 0
 
 		newSaved = savedLast or oldLast
+		if length > 0:
+			if newLast > length:
+				newLast = length
+			if newSaved > length:
+				newSaved = length
+
+		if newLast == 0 and newSaved == self.MOVIE_FINISHED:
+			newSaved = self.MOVIE_FINISHED - 1
+
 		self.__replaceLast(newLast)
 		self.__appendSavedLast(newSaved)
 
@@ -441,8 +451,8 @@ class CutList:
 			# No path or no file clear all
 			self.cut_list = []
 
-	def __writeCutFile(self):
-		if E2_NATIVE_CUTFILE:
+	def __writeCutFile(self, force=False):
+		if E2_NATIVE_CUTFILE and not force:
 			return
 		if self.iso:  # Don't write cuts for DVD because this will be done in enigma core code
 			return

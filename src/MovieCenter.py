@@ -378,13 +378,13 @@ def toggleProgressService(service, preparePlayback, forceProgress=-1, first=Fals
 			# 100% -> 0
 			# Don't care about preparePlayback, always reset to 0%
 			# Save last marker
-			cuts.toggleLastCutList(cuts.CUT_TOGGLE_START)
+			cuts.toggleLastCutList(cuts.CUT_TOGGLE_START, True)
 		elif progress <= 0:
 			# 0% -> SAVEDLAST or length
-			cuts.toggleLastCutList(cuts.CUT_TOGGLE_RESUME)
+			cuts.toggleLastCutList(cuts.CUT_TOGGLE_RESUME, True)
 		else:
 			# 1-99% -> length
-			cuts.toggleLastCutList(cuts.CUT_TOGGLE_FINISHED)
+			cuts.toggleLastCutList(cuts.CUT_TOGGLE_FINISHED, True)
 	else:
 		if progress >= 100 or config.EMC.movie_rewind_finished.value is True and progress >= int(config.EMC.movie_finished_percent.value):
 			# 100% -> 0 or
@@ -2892,10 +2892,10 @@ class MovieCenter(GUIComponent):
 					first = False
 					#if not preparePlayback:
 					forceProgress = progress
-		else:
-			toggleProgressService(service, preparePlayback)
-			self.invalidateService(service)
-			#DelayedFunction(1000, self.invalidateService, service)
+#		else:
+#			toggleProgressService(service, preparePlayback)
+#			self.invalidateService(service)
+#			#DelayedFunction(1000, self.invalidateService, service)
 
 	def getNextSelectedService(self, current, selectedlist=None):
 		curSerRef = None
