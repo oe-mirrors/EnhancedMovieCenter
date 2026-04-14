@@ -33,14 +33,13 @@ from .RecordingsControl import getRecording
 import NavigationInstance
 
 try:
-	from enigma import getE2Flags
-	E2_NATIVE_CUTFILE = bool(getE2Flags() & 4)
-except ImportError:
+	E2_NATIVE_CUTFILE = config.usage.nativeCuesheetSupport.value
+except Exception:
 	E2_NATIVE_CUTFILE = False
 
 try:
 	from Plugins.Extensions.CutlistDownloader.plugin import bestCutlist
-except ImportError as ie:
+except ImportError:
 	hasCutlistDownloader = False
 else:
 	hasCutlistDownloader = True
