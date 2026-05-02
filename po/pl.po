@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: EMC\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-03-12 09:04+0100\n"
-"PO-Revision-Date: 2019-11-12 20:23+0000\n"
+"PO-Revision-Date: 2026-05-02 13:00+0100\n"
 "Last-Translator: @Kos\n"
 "Language-Team: special OpenATV\n"
 "Language: pl\n"
@@ -11,7 +11,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 2.2.4\n"
+"X-Generator: Poedit 3.9\n"
 
 msgid " Deleting remotely recorded and it will display an rec-error dialog on the other DB."
 msgstr "Usunie zdalnie zarejstrowane nagrania i wyświetli okno dialogowe błędów nagrywania na innych DB."
@@ -217,8 +217,8 @@ msgid ""
 msgstr ""
 "Nie można zapisać informacji o filmie i pliku okładki\n"
 "\n"
-"%(informacje)\n"
-"%(plik)"
+"%(info)s\n"
+"%(file)s"
 
 msgid "Cancel"
 msgstr "Anuluj"
@@ -703,7 +703,7 @@ msgstr ""
 msgid ""
 "Files exists in current Playlist:\n"
 "%s"
-msgstr "" 
+msgstr ""
 "Plik istnieje na bieżącej liście odtwarzania:\n"
 "%s"
 
@@ -774,33 +774,26 @@ msgstr "Gotowe Timery zostaną automatycznie usunięte z Listy Timerów."
 msgid "HELP_Blue button function"
 msgstr "Wybór funkcji można przypisać do niebieskiego przycisku."
 
-#, fuzzy
 msgid "HELP_Bouquet buttons behaviour"
 msgstr "Zachowanie przycisków bukietu"
 
-#, fuzzy
 msgid "HELP_Check for dead links"
-msgstr "Sprawdź martwe linki"
+msgstr "Sprawdź, czy nie ma niedziałających linków"
 
 msgid "HELP_Configure in etc/enigma2/emc-topdir.cfg"
-msgstr ""
+msgstr "Skonfiguruj w etc/enigma2/emc-topdir.cfg"
 
-#, fuzzy
 msgid "HELP_Cover background"
 msgstr "Tło okładki"
 
-#, fuzzy
 msgid "HELP_Cover delay in ms"
-msgstr "Opóźnienie w ms"
+msgstr "Opóźnienie okładki w ms"
 
 msgid "HELP_Cursor predictive move after selection"
-msgstr ""
-"Po wybraniu przyciskiem [VIDEO / PVR] kursor przesunie się w określonym kierunku.\n"
-"Po naciśnięciu „góra / dół” kursor podąża za ostatnio zastosowanym kierunkiem."
+msgstr "Przewidywany ruch kursora po zaznaczeniu"
 
-#, fuzzy
 msgid "HELP_Daily auto-start"
-msgstr "Tryb uruchomienia automatycznego"
+msgstr "Codzienny automatyczny start"
 
 msgid "HELP_Daily cleanup time"
 msgstr "Czas, w którym EMC usuwa wszystkie pliki w koszu poza limitem ważności."
@@ -811,23 +804,18 @@ msgstr "Wybierz format daty i godziny, który będzie wyświetlany za plikami."
 msgid "HELP_Debug output file name"
 msgstr "Nazwa pliku dziennika do debugowania."
 
-#, fuzzy
 msgid "HELP_Default color highlighted"
 msgstr "Domyślny kolor podświetlonego filmu"
 
-#, fuzzy
 msgid "HELP_Default color partially watched"
 msgstr "Domyślny kolor dla częściowo oglądanego filmu"
 
-#, fuzzy
 msgid "HELP_Default color recording"
 msgstr "Domyślny kolor do nagrywania filmu"
 
-#, fuzzy
 msgid "HELP_Default color unwatched"
-msgstr "Domyślny kolor dla niezbadanego filmu"
+msgstr "Domyślny kolor dla nieoglądanego filmu"
 
-#, fuzzy
 msgid "HELP_Default color watched"
 msgstr "Domyślny kolor oglądanego filmu"
 
@@ -835,26 +823,19 @@ msgid "HELP_Delete validation"
 msgstr "Po aktywacji i użyciu kosza na śmieci EMC nigdy nie poprosi o potwierdzenie."
 
 msgid "HELP_Description field update delay"
-msgstr ""
-"Opóźnienie wyświetlenia opisu na liście filmów.\n"
-"(Zwiększa szybkość nawigacji po wielokrotnym naciśnięciu przycisku góra / dół. Ponieważ opis jest ładowany dopiero po wybranym opóźnieniu.)"
+msgstr "Opóźnienie wyświetlenia opisu na liście filmów."
 
 msgid "HELP_Disable EMC"
-msgstr "Całkowicie wyłącz EMC (MovieList). Niektóre funkcje specjalne, takie jak [Czyszczenie listy czasowej], [Czyszczenie kosza] i [Automatyczne ponowne uruchomienie] pozostają aktywne w tle."
+msgstr "Wyłącz EMC"
 
 msgid "HELP_Display directory reading text"
 msgstr "Wyświetl komunikat \"Czytanie katalogu ... \" podczas czytania katalogu."
 
-#, fuzzy
 msgid "HELP_Don't auto scan size of dirs from emc-noscan.cfg"
 msgstr "Nie skanuj automatycznie rozmiarów katalogów z emc-noscan.cfg"
 
-#, fuzzy
 msgid "HELP_Download cutlist from Cutlist.at"
-msgstr ""
-"Tytuły zostaną załadowane z .eit, jeśli są dostępne.\n"
-"W przeciwnym razie tytuł zostanie wyodrębniony z nazwy pliku.\n"
-"(Czy .meta i .eit activatetd, .meta zostanie przeczytany jako pierwszy.)"
+msgstr "Pobierz listę cięć z Cutlist.at"
 
 msgid "HELP_Dynamic trashcan"
 msgstr "Wyświetl ilość nagrań i / lub ile miejsca na dysku zużyją w koszu."
@@ -890,7 +871,6 @@ msgstr ""
 msgid "HELP_Enable daily trashcan cleanup"
 msgstr "EMC usuwa stare pliki z kosza, gdy osiągną limit wygaśnięcia ustawiony w następnym wpisie."
 
-#, fuzzy
 msgid "HELP_Enable playback AC3-track first"
 msgstr "Najpierw włącz odtwarzanie ścieżki AC3"
 
@@ -905,7 +885,6 @@ msgstr ""
 "Wykryj nagrania z innego Dreamboxa do wspólnego woluminu.\n"
 "To nagranie ma ikonę specjalną"
 
-#, fuzzy
 msgid "HELP_Fallback Cover"
 msgstr "Pokaż okładkę rezerwową"
 
@@ -914,7 +893,6 @@ msgstr ""
 "Określa, jaki procent postępu jest klasyfikowany jako \"widoczny\".\n"
 "Pasek postępu zmieni kolor na zielony."
 
-#, fuzzy
 msgid "HELP_Force standby after auto-start"
 msgstr "Przejdź w tryb Standby po auto restarcie"
 
@@ -928,11 +906,9 @@ msgstr ""
 "Podczas przenoszenia nagranie zostanie ukryte przed listą filmów.\n"
 "(W każdym razie akcja przesuwania zostanie wykonana w tle)."
 
-#, fuzzy
 msgid "HELP_Horizontal alignment for count / size"
 msgstr "Wyrównanie w poziomie dla liczby / rozmiaru"
 
-#, fuzzy
 msgid "HELP_Horizontal alignment for date"
 msgstr "Wyrównanie w poziomie dla daty"
 
@@ -941,7 +917,6 @@ msgstr ""
 "Ustaw, przez ile dni pliki mogą pozostać w koszu, zanim EMC usunie je na stałe.\n"
 "(Po ustawieniu na [0] pliki zostaną natychmiast usunięte)."
 
-#, fuzzy
 msgid "HELP_Icon shown for initially unknown count / size"
 msgstr "Pokaż Ikone dla początkowo nieznanej liczby / rozmiaru"
 
@@ -956,22 +931,18 @@ msgstr "Czas do ponownego wysłania przycisku przy wciśniętym przycisku."
 msgid "HELP_Key repeat value (250-900)"
 msgstr "Szybkość ponownego wysyłania przycisku po przytrzymaniu przycisku."
 
-#, fuzzy
 msgid "HELP_Latest Recordings directory limit"
 msgstr "Limit katalogu najnowszych nagrań"
 
-#, fuzzy
 msgid "HELP_Latest Recordings directory use emc-noscan.cfg"
 msgstr "Katalog najnowszych nagrań używa emc-noscan.cfg"
 
 msgid "HELP_Leave Movie with Exit"
 msgstr "Odtwarzanie nagrania można zatrzymać za pomocą przycisku EXIT, oprócz przycisku Stop."
 
-#, fuzzy
 msgid "HELP_Limit file operations in dirs from emc-noscan.cfg"
 msgstr "Ogranicz operacje na plikach w katalogach z emc-noscan.cfg"
 
-#, fuzzy
 msgid "HELP_List entries to skip"
 msgstr "Lista wpisów do pominięcia"
 
@@ -980,27 +951,21 @@ msgstr ""
 "Zostanie użyty wizualny wyświetlacz MovieList ze skórki (jeśli jest dostępny) (tylko <nazwa widżetu = \"lista\").\n"
 "W przeciwnym razie zostanie zastosowana konfiguracja EMC."
 
-#, fuzzy
 msgid "HELP_Long Blue button function"
 msgstr "Funkcja długiego niebieskiego przycisku"
 
-#, fuzzy
 msgid "HELP_Long Red button function"
 msgstr "Funkcja długiego czerwonego przycisku"
 
-#, fuzzy
 msgid "HELP_Long Yellow button function"
 msgstr "Funkcja długiego żółtego przycisku"
 
-#, fuzzy
 msgid "HELP_LongInfo Button"
 msgstr "Funkcja długiego info przycisku"
 
-#, fuzzy
 msgid "HELP_Mark new recordings with a star"
 msgstr "Oznacz nowe nagrania gwiazdką"
 
-#, fuzzy
 msgid "HELP_Minimum file cache limit"
 msgstr "Minimalny limit pamięci podręcznej plików (0 = wszystko buforuj)"
 
@@ -1015,11 +980,9 @@ msgstr ""
 msgid "HELP_Movie home home path"
 msgstr "Ustaw ścieżkę \"Strona główna filmu\" naiśnij OK lu TXT-TTX."
 
-#, fuzzy
 msgid "HELP_Movie preview delay in ms"
 msgstr "Opóźnienie podglądu filmu w ms"
 
-#, fuzzy
 msgid "HELP_Movie preview offset in seconds"
 msgstr "Opóźnienie podglądu filmu w ms"
 
@@ -1028,17 +991,14 @@ msgstr ""
 "Ignoruje znacznik początkowy poniżej 10 sekund.\n"
 "Jeśli odtwarzanie zostanie zatrzymane w ciągu pierwszych 10 sekund, przy następnym odtwarzaniu nie zostanie zaproponowane Wznowienie."
 
-#, fuzzy
 msgid "HELP_Own Path to movie picons"
 msgstr "Własna ścieżka do pikonów filmowych"
 
-#, fuzzy
 msgid "HELP_Path to movie picons"
-msgstr "Odpowiednia ikona jest wyświetlana na liście filmów."
+msgstr "Ścieżka do pikonów filmowych"
 
-#, fuzzy
 msgid "HELP_Position movie picons"
-msgstr "Odpowiednia ikona jest wyświetlana na liście filmów."
+msgstr "Pozycjonuj pikiny filmowe"
 
 msgid "HELP_Preferred EPG language"
 msgstr "Tutaj możesz określić preferowany język EPG."
@@ -1049,9 +1009,8 @@ msgstr "Pierwszy kanał audio, który należy wybrać, jeśli jest dostępny."
 msgid "HELP_Primary playback subtitle language"
 msgstr "Pierwszy język, który należy wybrać, jeśli jest dostępny, dla napisów."
 
-#, fuzzy
 msgid "HELP_Red button function"
-msgstr "Wybór funkcji można przypisać do niebieskiego przycisku."
+msgstr "Funkcjia czerwonego przycisku."
 
 msgid "HELP_Replace special chars in title"
 msgstr "Zastąp podkreślenia i punkty w tytułach spacjami."
@@ -1069,15 +1028,12 @@ msgstr ""
 "Wyłącz parsowanie struktur DVD we wszystkich katalogach.\n"
 "Pozwala to uniknąć niechcianego wznawiania dysków (sieciowych)."
 
-#, fuzzy
 msgid "HELP_Scan for bluray structures"
 msgstr "Wyszukaj struktury dla Bluray"
 
-#, fuzzy
 msgid "HELP_Scan for bluray structures in .iso"
 msgstr "Szukaj struktur Bluray w .iso"
 
-#, fuzzy
 msgid "HELP_Scan for movie structures"
 msgstr "Wyszukaj struktury dla filmów"
 
@@ -1092,11 +1048,9 @@ msgstr ""
 "Określa, jaki procent postępu jest klasyfikowany jako \"obserwowany\".\n"
 "Pasek postępu zmieni kolor na niebieski."
 
-#, fuzzy
 msgid "HELP_Show Bookmarks in movielist"
 msgstr "Pokaż zakładki w liście odtwarzania"
 
-#, fuzzy
 msgid "HELP_Show Cover"
 msgstr "Pokaż okładkę"
 
@@ -1110,9 +1064,8 @@ msgstr ""
 "Pokaż lub ukryj wtyczkę EMC w menu rozszerzeń.\n"
 "Menu rozszerzeń jest zwykle dostępne za pomocą klawisza [niebieski]."
 
-#, fuzzy
 msgid "HELP_Show EMC in main menu"
-msgstr "Pokaż w menu głównym"
+msgstr "Pokaż EMC w menu głównym"
 
 msgid "HELP_Show Latest Recordings directory"
 msgstr ""
@@ -1122,14 +1075,12 @@ msgstr ""
 msgid "HELP_Show Movie Format"
 msgstr "Rozszerzenie pliku (format pliku) zostanie dołączone do tytułu."
 
-#, fuzzy
 msgid "HELP_Show Path if no extended description available"
 msgstr "Pokaż ścieżkę, jeśli nie jest dostępny rozszerzony opis"
 
 msgid "HELP_Show VLC directory"
 msgstr "Pokaż lub ukryj katalog VLC, jeśli zainstalowana jest wtyczka VlcPlayerExtended."
 
-#, fuzzy
 msgid "HELP_Show audio metadata"
 msgstr "Pokaż metadane audio"
 
@@ -1139,34 +1090,27 @@ msgstr "Pokaż lub ukryj katalogi w liście odtwarzania"
 msgid "HELP_Show directories information"
 msgstr "Wyświetl ilość nagrań i / lub ile miejsca na dysku używają."
 
-#, fuzzy
 msgid "HELP_Show directories within movielist"
 msgstr "Pokaż katalogi w liście filmów"
 
-#, fuzzy
 msgid "HELP_Show directory size in skin"
 msgstr "Pokaż rozmiar katalogu w skórze"
 
-#, fuzzy
 msgid "HELP_Show experimental options"
 msgstr "Pokaż opcje eksperymentalne"
 
-#, fuzzy
 msgid "HELP_Show link arrow"
 msgstr "Pokaż strzałkę łącza"
 
-#, fuzzy
 msgid "HELP_Show message if file added to playlist"
 msgstr "Pokaż wiadomość, jeśli plik został dodany do listy odtwarzania"
 
 msgid "HELP_Show movie icons"
 msgstr "Odpowiednia ikona jest wyświetlana na liście filmów."
 
-#, fuzzy
 msgid "HELP_Show movie picons"
 msgstr "Odpowiednia ikona jest wyświetlana na liście filmów."
 
-#, fuzzy
 msgid "HELP_Show movie preview"
 msgstr "Pokaż podgląd filmu"
 
@@ -1178,11 +1122,9 @@ msgstr ""
 "Pokaż lub ukryj konfigurację EMC w menu rozszerzeń.\n"
 "Menu rozszerzeń jest zwykle dostępne za pomocą klawisza [niebieski]."
 
-#, fuzzy
 msgid "HELP_Show real length of running records"
 msgstr "Pokaż rzeczywistą długość uruchomionych nagrań"
 
-#, fuzzy
 msgid "HELP_Show symlinks"
 msgstr "Pokaż symlinki"
 
@@ -1191,18 +1133,14 @@ msgstr ""
 "Wyświetl katalog kosza na śmieci w EMC.\n"
 "(Gdy jest ukryty, można jednak uzyskać dostęp do kosza na śmieci przez EMC [MENU])"
 
-#, fuzzy
 msgid "HELP_Sort mode at startup"
-msgstr ""
-"EMC zaczyna się zawsze w katalogu \"Strona główna filmu\".\n"
-"(W następnym wpisie możesz ustawić katalog \"Strona główna filmu\")."
+msgstr "Tryb sortowania podczas uruchamiania"
 
 msgid "HELP_Start EMC with"
 msgstr "Ustaw przycisk bezpośredni, aby otworzyć EMC."
 
-#, fuzzy
 msgid "HELP_Style for original EMC-skin (needs reopen)"
-msgstr "Stylowa oryginalna skóra EMC"
+msgstr "Styl dla oryginalnej skórki EMC (wymaga ponownego otwarcia)"
 
 msgid "HELP_Tertiary playback audio language"
 msgstr "Trzeci kanał audio, który należy wybrać, jeśli jest dostępny."
@@ -1210,15 +1148,12 @@ msgstr "Trzeci kanał audio, który należy wybrać, jeśli jest dostępny."
 msgid "HELP_Tertiary playback subtitle language"
 msgstr "Trzeci język, który należy wybrać, jeśli jest dostępny, dla napisów."
 
-#, fuzzy
 msgid "HELP_Text shown for initially unknown count and size"
 msgstr "Tekst wyświetlany dla początkowo nieznanej liczby i rozmiaru"
 
-#, fuzzy
 msgid "HELP_Text shown for initially unknown directory size"
 msgstr "Tekst wyświetlany dla początkowo nieznanego rozmiaru katalogu"
 
-#, fuzzy
 msgid "HELP_Text shown for initially unknown file count"
 msgstr "Tekst wyświetlany dla początkowo nieznanej liczby plików"
 
@@ -1230,7 +1165,6 @@ msgstr ""
 "Ustaw ścieżkę kosza.\n"
 "Naciśnięcie [usuń] spowoduje przeniesienie nagrań do aktywowanego kosza na śmieci zamiast natychmiastowego usuwania plików naiśnij OK lub TXT-TTX."
 
-#, fuzzy
 msgid "HELP_Try to load extra title and more from .meta files"
 msgstr "Spróbuj załadować dodatkowy tytuł i więcej z plików .meta"
 
@@ -1246,32 +1180,26 @@ msgstr ""
 "W przeciwnym razie tytuł zostanie wyodrębniony z nazwy pliku.\n"
 "(Czy .meta i .eit activatetd, .meta zostanie przeczytany jako pierwszy.)"
 
-#, fuzzy
 msgid "HELP_Use cache for files and directories"
 msgstr "Użyj pamięci podręcznej dla plików i katalogów"
 
-#, fuzzy
 msgid "HELP_Use original EMC-skin (needs reopen)"
 msgstr "Użyj oryginalnej skóry EMC (wymaga ponownego otwarcia)"
 
-#, fuzzy
 msgid "HELP_Wake device when entering dir from emc-noscan.cfg"
 msgstr "Obudź urządzenie przy wprowadzaniu katalogu z emc-noscan.cfg"
 
-#, fuzzy
 msgid "HELP_Yellow button function"
 msgstr "Funkcja żółtego przycisku"
 
 msgid "HELP_Zap to channel after record EOF"
 msgstr "Jeśli gracz osiągnie koniec bieżącego rekordu, z powodu szybkiego przewijania do przodu lub do przodu, zamknij emc i przełącz bezpośrednio na kanał telewizyjny na żywo z tego rekordu."
 
-#, fuzzy
 msgid "HELP_auto-start window begin"
-msgstr "rozpocznie się"
+msgstr "Okno automatycznego uruchamiania"
 
-#, fuzzy
 msgid "HELP_auto-start window end"
-msgstr "zakończy"
+msgstr "Zakończenie okna automatycznego uruchamiania"
 
 msgid "HELP_cfghide_enable"
 msgstr ""
@@ -1283,16 +1211,14 @@ msgstr ""
 "Nie analizuj struktur DVD w podkatalogach ze ścieżek wymienionych w '/etc/enigma2/emc-noscan.cfg'. Pozwala to uniknąć niechcianego wznawiania dysków (sieciowych).\n"
 "Zmiana tego ustawienia wymaga ponownego uruchomienia Enigma2!"
 
-#, fuzzy
 msgid "HELP_hide_MiniTV"
 msgstr "Ukryj MiniTV"
 
-#, fuzzy
 msgid "HELP_hide_MiniTV cover"
 msgstr "Ukryj okładkę MiniTV"
 
 msgid "HELP_hide_MiniTV_method"
-msgstr ""
+msgstr "Metoda ukrywania okładki MiniTV"
 
 msgid "HELP_scan_linked"
 msgstr ""
@@ -1662,9 +1588,8 @@ msgstr "Pomarańcz"
 msgid "Own Path to movie picons"
 msgstr "Własna ścieżka do pikonów filmowych"
 
-#, fuzzy
 msgid "Path to movie picons"
-msgstr "Własna ścieżka do pikonów filmowych"
+msgstr "Ścieżka do pikonów filmowych"
 
 msgid "Percent (%)"
 msgstr "Procent (%)"
@@ -1678,7 +1603,6 @@ msgstr "Trwale usunąć wszystkie pliki z kosza?"
 msgid "Play All"
 msgstr "Odtwórz wszystkie"
 
-#, fuzzy
 msgid "Play All starting"
 msgstr "Odtwórz wszystkie"
 
@@ -1688,7 +1612,6 @@ msgstr "Odtwórz bieżącą listę odtwarzania"
 msgid "Play last"
 msgstr "Odtwórz ostatni"
 
-#, fuzzy
 msgid "Play last movie starting"
 msgstr "Odtwórz wybrany(e) film(y)"
 
@@ -1716,9 +1639,8 @@ msgstr ""
 msgid "Portuguese"
 msgstr "Portugalski"
 
-#, fuzzy
 msgid "Position movie picons"
-msgstr "Pokaż pikony filmowe"
+msgstr "Pozycja pikon filmowych"
 
 msgid "Preferred EPG language"
 msgstr "Preferowany język EPG"
@@ -1783,9 +1705,8 @@ msgstr "Odśwież filmową listę plików"
 msgid "Remove all cut file marker permanently?"
 msgstr "Usunąć trwale wszystkie znaczniki cięcia pliku ?"
 
-#, fuzzy
 msgid "Remove all marker permanently?"
-msgstr "Usunąć trwale wszystkie znaczniki cięcia pliku ?"
+msgstr "Usunąć trwale wszystkie znaczniki?"
 
 msgid "Remove cut list marker"
 msgstr "Usuń listę znaczników cięcia"
@@ -1799,20 +1720,17 @@ msgstr "Usuń katalog z zakładek EMC"
 msgid "Remove permanent sort"
 msgstr "Usuń sortowanie trwałe"
 
-#, fuzzy
 msgid "Remove permanent sort from parent"
-msgstr "Usuń sortowanie trwałe"
+msgstr "Usuń stałe sortowanie z elementu nadrzędnego"
 
 msgid "Remove rogue files"
 msgstr "Usuń niechciane pliki"
 
-#, fuzzy
 msgid "Remove selected E2 Bookmark"
-msgstr "Usuń katalog z zakładek E2"
+msgstr "Usuń wybraną zakładkę E2"
 
-#, fuzzy
 msgid "Remove selected EMC Bookmark"
-msgstr "Usuń katalog z zakładek EMC"
+msgstr "Usuń wybraną zakładkę EMC"
 
 msgid "Remove service selection"
 msgstr "Usuń wybór usług"
@@ -1831,11 +1749,10 @@ msgstr "Rozwiąż linki i pokaż prawdziwą ścieżkę"
 
 #, python-format
 msgid "Resume position at %s"
-msgstr ""
+msgstr "Wznów pozycję w %s"
 
-#, fuzzy
 msgid "Resuming playback"
-msgstr "ukryj odtwarzanie"
+msgstr "Wznawianie odtwarzania"
 
 msgid "Rewind finished movies before playing"
 msgstr "Przewiń zakończone filmy przed odtwarzaniem"
@@ -1855,9 +1772,8 @@ msgstr "Zapisz"
 msgid "Save Cover"
 msgstr "Zapisz Okładkę:"
 
-#, fuzzy
 msgid "Save current Playlist"
-msgstr "Odtwórz bieżącą listę odtwarzania"
+msgstr "Zapisz bieżącą listę odtwarzania"
 
 msgid "Save description to movie.txt file:"
 msgstr "Zapisz opis w pliku movie.txt:"
@@ -1880,9 +1796,8 @@ msgstr "Skanuj połączone foldery"
 msgid "Search"
 msgstr "Szukaj"
 
-#, fuzzy
 msgid "Search Results per Search Site (without counting cover range):"
-msgstr " (bez liczenia zakresu okładki)"
+msgstr "Wyniki wyszukiwania na stronę wyszukiwania (bez liczenia zakresu pokrycia):"
 
 msgid "Search Results per Search Site:"
 msgstr "Wyniki wyszukiwania według witryny wyszukiwania:"
@@ -1907,15 +1822,13 @@ msgid "Secondary playback subtitle language"
 msgstr "Drugi język odtwarzania napisów"
 
 msgid "Seek backward"
-msgstr ""
+msgstr "Szukaj wstecz"
 
-#, fuzzy
 msgid "Seek forward"
-msgstr "Przewiń Katalog"
+msgstr "Szukaj do przodu"
 
-#, fuzzy
 msgid "Select Location"
-msgstr "Usunąć Walidator"
+msgstr "Wybierz lokalizację"
 
 msgid "Set path to save the folder Cover:"
 msgstr "Ustaw ścieżkę, aby zapisać folder Okładki:"
@@ -2037,9 +1950,8 @@ msgstr "Pokaż informacje o koszu"
 msgid "Shuffle All"
 msgstr "Przetasować wszystko"
 
-#, fuzzy
 msgid "Shuffle All starting"
-msgstr "Przetasować wszystko"
+msgstr "Przetasować wszystko odtwarzane"
 
 msgid "Single Search:"
 msgstr "Pojedyncze wyszukiwanie:"
@@ -2061,12 +1973,11 @@ msgstr "Niektóre zmiany w ustawieniach wymagają ponownego uruchomienia GUI."
 msgid "Sort Mode"
 msgstr ""
 
-#, fuzzy
 msgid "Sort Options"
-msgstr "Opcje listy odtwarzania"
+msgstr "Opcje sortowania"
 
 msgid "Sort Order"
-msgstr ""
+msgstr "Kolejność sortowania"
 
 msgid "Spanish"
 msgstr "Hiszpański"
@@ -2162,7 +2073,6 @@ msgstr "Przełącz oglądane / nie oglądane"
 msgid "Total"
 msgstr "Wszystkich"
 
-#, fuzzy
 msgid "Trashcan"
 msgstr "Kosz"
 
@@ -2297,9 +2207,8 @@ msgstr "po przeładowaniu listy"
 msgid "after standby"
 msgstr "po czuwaniu"
 
-#, fuzzy
 msgid "all"
-msgstr "ogólny"
+msgstr "wszystko"
 
 msgid "always"
 msgstr "zawsze"
@@ -2308,7 +2217,7 @@ msgid "always hide"
 msgstr "Zawsze ukrywaj"
 
 msgid "auto-start is currently not active."
-msgstr ""
+msgstr "autostart nie jest obecnie aktywny."
 
 msgid "auto-start window begin"
 msgstr "rozpocznie się"
@@ -2356,22 +2265,22 @@ msgid "imdb.com"
 msgstr ""
 
 msgid "jump back to the previous title"
-msgstr ""
+msgstr "wróć do poprzedniego tytułu"
 
 msgid "jump forward to the next title"
-msgstr ""
+msgstr "przejdź do następnego tytułu"
 
 msgid "jump to next marked position"
-msgstr ""
+msgstr "przejdź do następnej oznaczonej pozycji"
 
 msgid "jump to previous marked position"
-msgstr ""
+msgstr "przejdź do poprzedniej oznaczonej pozycji"
 
 msgid "left"
 msgstr "lewo"
 
 msgid "left from Name"
-msgstr ""
+msgstr "po lewej od nazwy"
 
 msgid "movie manipulation list"
 msgstr "lista manipulacji filmu"
@@ -2412,9 +2321,8 @@ msgstr "sekund. Śr. Prędkość:"
 msgid "sec."
 msgstr "sekund."
 
-#, fuzzy
 msgid "show DVD main menu"
-msgstr "Pokaż w menu głównym"
+msgstr "Pokaż menu główne DVD"
 
 msgid "single pixel TV, muted"
 msgstr "single pixel TV, muted"
@@ -2426,13 +2334,13 @@ msgid "stop service"
 msgstr "Zatrzymaj usługę"
 
 msgid "switch to the next angle"
-msgstr ""
+msgstr "przejdź do następnego kąta"
 
 msgid "switch to the next audio track"
-msgstr ""
+msgstr "przejdź do następnej ścieżki audio"
 
 msgid "switch to the next subtitle language"
-msgstr ""
+msgstr "przełącz na następny język napisów"
 
 msgid "themoviedb.org"
 msgstr ""
@@ -2453,7 +2361,7 @@ msgid "three contiguous"
 msgstr "trzy przylegające"
 
 msgid "toggle a cut mark at the current position"
-msgstr ""
+msgstr "przełącz znacznik cięcia w bieżącej pozycji"
 
 msgid "trashcan"
 msgstr "Kosz"
@@ -2462,25 +2370,25 @@ msgid "two contiguous"
 msgstr "dwa przylegające"
 
 msgid "type 1 - OSD + black (#00000000)"
-msgstr ""
+msgstr "typ 1 - OSD + czarny (#00000000)"
 
 msgid "type 2 - transparent + white (#FFFFFFFF)"
-msgstr ""
+msgstr "typ 2 - przezroczysty + biały (#FFFFFFFF)"
 
 msgid "type 3 - OSD + black (#00FFFFFF)"
-msgstr ""
+msgstr "typ 3 - OSD + czarny (#00FFFFFF)"
 
 msgid "type 4 - transparent + black (#FF000000)"
-msgstr ""
+msgstr "typ 4 - przezroczysty + czarny (#FF000000)"
 
 msgid "unknown"
-msgstr ""
+msgstr "nieznany"
 
 msgid "up/down"
 msgstr "góra/dół"
 
 msgid "view extensions..."
-msgstr ""
+msgstr "zobacz rozszerzenia..."
 
 msgid "x"
 msgstr ""
