@@ -277,7 +277,17 @@ config.EMC.extmenu_plugin = ConfigYesNo(default=False)
 config.EMC.mainmenu_list = ConfigYesNo(default=False)
 config.EMC.extmenu_list = ConfigYesNo(default=False)
 
-default_lang = language.lang[language.getActiveLanguage()][1]
+active_lang = language.getActiveLanguage()
+default_lang = language.lang.get(active_lang)
+if default_lang is None:
+	default_lang = active_lang.split("_")[0]
+else:
+	default_lang = default_lang[1]
+
+if default_lang not in [ln[0] for ln in langList()]:
+	default_lang = "en"
+
+print(f"[EMC] Default language for audio and subtitles is set to '{default_lang}' active locale is '{active_lang}'.")
 
 config.EMC.sublang1 = ConfigSelection(default=default_lang, choices=langList())
 config.EMC.sublang2 = ConfigSelection(default=default_lang, choices=langList())
