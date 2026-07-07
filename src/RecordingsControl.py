@@ -256,7 +256,7 @@ class RecordingsControl:
 			if self.recFile is None:
 				return  # was not able to get IP
 			recf = open(self.recFile, "wb")
-			pickle.dump(self.recDict.keys(), recf, protocol=5)
+			pickle.dump(list(self.recDict.keys()), recf, protocol=pickle.HIGHEST_PROTOCOL)
 		except Exception as e:
 			emcDebugOut("[emcRC] recFileUpdate exception:\n" + str(e))
 		finally:
