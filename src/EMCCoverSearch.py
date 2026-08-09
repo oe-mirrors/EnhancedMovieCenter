@@ -131,6 +131,7 @@ class imdblist(MenuList):
 		self.l.setFont(5, gFont("Regular", 24))
 		self.l.setFont(6, gFont("Regular", 28))
 		self.l.setFont(7, gFont("Regular", 54))
+		self.l.setFont(8, gFont("Regular", 40))
 
 
 class EMCImdbScan(Screen):
@@ -586,7 +587,13 @@ class EMCImdbScan(Screen):
 		s1 = _("Exist") + "|" + _("N/A")
 		if not match(r'.*?(' + s1 + ')', elapsed):
 			elapsed = f"{elapsed} ms"
-		f, gF = (1.5, 6) if getDesktop(0).size().width() == 1920 else (1, 4)
+		screenWidth = getDesktop(0).size().width()
+		if screenWidth >= 2560:
+			f, gF = (2, 8)
+		elif screenWidth >= 1920:
+			f, gF = (1.5, 6)
+		else:
+			f, gF = (1, 4)
 		h = self.itemHeight
 		w = self.listWidth - 15 if self.count_movies * h > self.listHeight else self.listWidth  # place for scrollbar
 		res.append(MultiContentEntryText(pos=(5, 0), size=(w, h), font=gF, text=search_title, flags=RT_HALIGN_LEFT | RT_VALIGN_CENTER))
