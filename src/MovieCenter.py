@@ -235,6 +235,9 @@ def getPlayerService(path, name="", ext=None):
 
 def updatePlayerService(service, name):
 	if service and service.type != eServiceReference.idServiceDVD and name:
+		if isinstance(name, bytes):
+			print("[EMC] WARNING updatePlayerService: name is bytes: " + repr(name))
+			name = name.decode()
 		service.setName(name)
 
 
@@ -1230,6 +1233,9 @@ class MovieCenterData(VlcPluginInterfaceList, PermanentSort, E2Bookmarks, EMCBoo
 				sortyear, sortmonth, sortday, sorthour, sortmin = "", "", "", "", ""
 				isExtHDDSleeping = config.EMC.limit_fileops_noscan.value and mountPoints.isExtHDDSleeping(str(currentPath), self)
 
+				if isinstance(filename, bytes):
+					print("[EMC] DEBUG: filename returned bytes: " + str(filename))
+
 				# Remove extension
 				if not ext:
 					# Avoid splitext it is very slow compared to a slice
@@ -1290,11 +1296,15 @@ class MovieCenterData(VlcPluginInterfaceList, PermanentSort, E2Bookmarks, EMCBoo
 				if movie_metaload and not isExtHDDSleeping:
 					if serviceInfo:
 						metastring = serviceInfo.getName(service)
+						if isinstance(metastring, bytes):
+							print("[EMC] DEBUG: serviceInfo.getName() returned bytes for service: " + str(service) + " | value: " + repr(metastring))
 						if config.EMC.movie_metaload_all.value == "title":
 							desc = serviceInfo.getInfoString(service, iServiceInformation.sDescription) or ""
 							eventtitle = getMetaTitleFromDescription(desc)
 						if not eventtitle and config.EMC.movie_metaload_all.value == "everything":
 							eventtitle = serviceInfo.getInfoString(service, iServiceInformation.sDescription)
+							if isinstance(eventtitle, bytes):
+								print("[EMC] DEBUG: getInfoString(sDescription) returned bytes for service: " + str(service) + " | value: " + repr(eventtitle))
 						if not date:
 							dt = serviceInfo.getInfo(service, iServiceInformation.sTimeCreate)
 							if dt > 0:
@@ -1305,6 +1315,8 @@ class MovieCenterData(VlcPluginInterfaceList, PermanentSort, E2Bookmarks, EMCBoo
 						event = serviceInfo and serviceInfo.getEvent(service)
 						if event:
 							eitstring = event.getEventName()
+							if isinstance(eitstring, bytes):
+								print("[EMC] DEBUG: event.getEventName() returned bytes for service: " + str(service) + " | event: " + str(event) + " | value: " + repr(eitstring))
 							if not date:
 								starttimestamp = event.getBeginTime()
 								if starttimestamp:
@@ -1336,6 +1348,9 @@ class MovieCenterData(VlcPluginInterfaceList, PermanentSort, E2Bookmarks, EMCBoo
 					title = metastring
 				else:
 					title = eitstring or title or filename
+
+				if isinstance(title, bytes):
+					print("[EMC] DEBUG: title is bytes after fallback for path: " + str(path) + " | value: " + repr(title))
 
 				# Set date priority here
 				# Fallback get date from filesystem, but it is very slow
