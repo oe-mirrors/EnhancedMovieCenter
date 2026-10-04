@@ -17,6 +17,7 @@
 #	<http://www.gnu.org/licenses/>.
 #
 import os
+from shlex import quote
 import struct
 
 from Components.config import config
@@ -283,20 +284,20 @@ class MovieMenu(Screen, E2Bookmarks, EMCBookmarks):
 	def lockDirConfirmed(self, currentPath, locked, confirmed):
 		if not locked:
 			if confirmed:
-				emcTasker.shellExecute('touch "' + currentPath + '/dir.lock"')
+				emcTasker.shellExecute(f"touch -- {quote(currentPath + '/dir.lock')}")
 				movieFileCache.delPathFromCache(currentPath)
 				for root, dirs, files in os.walk(currentPath):
 					for dir in dirs:
 						movieFileCache.delPathFromCache(root + '/' + dir)
-						emcTasker.shellExecute('touch "' + root + '/' + dir + '/dir.lock"')
+						emcTasker.shellExecute(f"touch -- {quote(root + '/' + dir + '/dir.lock')}")
 		else:
 			if confirmed:
-				emcTasker.shellExecute('rm -f "' + currentPath + '/dir.lock"')
+				emcTasker.shellExecute(f"rm -f -- {quote(currentPath + '/dir.lock')}")
 				movieFileCache.delPathFromCache(currentPath)
 				for root, dirs, files in os.walk(currentPath):
 					for dir in dirs:
 						movieFileCache.delPathFromCache(root + '/' + dir)
-						emcTasker.shellExecute('rm -rf "' + root + '/' + dir + '/dir.lock"')
+						emcTasker.shellExecute(f"rm -f -- {quote(root + '/' + dir + '/dir.lock')}")
 
 	def createLink(self, path):
 		self.session.openWithCallback(
@@ -534,10 +535,10 @@ class MovieMenu(Screen, E2Bookmarks, EMCBookmarks):
 	def deleteCutFile(self, confirm):
 		if confirm:
 			if os.path.isdir(self.service.getPath()):
-				emcTasker.shellExecute('find ' + '"' + self.service.getPath() + '" -name "*.cuts" -exec rm -f \'{}\' +')
+				emcTasker.shellExecute(f"find {quote(self.service.getPath())} -name '*.cuts' -exec rm -f -- {{}} +")
 			else:
 				file = self.service.getPath() + ".cuts"
-				emcTasker.shellExecute('rm -f "' + file + '"')
+				emcTasker.shellExecute(f"rm -f -- {quote(file)}")
 				movieFileCache.delPathFromCache(os.path.dirname(self.service.getPath()))
 		self.close("reload")
 

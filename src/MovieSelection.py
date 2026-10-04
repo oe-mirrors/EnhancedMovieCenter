@@ -17,6 +17,7 @@
 #	<http://www.gnu.org/licenses/>.
 #
 import os
+from shlex import quote
 from time import localtime
 #from thread import start_new_thread
 #from threading import Thread
@@ -131,8 +132,8 @@ def purgeExpired(currentPath=None, postFileOp=None, emptyTrash=False):
 										)
 										return
 									else:
-										path = os.path.splitext(fullpath)[0].replace("'", "\'")
-										purgeCmd += '; rm -f "' + path + '."*'
+										path = os.path.splitext(fullpath)[0]
+										purgeCmd += f"; rm -f -- {quote(path + '.')}*"
 									#TEST_E2DELETE
 
 				if purgeCmd != "":
@@ -170,11 +171,11 @@ def purgeExpired(currentPath=None, postFileOp=None, emptyTrash=False):
 										progress, length = getProgress(service, forceRecalc=True)
 										if progress >= int(config.EMC.movie_finished_percent.value):
 											# cut file extension
-											fullpath = os.path.splitext(fullpath)[0].replace("'", "\'")
+											fullpath = os.path.splitext(fullpath)[0]
 											# create a time stamp with touch for all corresponding files
-											mvCmd += '; touch "' + fullpath + '."*'
+											mvCmd += f"; touch -c -- {quote(fullpath + '.')}*"
 											# move movie into the trashcan
-											mvCmd += '; mv "' + fullpath + '."* "' + movie_trashpath + '"'
+											mvCmd += f"; mv -- {quote(fullpath + '.')}* {quote(movie_trashpath)}"
 					if mvCmd != "":
 						association = []
 						#Not necessary anymore - Is done always on show
@@ -2677,7 +2678,7 @@ class EMCSelection(Screen, HelpableScreen, SelectionEventInfo, VlcPluginInterfac
 				movieFileCache.delPathFromCache(path)
 				cmd = []
 				association = []
-				cmd.append('rm -rf "' + path + '"')
+				cmd.append(f"rm -rf -- {quote(path)}")
 				association.append((self.postFileOp, None, path))
 				emcTasker.shellExecute(cmd, association, True)
 
@@ -2687,7 +2688,7 @@ class EMCSelection(Screen, HelpableScreen, SelectionEventInfo, VlcPluginInterfac
 			if path != "..":
 				movieFileCache.delPathFromCache(os.path.dirname(path))
 				if os.path.islink(path):
-					emcTasker.shellExecute("rm -f '" + path + "'")
+					emcTasker.shellExecute(f"rm -f -- {quote(path)}")
 					self.removeService(service)
 					self.setReturnCursor()
 				elif os.path.exists(path):
@@ -2786,8 +2787,7 @@ class EMCSelection(Screen, HelpableScreen, SelectionEventInfo, VlcPluginInterfac
 								else:
 									self.removeService(x)
 									self.setReturnCursor()
-									path = path.replace("'", "\'")
-									c.append('rm -f "' + path + '."*')
+									c.append(f"rm -f -- {quote(path + '.')}*")
 									cmd.append(c)
 									dest_path = path
 							else:
@@ -2795,42 +2795,42 @@ class EMCSelection(Screen, HelpableScreen, SelectionEventInfo, VlcPluginInterfac
 								self.removeService(x)
 								self.setReturnCursor()
 								path = path.rsplit(".", 1)[0]
-								c.append('rm -f "' + path + '."*')
+								c.append(f"rm -f -- {quote(path + '.')}*")
 								cmd.append(c)
 								dest_path = path
 						#TEST_E2DELETE
 						else:
-							path = path.replace("'", "\'")
 							if ext in plyDVB:
 								if self.deleteAllOtherList:
 									extsOther = [".eit", ".jpg", ".txt", ".poster.jpg", ".backdrop.jpg"]
 									for x in extsOther:
 										f = path + str(x)
 										if fileExists(f):
-											c.append('touch "' + f + '"')
-											c.append('mv "' + f + '" "' + targetPath + '/"')
+											c.append(f"touch -c -- {quote(f)}")
+											c.append(f"mv -- {quote(f)} {quote(targetPath + '/')}")
 								# create a time stamp with touch
-								c.append('touch "' + path + str(ext) + '"')
-								c.append('touch "' + path + str(ext) + '."*')
+								c.append(f"touch -c -- {quote(path + str(ext))}")
+								c.append(f"touch -c -- {quote(path + str(ext) + '.')}*")
 								# move movie into the trashcan
-								c.append('mv "' + path + str(ext) + '" "' + targetPath + '/"')
-								c.append('mv "' + path + str(ext) + '."* "' + targetPath + '/"')
+								c.append(f"mv -- {quote(path + str(ext))} {quote(targetPath + '/')}")
+								# Keep the suffix glob outside the quoted filename; sidecars are optional.
+								c.append(f'for file in {quote(path + str(ext) + ".")}*; do [ -e "$file" ] || [ -L "$file" ] || continue; mv -- "$file" {quote(targetPath + "/")} || exit $?; done')
 							else:
 								if self.deleteAllOtherList:
 									extsOther = [".eit", ".jpg", ".txt", ".poster.jpg", ".backdrop.jpg"]
 									for x in extsOther:
 										f = path + str(x)
 										if fileExists(f):
-											c.append('touch "' + f + '"')
-											c.append('mv "' + f + '" "' + targetPath + '/"')
+											c.append(f"touch -c -- {quote(f)}")
+											c.append(f"mv -- {quote(f)} {quote(targetPath + '/')}")
 								f = path + str(ext)
 								if fileExists(f):
-									c.append('touch "' + f + '"')
-									c.append('mv "' + f + '" "' + targetPath + '/"')
+									c.append(f"touch -c -- {quote(f)}")
+									c.append(f"mv -- {quote(f)} {quote(targetPath + '/')}")
 								cuts = path + str(ext) + ".cuts"
 								if fileExists(cuts):
-									c.append('touch "' + cuts + '"')
-									c.append('mv "' + cuts + '" "' + targetPath + '/"')
+									c.append(f"touch -c -- {quote(cuts)}")
+									c.append(f"mv -- {quote(cuts)} {quote(targetPath + '/')}")
 
 							#TEST_E2DELETE <- decrement indent
 							cmd.append(c)
@@ -2869,8 +2869,7 @@ class EMCSelection(Screen, HelpableScreen, SelectionEventInfo, VlcPluginInterfac
 							else:
 								self.removeService(service)
 								self.setReturnCursor()
-								path = path.replace("'", "\'")
-								c.append('rm -f "' + path + '."*')
+								c.append(f"rm -f -- {quote(path + '.')}*")
 								cmd.append(c)
 								dest_path = path
 						else:
@@ -2878,42 +2877,42 @@ class EMCSelection(Screen, HelpableScreen, SelectionEventInfo, VlcPluginInterfac
 							self.removeService(service)
 							self.setReturnCursor()
 							path = path.rsplit(".", 1)[0]
-							c.append('rm -f "' + path + '."*')
+							c.append(f"rm -f -- {quote(path + '.')}*")
 							cmd.append(c)
 							dest_path = path
 					#TEST_E2DELETE
 					else:
-						path = path.replace("'", "\'")
 						if ext in plyDVB:
 							if self.deleteAllOther:
 								extsOther = [".eit", ".jpg", ".txt", ".poster.jpg", ".backdrop.jpg"]
 								for x in extsOther:
 									f = path + str(x)
 									if fileExists(f):
-										c.append('touch "' + f + '"')
-										c.append('mv "' + f + '" "' + targetPath + '/"')
+										c.append(f"touch -c -- {quote(f)}")
+										c.append(f"mv -- {quote(f)} {quote(targetPath + '/')}")
 							# create a time stamp with touch
-							c.append('touch "' + path + str(ext) + '"')
-							c.append('touch "' + path + str(ext) + '."*')
+							c.append(f"touch -c -- {quote(path + str(ext))}")
+							c.append(f"touch -c -- {quote(path + str(ext) + '.')}*")
 							# move movie into the trashcan
-							c.append('mv "' + path + str(ext) + '" "' + targetPath + '/"')
-							c.append('mv "' + path + str(ext) + '."* "' + targetPath + '/"')
+							c.append(f"mv -- {quote(path + str(ext))} {quote(targetPath + '/')}")
+							# Keep the suffix glob outside the quoted filename; sidecars are optional.
+							c.append(f'for file in {quote(path + str(ext) + ".")}*; do [ -e "$file" ] || [ -L "$file" ] || continue; mv -- "$file" {quote(targetPath + "/")} || exit $?; done')
 						else:
 							if self.deleteAllOther:
 								extsOther = [".eit", ".jpg", ".txt", ".poster.jpg", ".backdrop.jpg"]
 								for x in extsOther:
 									f = path + str(x)
 									if fileExists(f):
-										c.append('touch "' + f + '"')
-										c.append('mv "' + f + '" "' + targetPath + '/"')
+										c.append(f"touch -c -- {quote(f)}")
+										c.append(f"mv -- {quote(f)} {quote(targetPath + '/')}")
 							f = path + str(ext)
 							if fileExists(f):
-								c.append('touch "' + f + '"')
-								c.append('mv "' + f + '" "' + targetPath + '/"')
+								c.append(f"touch -c -- {quote(f)}")
+								c.append(f"mv -- {quote(f)} {quote(targetPath + '/')}")
 							cuts = path + str(ext) + ".cuts"
 							if fileExists(cuts):
-								c.append('touch "' + cuts + '"')
-								c.append('mv "' + cuts + '" "' + targetPath + '/"')
+								c.append(f"touch -c -- {quote(cuts)}")
+								c.append(f"mv -- {quote(cuts)} {quote(targetPath + '/')}")
 
 						#TEST_E2DELETE <- decrement indent
 						cmd.append(c)
@@ -2934,11 +2933,10 @@ class EMCSelection(Screen, HelpableScreen, SelectionEventInfo, VlcPluginInterfac
 					# different self.mountpoint? -> reset user&group
 					if mountPoints.mountpoint(targetPath) != mountPoints.mountpoint(config.EMC.movie_homepath.value):		# CIFS to HDD is ok!
 						# need to change file ownership to match target filesystem file creation
-						tfile = "\"" + targetPath + "/owner_test" + "\""
-						path = path.replace("'", "\'")
-						sfile = "\"" + path + ".\"*"
-						c.append(f"touch {tfile};ls -l {tfile} | while read flags i owner group crap;do chown $owner:$group {sfile};done;rm {tfile}")
-					c.append('mv "' + path + '."* "' + targetPath + '/"')
+						tfile = quote(targetPath + "/owner_test")
+						sfile = quote(path + ".") + "*"
+						c.append(f'touch -- {tfile};ls -l -- {tfile} | while read flags i owner group crap;do chown "$owner:$group" -- {sfile};done;rm -- {tfile}')
+					c.append(f"mv -- {quote(path + '.')}* {quote(targetPath + '/')}")
 					source_path = path
 					dest_path = targetPath
 					cmd.append(c)
@@ -2957,11 +2955,10 @@ class EMCSelection(Screen, HelpableScreen, SelectionEventInfo, VlcPluginInterfac
 					# different self.mountpoint? -> reset user&group
 					if mountPoints.mountpoint(targetPath) != mountPoints.mountpoint(config.EMC.movie_homepath.value):		# CIFS to HDD is ok!
 						# need to change file ownership to match target filesystem file creation
-						tfile = "\"" + targetPath + "/owner_test" + "\""
-						path = path.replace("'", "\'")
-						sfile = "\"" + path + ".\"*"
-						c.append(f"touch {tfile};ls -l {tfile} | while read flags i owner group crap;do chown $owner:$group {sfile};done;rm {tfile}")
-					c.append('cp "' + path + '."* "' + targetPath + '/"')
+						tfile = quote(targetPath + "/owner_test")
+						sfile = quote(path + ".") + "*"
+						c.append(f'touch -- {tfile};ls -l -- {tfile} | while read flags i owner group crap;do chown "$owner:$group" -- {sfile};done;rm -- {tfile}')
+					c.append(f"cp -- {quote(path + '.')}* {quote(targetPath + '/')}")
 					dest_path = targetPath
 					cmd.append(c)
 					association.append((self.copyCB, service))  # put in a callback for this particular movie
@@ -3214,7 +3211,7 @@ class EMCSelection(Screen, HelpableScreen, SelectionEventInfo, VlcPluginInterfac
 				movieFileCache.delPathFromCache(targetPath)
 				movieFileCache.delPathFromCache(self.tmpSelPath)
 				movieFileCache.delPathFromCache(self.currentPath)
-				cmd.append('mv "' + self.tmpSelPath + '" "' + targetPath + '"')
+				cmd.append(f"mv -- {quote(self.tmpSelPath)} {quote(targetPath)}")
 				try:
 					if cmd:
 						association.append((self.initCursor, False))  # Set new Cursor position

@@ -18,6 +18,7 @@
 #
 import pickle
 import os
+from shlex import quote
 from collections import defaultdict
 
 from Components.config import config
@@ -231,7 +232,7 @@ class RecordingsControl:
 			for timer in NavigationInstance.instance.RecordTimer.timer_list:
 				if timer.isRunning() and not timer.justplay and timer.Filename == old:
 					timer.dirname = os.path.dirname(new) + "/"
-					timer.fixMoveCmd = 'mv "' + timer.Filename + '."* "' + timer.dirname + '"'
+					timer.fixMoveCmd = f"mv -- {quote(timer.Filename + '.')}* {quote(timer.dirname)}"
 					timer.Filename = new
 					emcDebugOut("[emcRC] fixed path: " + new)
 					break

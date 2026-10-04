@@ -18,8 +18,9 @@
 #
 
 import os
+from shlex import quote
 
-from glob import glob
+from glob import escape, glob
 
 from . import _
 
@@ -63,7 +64,7 @@ class RogueFileCheck:
 					# Maybe we can use a dict e.x.: .ap = .ts.ap
 					filepath, ext = os.path.splitext(fullpath)
 					if ext.lower() in extRogue:
-						for f in glob(filepath + '*'):
+						for f in glob(escape(filepath) + '*'):
 							if os.path.splitext(f)[1].lower() in extMedia:
 								break
 						else:
@@ -77,15 +78,15 @@ class RogueFileCheck:
 	def getDelFilesScript(self):
 		strg = ""
 		for file in self.files:
-			strg += "rm \"" + file + "\"\n"
+			strg += f"rm -- {quote(file)}\n"
 		return strg
 
 	def getScript(self, path):
 		strg = ""
 		if path and os.path.exists(path):
 			for file in self.files:
-				strg += "\nmv \"" + file + "\" \"" + path + "\""
+				strg += f"\nmv -- {quote(file)} {quote(path)}"
 		else:
 			for file in self.files:
-				strg += "\nrm -f \"" + file + "\""
+				strg += f"\nrm -f -- {quote(file)}"
 		return strg[1:]
