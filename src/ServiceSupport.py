@@ -24,7 +24,6 @@ from enigma import eServiceCenter, iServiceInformation
 from .EMCFileCache import movieFileCache
 from .CutListSupport import CutList
 from .CommonSupport import getInfoFile, readPlaylist
-from .RecordingsControl import getRecording
 from .EMCTasker import emcDebugOut
 
 
@@ -177,13 +176,9 @@ class ServiceEvent:
 	def __getDuration(self):
 		duration = 0
 
-		if config.EMC.record_show_real_length.value:
-			# If it is a record we will force to use the timer duration
-			record = getRecording(self.path)
-			if record:
-				begin, end, service = record
-				duration = end - begin  # times = (begin, end) : end - begin
-		else:
+		# Keep EPG duration optional, but never use the planned timer duration
+		# as the real length of a recording that may have started late.
+		if not config.EMC.record_show_real_length.value:
 			duration = self.event and self.event.getDuration() or 0
 
 		if not duration:

@@ -38,7 +38,7 @@ from timer import TimerEntry
 from . import _
 from .EMCFileCache import movieFileCache
 from .EMCMountPoints import mountPoints
-from .RecordingsControl import RecordingsControl, getRecording
+from .RecordingsControl import RecordingsControl
 from .DelayedFunction import DelayedFunction
 from .EMCTasker import emcDebugOut
 from .VlcPluginInterface import VlcPluginInterfaceList
@@ -310,23 +310,6 @@ def getProgress(service, length=0, last=0, forceRecalc=False, cuts=None):
 		# No position implies progress is zero
 		progress = 0
 	return progress, length
-
-
-def getRecordProgress(path):
-	# The progress of all recordings is updated
-	# - on show dialog
-	# - on reload list / change directory / movie home
-	# The progress of one recording is updated
-	# - if it will be highlighted the list
-	# Note: There is no auto update mechanism of the recording progress
-	record = getRecording(path)
-	if record:
-		begin, end, service = record
-		last = time() - begin
-		length = end - begin
-		return calculateProgress(last, length)
-	else:
-		return 0
 
 
 def calculateProgress(last, length):
@@ -1966,6 +1949,7 @@ class MovieCenter(GUIComponent):
 			progressWidth = 65
 			globalHeight = 80
 			progress = 0
+			isRecording = False
 			pixmap = None
 			datepic = None
 			color = None
@@ -2002,19 +1986,21 @@ class MovieCenter(GUIComponent):
 				# Playable files
 				latest = date and (datetime.today() - date).days < 1
 
-				# Check for recording only if date is within the last day
-				if latest and self.recControl.isRecording(path):
+				if self.recControl.isRecording(path):
 					datetext = "-- REC --"
 					pixmap = self.pic_movie_rec
 					color = self.RecordingColor
-					# Recordings status shows always the progress of the recording,
-					# Never the progress of the cut list marker to avoid misunderstandings
-					progress = service and getRecordProgress(path) or 0
+					# Like E2's movie list, use the bar as a recording status marker.
+					# A timer's planned start does not tell us how much was recorded.
+					isRecording = True
+					progress = 100
 
 				elif latest and config.EMC.remote_recordings.value and self.recControl.isRemoteRecording(path):
 					datetext = "-- rec --"
 					pixmap = self.pic_movie_recrem
 					color = self.RecordingColor
+					isRecording = True
+					progress = 100
 
 				#IDEA elif config.EMC.check_movie_cutting.value:
 				elif self.recControl.isCutting(path):
@@ -2102,6 +2088,7 @@ class MovieCenter(GUIComponent):
 
 				colortitle = color
 				colordate = color
+				progressText = "REC" if isRecording else "%d%%" % progress
 				#colorhighlight = color
 				if color == self.WatchingColor or color == self.FinishedColor or color == self.RecordingColor:
 					colorhighlight = color
@@ -2151,7 +2138,7 @@ class MovieCenter(GUIComponent):
 							offset += self.CoolBarSize.width() + 10
 
 						elif config.EMC.movie_progress.value == "P":
-							append(MultiContentEntryText(pos=(offset, 0), size=(progressWidth, globalHeight), font=usedFont, flags=RT_HALIGN_CENTER, text="%d%%" % (progress), color=color, color_sel=colorhighlight, backcolor=self.BackColor, backcolor_sel=self.BackColorSel))
+							append(MultiContentEntryText(pos=(offset, 0), size=(progressWidth, globalHeight), font=usedFont, flags=RT_HALIGN_CENTER, text=progressText, color=color, color_sel=colorhighlight, backcolor=self.BackColor, backcolor_sel=self.BackColorSel))
 							offset += progressWidth + 5
 
 					if config.EMC.movie_date_format.value:
@@ -2270,13 +2257,13 @@ class MovieCenter(GUIComponent):
 							append(MultiContentEntryProgress(pos=(CoolBarPos - iconsub, self.CoolBarHPos - 2), size=(self.CoolBarSizeSa.width(), self.CoolBarSizeSa.height()), percent=progress, borderWidth=1, foreColor=color, foreColorSelected=colorhighlight, backColor=self.BackColor, backColorSelected=None))
 					if CoolProgressPos != -1:
 						if config.EMC.movie_icons.value:
-							append(MultiContentEntryText(pos=(CoolProgressPos, self.CoolMovieHPos), size=(progressWidth, globalHeight), font=usedFont, flags=RT_HALIGN_LEFT, text="%d%%" % (progress), color=colortitle, color_sel=colorhighlight))
+							append(MultiContentEntryText(pos=(CoolProgressPos, self.CoolMovieHPos), size=(progressWidth, globalHeight), font=usedFont, flags=RT_HALIGN_LEFT, text=progressText, color=colortitle, color_sel=colorhighlight))
 						else:
 							if self.CoolProgressPos < self.CoolMoviePos:
 								iconsub = self.CoolIconSize.width()
 							else:
 								iconsub = 0
-							append(MultiContentEntryText(pos=(CoolProgressPos - iconsub, self.CoolMovieHPos), size=(progressWidth, globalHeight), font=usedFont, flags=RT_HALIGN_LEFT, text="%d%%" % (progress), color=colortitle, color_sel=colorhighlight))
+							append(MultiContentEntryText(pos=(CoolProgressPos - iconsub, self.CoolMovieHPos), size=(progressWidth, globalHeight), font=usedFont, flags=RT_HALIGN_LEFT, text=progressText, color=colortitle, color_sel=colorhighlight))
 					if CoolDatePos != -1:
 						if config.EMC.movie_date_position.value == '1':
 							halign = RT_HALIGN_RIGHT

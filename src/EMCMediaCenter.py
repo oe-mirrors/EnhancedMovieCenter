@@ -18,8 +18,6 @@
 from os.path import basename, exists
 from shutil import copy2
 
-from time import time
-
 from Components.config import config
 from Components.ActionMap import ActionMap, HelpableActionMap
 from Components.Label import Label
@@ -544,16 +542,7 @@ class EMCMediaCenter(CutList, Screen, HelpableScreen, InfoBarTimeshift, InfoBarS
 	##############################################################################
 	## Recordings relevant function
 	def getLength(self):
-		if config.EMC.record_show_real_length.value:
-			service = self.service
-			path = service and service.getPath()
-			if path:
-				record = getRecording(path)
-				if record:
-					#TODO There is still a problem with split records with cut numbers
-					begin, end, s = record
-					return int((end - begin) * 90000)
-		# Fallback
+		# Like E2, use the playable file length, not the planned timer duration.
 		seek = self.getSeek()
 		if seek is None:
 			return None
@@ -563,15 +552,7 @@ class EMCMediaCenter(CutList, Screen, HelpableScreen, InfoBarTimeshift, InfoBarS
 		return length[1]
 
 	def getPosition(self):
-		if config.EMC.record_show_real_length.value:
-			service = self.service
-			path = service and service.getPath()
-			if path:
-				record = getRecording(path)
-				if record:
-					begin, end, s = record
-					return int((time() - begin) * 90000)
-		# Fallback
+		# Playback position must also remain correct when paused or seeking.
 		seek = self.getSeek()
 		if seek is None:
 			return None
