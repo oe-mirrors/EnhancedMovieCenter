@@ -34,12 +34,9 @@ class EMCRecordPosition(ServicePosition):
 
 	@cached
 	def getPosition(self):
+		# Recorded length of a running recording, nothing otherwise.
 		player = self.source.player
-		position = player and player.getPosition()
-		if position:
-			return position
-		# Fallback
-		return ServicePosition.getPosition(self)
+		return player.getRecordPosition() if player and player.getRunningRecord() else 0
 
 	position = property(getPosition)
 

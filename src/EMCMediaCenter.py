@@ -17,6 +17,7 @@
 #
 from os.path import basename, exists
 from shutil import copy2
+from time import time
 
 from Components.config import config
 from Components.ActionMap import ActionMap, HelpableActionMap
@@ -542,6 +543,15 @@ class EMCMediaCenter(CutList, Screen, HelpableScreen, InfoBarTimeshift, InfoBarS
 	##############################################################################
 	## Recordings relevant function
 	def getLength(self):
+		# Running recording: recorded file length plus the time left until the timer ends.
+		length = self.getRecordPosition()
+		if length and config.EMC.record_show_real_length.value:
+			record = self.getRunningRecord()
+			if record:
+				length += max(0, int((record[1] - time()) * 90000))
+		return length
+
+	def getRecordPosition(self):
 		# Like E2, use the playable file length, not the planned timer duration.
 		seek = self.getSeek()
 		if seek is None:
@@ -550,6 +560,10 @@ class EMCMediaCenter(CutList, Screen, HelpableScreen, InfoBarTimeshift, InfoBarS
 		if length[0]:
 			return 0
 		return length[1]
+
+	def getRunningRecord(self):
+		path = self.service and self.service.getPath()
+		return path and getRecording(path)
 
 	def getPosition(self):
 		# Playback position must also remain correct when paused or seeking.
