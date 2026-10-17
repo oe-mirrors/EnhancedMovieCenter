@@ -17,14 +17,16 @@
 #	<http://www.gnu.org/licenses/>.
 #
 from copy import copy
+
 from Components.ActionMap import ActionMap
-from Components.config import KEY_LEFT, KEY_RIGHT, KEY_HOME, KEY_END, config, ConfigText, ConfigYesNo, ConfigSubsection, ConfigNothing, ConfigSelection, ConfigSelectionNumber, NoSave, ConfigClock
+from Components.config import ConfigClock, ConfigNothing, ConfigSelection, ConfigSelectionNumber, ConfigSubsection, ConfigText, ConfigYesNo, KEY_END, KEY_HOME, KEY_LEFT, KEY_RIGHT, NoSave, config
 from Components.Language import language
-from Screens.MessageBox import MessageBox
 from Plugins.Plugin import PluginDescriptor
-from .ISO639 import ISO639Language
-from .EMCTasker import emcTasker, emcDebugOut
+from Screens.MessageBox import MessageBox
+
 from . import _
+from .EMCTasker import emcDebugOut, emcTasker
+from .ISO639 import ISO639Language
 
 
 class ConfigTextWOHelp(ConfigText):
@@ -284,17 +286,19 @@ if default_lang is None:
 else:
 	default_lang = default_lang[1]
 
-if default_lang not in [ln[0] for ln in langList()]:
+languageChoices = langList()
+if default_lang not in [x[0] for x in languageChoices]:
 	default_lang = "en"
 
 print(f"[EMC] Default language for audio and subtitles is set to '{default_lang}' active locale is '{active_lang}'.")
 
-config.EMC.sublang1 = ConfigSelection(default=default_lang, choices=langList())
-config.EMC.sublang2 = ConfigSelection(default=default_lang, choices=langList())
-config.EMC.sublang3 = ConfigSelection(default=default_lang, choices=langList())
-config.EMC.audlang1 = ConfigSelection(default=default_lang, choices=langList())
-config.EMC.audlang2 = ConfigSelection(default=default_lang, choices=langList())
-config.EMC.audlang3 = ConfigSelection(default=default_lang, choices=langList())
+config.EMC.sublang1 = ConfigSelection(default=default_lang, choices=languageChoices[:])
+config.EMC.sublang2 = ConfigSelection(default=default_lang, choices=languageChoices[:])
+config.EMC.sublang3 = ConfigSelection(default=default_lang, choices=languageChoices[:])
+config.EMC.audlang1 = ConfigSelection(default=default_lang, choices=languageChoices[:])
+config.EMC.audlang2 = ConfigSelection(default=default_lang, choices=languageChoices[:])
+config.EMC.audlang3 = ConfigSelection(default=default_lang, choices=languageChoices[:])
+del languageChoices
 config.EMC.autosubs = ConfigYesNo(default=False)
 config.EMC.autoaudio = ConfigYesNo(default=False)
 config.EMC.autoaudio_ac3 = ConfigYesNo(default=False)
