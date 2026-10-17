@@ -24,9 +24,14 @@ from Components.Language import language
 from Plugins.Plugin import PluginDescriptor
 from Screens.MessageBox import MessageBox
 
-from . import _
+from . import InitTranslations, _
 from .EMCTasker import emcDebugOut, emcTasker
 from .ISO639 import ISO639Language
+
+
+# Cache translations only while constructing this module's configuration.
+normalTranslate = _
+_ = InitTranslations()
 
 
 class ConfigTextWOHelp(ConfigText):
@@ -582,3 +587,8 @@ def Plugins(**kwargs):
 		descriptors.append(PluginDescriptor(name="Enhanced Movie Center", description="Enhanced Movie Center " + _("movie manipulation list"), where=[PluginDescriptor.WHERE_MENU], fnc=menu_recordingsOpen))
 
 	return descriptors
+
+
+# Restore runtime translation and release the temporary catalog before returning.
+_ = normalTranslate
+del normalTranslate
