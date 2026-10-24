@@ -15,21 +15,22 @@
 #	For more information on the GNU General Public License see:
 #	<http://www.gnu.org/licenses/>.
 #
+from collections import deque
+from collections.abc import Callable
 from itertools import zip_longest
 from os.path import exists, join
 from random import randint
-from time import localtime, time
-
-from enigma import eTimer, eConsoleAppContainer
-from Components.config import config
-from Screens.Standby import Standby, TryQuitMainloop
-from Screens.MessageBox import MessageBox
-import Screens.Standby
-import sys
-from traceback import print_exc
-from collections.abc import Callable
-from collections import deque
 from shlex import quote
+import sys
+from time import localtime, time
+from traceback import print_exc
+
+from enigma import eConsoleAppContainer, eTimer
+
+from Screens import Standby as standbyScreens
+from Components.config import config
+from Screens.MessageBox import MessageBox
+from Screens.Standby import Standby, TryQuitMainloop
 
 
 def emcDebugOut(outtxt, outfile=None, fmode="a", forced=False):
@@ -204,7 +205,7 @@ class EMCTasker:
 		self.minutes = 0
 
 	def InitRestart(self):
-		if Screens.Standby.inStandby:
+		if standbyScreens.inStandby:
 			self.LaunchRestart(True)  # no need to query if in standby mode
 		else:
 			if config.EMC.restart.value == "0":  # Standby
@@ -219,9 +220,12 @@ class EMCTasker:
 
 	def LaunchRestart(self, confirmFlag=True):
 		if confirmFlag:
+			if config.EMC.restart.value == "0" and standbyScreens.inStandby:
+				emcDebugOut("+++ Automatic standby skipped: receiver is already in standby")
+				return "true"
 			emcDebugOut("+++ Enigma restart NOW")
 			flag = join(config.EMC.folder.value, "EMC_standby_flag.tmp")
-			if Screens.Standby.inStandby or config.EMC.restart_stby.value:
+			if standbyScreens.inStandby or config.EMC.restart_stby.value:
 				emcDebugOut("!", flag, fmode="w", forced=True)
 			else:
 				self.shellExecute("rm -rf " + flag)
