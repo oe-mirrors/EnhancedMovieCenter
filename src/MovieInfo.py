@@ -1,25 +1,30 @@
-from . import _, defaultlang
 from os import remove
-from re import match, sub, IGNORECASE
-from requests import get, exceptions
+from re import IGNORECASE, match, sub
 from shutil import copy2
+from requests import exceptions, get
 from six import ensure_binary
+import tmdbsimple as tmdb
 from twisted.internet.reactor import callInThread
+
 from enigma import ePicLoad, eTimer, getDesktop
-from Components.config import config, ConfigSubsection, ConfigSelection, ConfigYesNo, ConfigSelectionNumber
+
 from Components.ActionMap import HelpableActionMap
 from Components.AVSwitch import AVSwitch
-from Components.MenuList import MenuList
+from Components.config import ConfigSelection, ConfigSelectionNumber, ConfigSubsection, ConfigYesNo, config
 from Components.Label import Label
-from Components.ProgressBar import ProgressBar
+from Components.MenuList import MenuList
 from Components.Pixmap import Pixmap
+from Components.ProgressBar import ProgressBar
 from Components.ScrollLabel import ScrollLabel
+from Screens.MessageBox import MessageBox
 from Screens.Screen import Screen
 from Screens.Setup import Setup
-from Screens.MessageBox import MessageBox
 from Tools.Directories import fileExists
+
+from . import _, defaultlang
 from .MovieCenter import getMovieNameWithoutExt, getMovieNameWithoutPhrases, getNoPosterPath
-import tmdbsimple as tmdb
+
+# Keep the tmdb module reference: its shared API_KEY is set when the screen opens.
 
 # Cover
 config.EMC.movieinfo = ConfigSubsection()
@@ -45,8 +50,13 @@ def getMovieList(moviename):
 	if m:
 		text, year = m.groups()
 	search = tmdb.Search()
-	json_data = search.multi(query=text, language=lang, year=year) if year else search.multi(query=text, language=lang)
-	for result in json_data["results"]:
+	try:
+		searchResult = search.multi(query=text, language=lang, year=year) if year else search.multi(query=text, language=lang)
+	except (exceptions.RequestException, ValueError) as error:
+		# Request URLs can contain the API key; log only the failure type.
+		print(f"[EMC] MovieInfo search failed: {type(error).__name__}")
+		return None
+	for result in searchResult["results"]:
 		media = result.get("media_type", "")
 		id = result.get("id", "")
 		title = result.get("title", result.get("name", ""))
@@ -264,6 +274,7 @@ class MovieInfoTMDb(Screen):
 		self.selectionTimer.callback.append(self.updateSelection)
 		self["previewlist"] = MenuList([])
 		self.page = 0
+		self.infoAvailable = False
 		self.id = None
 		self.cat = None
 		self["contenttxt"] = ScrollLabel()
@@ -288,7 +299,7 @@ class MovieInfoTMDb(Screen):
 		self.ratingstars = -1
 		tmdb.API_KEY = bytes.fromhex("38373839636664336662616237646363663132363963336437643836376166666"[:-1]).decode('utf-8')
 		self.movielist = getMovieList(moviename)
-		if self.movielist is not None:
+		if self.movielist is not None and self.movielist[1]:
 			self["previewlist"] = MenuList(self.movielist[0])
 			if self.movielist[1] > 1:
 				self.page = 1
@@ -297,15 +308,14 @@ class MovieInfoTMDb(Screen):
 				self.page = 0
 				sel = self["previewlist"].l.getCurrentSelection()
 				if sel is not None:
-					preview = getMovieInfo(sel[1], sel[2])
-					if preview is not None:
-						self.id = sel[1]
-						self.cat = sel[2]
+					self.id = sel[1]
+					self.cat = sel[2]
 				self["previewlist"].hide()
 				self["movie_name"] = Label(_("Movie Information Preview for:") + "   " + moviename)
 		else:
+			self["previewlist"].hide()
 			self["movie_name"] = Label(_("Search results for:") + "   " + moviename)
-			self["contenttxt"].setText(_("Nothing was found !"))
+			self["contenttxt"].setText(_("Unable to load movie information. Please try again later.") if self.movielist is None else _("Nothing was found !"))
 
 		self.file_format = r"(\.ts|\.avi|\.mkv|\.divx|\.f4v|\.flv|\.img|\.iso|\.m2ts|\.m4v|\.mov|\.mp4|\.mpeg|\.mpg|\.mts|\.vob|\.asf|\.wmv|.\stream|.\webm)"
 		# for file-operations
@@ -342,25 +352,15 @@ class MovieInfoTMDb(Screen):
 		self.switchPage()
 
 	def switchPage(self, id=None, cat=None):
+		self.infoAvailable = False
+		for name in ("runtime", "genre", "country", "release", "rating", "runtimetxt", "genretxt", "countrytxt", "releasetxt", "ratingtxt", "stars", "starsbg", "save", "key_green"):
+			self[name].hide()
 		if self.page == 1:
 			self["previewlist"].show()
 			self.selectionChanged()
-			self["runtime"].hide()
-			self["genre"].hide()
-			self["country"].hide()
-			self["release"].hide()
-			self["rating"].hide()
 			self["contenttxt"].hide()
-			self["runtimetxt"].hide()
-			self["genretxt"].hide()
-			self["countrytxt"].hide()
-			self["releasetxt"].hide()
-			self["ratingtxt"].hide()
-			self["stars"].hide()
-			self["starsbg"].hide()
-			self["save"].hide()
-			self["key_green"].hide()
 		else:
+			self["contenttxt"].show()
 			self["runtime"].setText(_("Runtime:"))
 			self["genre"].setText(_("Genre:"))
 			self["country"].setText(_("Production Countries:"))
@@ -372,8 +372,13 @@ class MovieInfoTMDb(Screen):
 			if cat is None:
 				if self.cat is not None:
 					cat = self.cat
-			if id is not None or cat is not None:
-				content, runtime, genres, countries, release, vote = getMovieInfo(id, cat, False)
+			if id is not None and cat is not None:
+				preview = getMovieInfo(id, cat, False)
+				if preview is None:
+					self["contenttxt"].setText(_("Unable to load movie information. Please try again later."))
+					return
+				content, runtime, genres, countries, release, vote = preview
+				self.infoAvailable = True
 				self["runtime"].show()
 				self["genre"].show()
 				self["country"].show()
@@ -429,7 +434,7 @@ class MovieInfoTMDb(Screen):
 		self.session.open(MessageBox, msg, MessageBox.TYPE_INFO, 5)
 
 	def save(self):
-		if self.page == 0 and self.spath is not None:
+		if self.page == 0 and self.infoAvailable and self.spath is not None:
 			self.txtsaved = False
 			self.mpath = sub(self.file_format + "$", '.jpg', self.spath, flags=IGNORECASE)
 			try:
