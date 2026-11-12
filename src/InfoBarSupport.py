@@ -1,4 +1,4 @@
-﻿# Copyright (C) 2011 by betonme
+# Copyright (C) 2011 by betonme
 #
 # In case of reuse of this source code please do not remove this copyright.
 #
@@ -16,18 +16,20 @@
 #	<http://www.gnu.org/licenses/>.
 #
 
-from Components.config import config
+from enigma import eServiceReference, iPlayableService
+
 from Components.ActionMap import HelpableActionMap
-from Components.ServiceEventTracker import ServiceEventTracker, InfoBarBase
-from enigma import iPlayableService, eServiceReference
-from Screens.InfoBarGenerics import *
+from Components.config import config
+from Components.ServiceEventTracker import InfoBarBase, ServiceEventTracker
+from Screens.InfoBarGenerics import InfoBarAudioSelection, InfoBarCueSheetSupport, InfoBarEPG, InfoBarExtensions, InfoBarMenu, InfoBarNotifications, InfoBarNumberZap, InfoBarPVRState, InfoBarPiP, InfoBarPlugins, InfoBarSeek, InfoBarServiceErrorPopupSupport, InfoBarServiceNotifications, InfoBarShowHide, InfoBarShowMovies, InfoBarSimpleEventView, InfoBarSubtitleSupport, InfoBarTeletextPlugin
 from Screens.MessageBox import MessageBox
 from Tools.BoundFunction import boundFunction
-from Tools.Directories import fileExists, resolveFilename, SCOPE_PLUGINS
+from Tools.Directories import SCOPE_PLUGINS, fileExists, resolveFilename
+from Tools.Notifications import AddNotificationWithCallback
 
 from . import _
-from .EMCTasker import emcDebugOut
 from .DelayedFunction import DelayedFunction
+from .EMCTasker import emcDebugOut
 
 SeekbarPlg = f"{resolveFilename(SCOPE_PLUGINS)}Extensions/Seekbar/plugin.py"
 
@@ -136,20 +138,23 @@ class InfoBarSupport(InfoBarBase,
 
 			if last is not None:
 				self.resume_point = last
-				l = last / 90000
+				seconds = last / 90000
 				val = config.usage.on_movie_start.value
 				if val == "ask" or val == "ask yes":
-					Notifications.AddNotificationWithCallback(self.playLastCB, MessageBox, _("Do you want to resume this playback?") + "\n" + (_("Resume position at %s") % ("%d:%02d:%02d" % (l / 3600, l % 3600 / 60, l % 60))), timeout=10, default=True)
+					AddNotificationWithCallback(self.playLastCB, MessageBox, _("Do you want to resume this playback?") + "\n" + (_("Resume position at %s") % ("%d:%02d:%02d" % (seconds / 3600, seconds % 3600 / 60, seconds % 60))), timeout=10, default=True)
 				elif val == "ask no":
-					Notifications.AddNotificationWithCallback(self.playLastCB, MessageBox, _("Do you want to resume this playback?") + "\n" + (_("Resume position at %s") % ("%d:%02d:%02d" % (l / 3600, l % 3600 / 60, l % 60))), timeout=10, default=False)
+					AddNotificationWithCallback(self.playLastCB, MessageBox, _("Do you want to resume this playback?") + "\n" + (_("Resume position at %s") % ("%d:%02d:%02d" % (seconds / 3600, seconds % 3600 / 60, seconds % 60))), timeout=10, default=False)
 				elif val == "resume":
-					Notifications.AddNotificationWithCallback(self.playLastCB, MessageBox, _("Resuming playback"), timeout=2, type=MessageBox.TYPE_INFO)
+					AddNotificationWithCallback(self.playLastCB, MessageBox, _("Resuming playback"), timeout=2, type=MessageBox.TYPE_INFO)
 			elif config.EMC.movie_jump_first_mark.value is True:
 				self.jumpToFirstMark()
 		elif config.EMC.movie_jump_first_mark.value is True:
 			self.jumpToFirstMark()
 
 	def playLastCB(self, answer):
+		# A queued answer can outlive the player; Screen.doClose clears its attributes.
+		if getattr(self, "is_closing", True) or getattr(self, "closeOnNextExec", None) is not None:
+			return
 		if answer is True:
 			self.doSeek(self.resume_point)
 		# From Merlin2
