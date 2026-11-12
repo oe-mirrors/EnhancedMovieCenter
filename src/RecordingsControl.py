@@ -16,17 +16,17 @@
 #	For more information on the GNU General Public License see:
 #	<http://www.gnu.org/licenses/>.
 #
-import pickle
-import os
-from shlex import quote
 from collections import defaultdict
+import os
+import pickle
+from shlex import quote
 
-from Components.config import config
-from RecordTimer import AFTEREVENT
 import NavigationInstance
+from RecordTimer import AFTEREVENT
+from Components.config import config
 
-from .EMCTasker import emcTasker, emcDebugOut
 from .DelayedFunction import DelayedFunction
+from .EMCTasker import emcDebugOut, emcTasker
 
 
 def getRecording(filename):
@@ -37,6 +37,9 @@ def getRecording(filename):
 			filename = filename[:-3]
 
 		for timer in NavigationInstance.instance.RecordTimer.timer_list:
+			# Repeated timers keep the previous filename while waiting for their next run.
+			if not timer.isRunning() or timer.justplay:
+				continue
 			try:
 				timer.Filename
 			except:
