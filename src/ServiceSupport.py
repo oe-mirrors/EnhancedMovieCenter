@@ -16,15 +16,18 @@
 #	For more information on the GNU General Public License see:
 #	<http://www.gnu.org/licenses/>.
 #
-import os
 from datetime import datetime
+import os
+
+from enigma import eServiceCenter, iServiceInformation
 
 from Components.config import config
-from enigma import eServiceCenter, iServiceInformation
-from .EMCFileCache import movieFileCache
-from .CutListSupport import CutList
+
 from .CommonSupport import getInfoFile, readPlaylist
+from .CutListSupport import CutList
+from .EMCFileCache import movieFileCache
 from .EMCTasker import emcDebugOut
+from .RecordingsControl import getRecording
 
 
 instance = None
@@ -64,7 +67,7 @@ class ServiceInfo:
 		return self.info and self.info.getName(service) or ""
 
 	def getLength(self, service):
-		return self.event and self.event.getDuration() or 0
+		return self.event and self.event.getLength() or 0
 
 	def getInfoString(self, service, type):
 		return self.info and self.info.getInfoString(service, type) or ""
@@ -127,6 +130,16 @@ class ServiceEvent:
 		return beginTime
 
 	def getDuration(self):
+		if config.EMC.record_show_real_length.value:
+			record = getRecording(self.path)
+			beginTime = self.getBeginTime()
+			if record and beginTime:
+				# EventView derives the scheduled end from begin + duration.
+				return max(0, int(record[1] - beginTime))
+		return self.getLength()
+
+	def getLength(self):
+		# File length is also used for playback and must exclude the timer's remaining time.
 		return self.__getDuration()
 
 	def getEventId(self):

@@ -16,39 +16,38 @@
 #	For more information on the GNU General Public License see:
 #	<http://www.gnu.org/licenses/>.
 #
+from datetime import datetime
 from math import ceil
 import os
 import random
 import re
-
-from time import time
-from datetime import datetime
 from threading import Thread
+from time import time
 
+from enigma import BT_KEEP_ASPECT_RATIO, BT_SCALE, RT_HALIGN_CENTER, RT_HALIGN_LEFT, RT_HALIGN_RIGHT, eListbox, eListboxPythonMultiContent, ePythonMessagePump, eServiceCenter, eServiceReference, gFont, getDesktop, iServiceInformation, loadPNG
+
+from skin import parseColor, parseFont, parseSize
+from timer import TimerEntry
 from Components.config import config
 from Components.GUIComponent import GUIComponent
-from Components.MultiContent import MultiContentEntryText, MultiContentEntryPixmapAlphaBlend
+from Components.MultiContent import MultiContentEntryPixmapAlphaBlend, MultiContentEntryText
 from Components.Renderer.Picon import getPiconName
+from Tools.Directories import SCOPE_CURRENT_SKIN, fileExists, resolveFilename
 from Tools.LoadPixmap import LoadPixmap
-from Tools.Directories import fileExists, resolveFilename, SCOPE_CURRENT_SKIN
-from skin import parseColor, parseFont, parseSize
-from enigma import eListboxPythonMultiContent, eListbox, gFont, BT_SCALE, BT_KEEP_ASPECT_RATIO, RT_HALIGN_LEFT, RT_HALIGN_RIGHT, RT_HALIGN_CENTER, eServiceReference, eServiceCenter, ePythonMessagePump, loadPNG, getDesktop, iServiceInformation
-from timer import TimerEntry
 
 from . import _
-from .EMCFileCache import movieFileCache
-from .EMCMountPoints import mountPoints
-from .RecordingsControl import RecordingsControl
-from .DelayedFunction import DelayedFunction
-from .EMCTasker import emcDebugOut
-from .VlcPluginInterface import VlcPluginInterfaceList
-from .VlcPluginInterface import DEFAULT_VIDEO_PID, DEFAULT_AUDIO_PID, ENIGMA_SERVICE_ID
 from .CutListSupport import CutList
-from .PermanentSort import PermanentSort
+from .DelayedFunction import DelayedFunction
 from .E2Bookmarks import E2Bookmarks
 from .EMCBookmarks import EMCBookmarks
+from .EMCFileCache import movieFileCache
+from .EMCMountPoints import mountPoints
+from .EMCTasker import emcDebugOut
+from .PermanentSort import PermanentSort
+from .RecordingsControl import RecordingsControl
 from .ServiceSupport import ServiceCenter
 from .ThreadQueue import ThreadQueue
+from .VlcPluginInterface import DEFAULT_AUDIO_PID, DEFAULT_VIDEO_PID, ENIGMA_SERVICE_ID, VlcPluginInterfaceList
 
 
 sz_w = getDesktop(0).size().width()
@@ -1305,7 +1304,7 @@ class MovieCenterData(VlcPluginInterfaceList, PermanentSort, E2Bookmarks, EMCBoo
 								if starttimestamp:
 									date = datetime.fromtimestamp(starttimestamp)
 							if not length:
-								length = event.getDuration()
+								length = serviceInfo.getLength(service)
 				# get piconpath
 				if config.EMC.movie_picons.value and not isExtHDDSleeping:
 					if serviceInfo:
