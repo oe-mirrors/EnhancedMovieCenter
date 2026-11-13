@@ -123,6 +123,11 @@ class ServiceEvent:
 		beginTime = None
 		if not config.EMC.record_show_real_length.value:
 			beginTime = self.event and self.event.getBeginTime()
+		if not beginTime and self.isfile and self.serviceInfo.info:
+			# The filename can still contain the planned start of a late recording.
+			created = self.serviceInfo.info.getInfo(self.service, iServiceInformation.sTimeCreate)
+			if created > 0:
+				beginTime = created
 		if not beginTime:
 			dt = self.isfile and hasattr(self.service, "date") and self.service.date or None
 			if dt:
