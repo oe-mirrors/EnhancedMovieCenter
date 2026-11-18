@@ -17,6 +17,7 @@
 #	<http://www.gnu.org/licenses/>.
 #
 import os
+from os import rmdir, scandir
 from shlex import quote
 from time import localtime
 #from thread import start_new_thread
@@ -2691,12 +2692,26 @@ class EMCSelection(Screen, HelpableScreen, SelectionEventInfo, VlcPluginInterfac
 					emcTasker.shellExecute(f"rm -f -- {quote(path)}")
 					self.removeService(service)
 					self.setReturnCursor()
-				elif os.path.exists(path):
-					if len(os.listdir(path)) > 0:
+				else:
+					movieFileCache.delPathFromCache(path)
+					try:
+						with scandir(path) as entries:
+							hasContents = next(entries, None) is not None
+						if not hasContents:
+							rmdir(path)
+					except FileNotFoundError:
+						self.removeService(service)
+						self.setReturnCursor()
+						return
+					except OSError as error:
+						self.checkHideMiniTV_beforeFullscreen()
+						self.session.open(MessageBox, _("Delete error:\n") + str(error), MessageBox.TYPE_ERROR)
+						return
+					if hasContents:
 						self.checkHideMiniTV_beforeFullscreen()
 						self.session.openWithCallback(boundFunction(self.delPathSelRecursive, service, path), MessageBox, _("Directory is not empty! Do you really want to delete it?"), MessageBox.TYPE_YESNO)
 					else:
-						self.delPathSelRecursive(service, path, True)
+						self.postFileOp(None, path)
 					self.setReturnCursor()
 			else:
 				self.checkHideMiniTV_beforeFullscreen()
